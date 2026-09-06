@@ -5,6 +5,7 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 
 from manager_mcp.writable import WRITABLE
+from manager_mcp.xalterra_read_collections import XALTERRA_READ_ONLY_COLLECTIONS
 
 
 @dataclass(frozen=True)
@@ -164,7 +165,22 @@ def _merge_writable_collections(
     return merged
 
 
-_RESOURCES: dict[str, ResourceDescriptor] = _merge_writable_collections(_BASE_RESOURCES)
+def _merge_xalterra_read_only_collections(
+    base: dict[str, ResourceDescriptor],
+) -> dict[str, ResourceDescriptor]:
+    merged = dict(base)
+    for name, path, description, form_template, items_key in XALTERRA_READ_ONLY_COLLECTIONS:
+        if name in merged:
+            continue
+        merged[name] = _collection(
+            name, path, description, form_template=form_template, items_key=items_key
+        )
+    return merged
+
+
+_RESOURCES: dict[str, ResourceDescriptor] = _merge_xalterra_read_only_collections(
+    _merge_writable_collections(_BASE_RESOURCES)
+)
 
 
 def resolve(name: str) -> ResourceDescriptor | None:

@@ -22,16 +22,13 @@ upstream change ever removed one of these from WRITABLE (or gated the merge
 by scope), a migration-critical read would silently disappear, and this
 test file is what would catch it.
 
-Two requested collections are deliberately NOT added: `fixed_assets` and
-`tax_codes`. Neither appears anywhere in this codebase (not in
-writable.WRITABLE, not in resources._BASE_RESOURCES, not in the bundled
-partial OpenAPI fragment at src/manager_mcp/spec/api2.json), and Manager's
-public API documentation was unreachable when this was written (moved/
-paywalled). Per instruction, no endpoint path is invented here. Adding these
-two requires either a live Manager API2 response confirming the exact path/
-items-key, or authoritative documentation -- whichever arrives first should
-extend `MIGRATION_COLLECTIONS` below and add a matching resolve()/list_records
-test, the same shape as the ones already here.
+The remaining two requested collections, `fixed_assets` and `tax_codes`,
+were NOT added here when this file was first written -- neither had a
+verified live path at the time. They have since been confirmed against the
+live Xalterra Manager business and added via
+src/manager_mcp/xalterra_read_collections.py (a separate isolated module,
+merged into resources.py through one small hook). See
+tests/test_xalterra_read_collections.py for their coverage.
 """
 
 from __future__ import annotations
@@ -62,9 +59,6 @@ MIGRATION_COLLECTIONS = (
     "inventory_items",
     "non_inventory_items",
 )
-
-NOT_YET_VERIFIED = ("fixed_assets", "tax_codes")
-
 
 @pytest.fixture(autouse=True)
 def _env_and_client(monkeypatch: pytest.MonkeyPatch) -> None:
@@ -97,16 +91,6 @@ def test_all_migration_collections_resolve() -> None:
         assert desc is not None, f"{name} does not resolve as a collection"
         assert desc.kind == "collection"
         assert desc.path.startswith("/")
-
-
-def test_not_yet_verified_collections_are_absent_not_invented() -> None:
-    """fixed_assets/tax_codes must stay unresolved until a real path is
-    confirmed -- this test fails loudly the day someone is tempted to guess."""
-    for name in NOT_YET_VERIFIED:
-        assert resolve(name) is None, (
-            f"{name} now resolves -- update this test and the module docstring "
-            "once its path has actually been verified against live Manager API2"
-        )
 
 
 @pytest.mark.asyncio

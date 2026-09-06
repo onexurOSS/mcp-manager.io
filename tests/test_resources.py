@@ -34,7 +34,13 @@ WRITABLE_COLLECTIONS = {
     "depreciation_entries",
     "amortization_entries",
 }
-COLLECTIONS = CORE_COLLECTIONS | WRITABLE_COLLECTIONS
+# Xalterra addition (src/manager_mcp/xalterra_read_collections.py): read-only,
+# never in WRITABLE. See tests/test_xalterra_read_collections.py for coverage.
+XALTERRA_COLLECTIONS = {
+    "fixed_assets",
+    "tax_codes",
+}
+COLLECTIONS = CORE_COLLECTIONS | WRITABLE_COLLECTIONS | XALTERRA_COLLECTIONS
 REPORTS = {
     "aged_receivables",
     "aged_payables",
