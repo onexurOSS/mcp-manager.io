@@ -1,0 +1,62 @@
+{
+  "manifest_version": "0.4",
+  "name": "manager-mcp",
+  "display_name": "onexurOSS Manager MCP",
+  "version": "1.0.0",
+  "description": "MCP server for Manager.io bookkeeping: read-first with opt-in scoped task and write tools. Requires uv on PATH.",
+  "author": {
+    "name": "onexurOSS",
+    "url": "https://github.com/onexurOSS/mcp-manager.io"
+  },
+  "homepage": "https://github.com/onexurOSS/mcp-manager.io",
+  "documentation": "https://github.com/onexurOSS/mcp-manager.io#readme",
+  "support": "https://github.com/onexurOSS/mcp-manager.io/issues",
+  "icon": "icon.png",
+  "server": {
+    "type": "uv",
+    "entry_point": "server/main.py",
+    "mcp_config": {
+      "command": "uv",
+      "args": ["tool", "run", "--from", "mcp-manager.io", "manager-mcp"],
+      "env": {
+        "MANAGER_API_URL": "${user_config.api_url}",
+        "MANAGER_API_KEY": "${user_config.api_key}",
+        "MANAGER_MCP_WRITE_SCOPES": "${user_config.write_scopes}",
+        "MANAGER_MCP_DELETE_SCOPES": "${user_config.delete_scopes}"
+      }
+    }
+  },
+  "user_config": {
+    "api_url": {
+      "type": "string",
+      "title": "Manager API URL",
+      "description": "Instance root including /api2 when required (e.g. http://127.0.0.1:55667/api2).",
+      "required": true,
+      "default": "http://127.0.0.1:55667/api2"
+    },
+    "api_key": {
+      "type": "string",
+      "title": "Manager API key",
+      "description": "Access token from Manager Settings → Access Tokens (sent as X-API-KEY).",
+      "sensitive": true,
+      "required": true
+    },
+    "write_scopes": {
+      "type": "string",
+      "title": "Write scopes",
+      "description": "Comma-separated domains for create/update: quotes,orders,parties,items,sales,purchases,banking,payroll,ledger,raw. Recommended: banking,sales,parties. Leave empty for read-only.",
+      "required": false,
+      "default": ""
+    },
+    "delete_scopes": {
+      "type": "string",
+      "title": "Delete scopes",
+      "description": "Comma-separated domains for delete only. Never implied by write scopes. Leave empty for no deletes.",
+      "required": false,
+      "default": ""
+    }
+  },
+  "compatibility": {
+    "platforms": ["darwin", "win32", "linux"]
+  }
+}

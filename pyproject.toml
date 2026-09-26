@@ -1,0 +1,84 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "mcp-manager.io"
+version = "1.0.0"
+description = "MCP server for Manager.io bookkeeping: read-first with opt-in scoped task and write tools"
+readme = "README.md"
+license = "MIT"
+authors = [{ name = "Dru Connold" }, { name = "onexurOSS" }]
+requires-python = ">=3.10"
+keywords = [
+  "mcp",
+  "model-context-protocol",
+  "manager.io",
+  "accounting",
+  "fastmcp",
+  "bookkeeping",
+  "customer-deposits",
+  "task-tools",
+]
+classifiers = [
+  "Development Status :: 4 - Beta",
+  "Intended Audience :: Developers",
+  "Programming Language :: Python :: 3",
+  "Topic :: Office/Business :: Financial :: Accounting",
+]
+dependencies = [
+  "fastmcp>=2.0",
+  "httpx",
+]
+
+[project.urls]
+Homepage = "https://github.com/onexurOSS/mcp-manager.io"
+Repository = "https://github.com/onexurOSS/mcp-manager.io"
+Issues = "https://github.com/onexurOSS/mcp-manager.io/issues"
+
+[project.optional-dependencies]
+dev = [
+  "pytest",
+  "pytest-asyncio",
+  "respx",
+  "ruff",
+  "hatchling",
+  "hatch",
+]
+
+[project.scripts]
+manager-mcp = "manager_mcp.server:main"
+manager-mcp-dev = "manager_mcp.dev_supervisor:main"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/manager_mcp"]
+# Assets under src/manager_mcp/assets ship with the package; do not
+# force-include them again (duplicate path breaks the wheel).
+
+[tool.hatch.build.targets.sdist]
+include = [
+  "src/",
+  "tests/",
+  "README.md",
+  "LICENSE",
+  "pyproject.toml",
+]
+exclude = [
+  "mcpb/",
+]
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+asyncio_default_fixture_loop_scope = "function"
+testpaths = ["tests"]
+markers = [
+  "integration: live Manager sandbox, requires TEST_MANAGER_API_URL env var",
+]
+addopts = "-m 'not integration'"
+
+[tool.ruff]
+line-length = 100
+target-version = "py310"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP"]

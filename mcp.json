@@ -1,0 +1,14 @@
+{
+  "mcpServers": {
+    "manager": {
+      "command": "uvx",
+      "args": ["--from", "mcp-manager.io", "manager-mcp"],
+      "env": {
+        "MANAGER_API_URL": "${MANAGER_API_URL}",
+        "MANAGER_API_KEY": "${MANAGER_API_KEY}",
+        "MANAGER_MCP_WRITE_SCOPES": "${MANAGER_MCP_WRITE_SCOPES}",
+        "MANAGER_MCP_DELETE_SCOPES": "${MANAGER_MCP_DELETE_SCOPES}"
+      }
+    }
+  }
+}

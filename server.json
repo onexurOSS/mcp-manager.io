@@ -1,0 +1,56 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+  "name": "io.github.onexurOSS/manager-mcp",
+  "title": "onexurOSS Manager MCP",
+  "description": "MCP server for Manager.io bookkeeping: read-first with opt-in scoped task and write tools",
+  "repository": {
+    "url": "https://github.com/onexurOSS/mcp-manager.io",
+    "source": "github"
+  },
+  "version": "1.0.0",
+  "websiteUrl": "https://github.com/onexurOSS/mcp-manager.io",
+  "packages": [
+    {
+      "registryType": "pypi",
+      "registryBaseUrl": "https://pypi.org",
+      "identifier": "mcp-manager.io",
+      "version": "1.0.0",
+      "runtimeHint": "uvx",
+      "transport": {
+        "type": "stdio"
+      },
+      "environmentVariables": [
+        {
+          "name": "MANAGER_API_URL",
+          "description": "Manager API base URL (include /api2 when required)",
+          "isRequired": true
+        },
+        {
+          "name": "MANAGER_API_KEY",
+          "description": "Access token from Manager Settings (sent as X-API-KEY)",
+          "isRequired": true,
+          "isSecret": true
+        },
+        {
+          "name": "MANAGER_MCP_WRITE_SCOPES",
+          "description": "Comma-separated write scopes: quotes,orders,parties,items,sales,purchases,banking,payroll,ledger,raw. Recommended: banking,sales,parties",
+          "isRequired": false,
+          "default": ""
+        },
+        {
+          "name": "MANAGER_MCP_DELETE_SCOPES",
+          "description": "Comma-separated delete scopes (never implied by write scopes)",
+          "isRequired": false,
+          "default": ""
+        }
+      ]
+    }
+  ],
+  "icons": [
+    {
+      "src": "https://raw.githubusercontent.com/onexurOSS/mcp-manager.io/main/src/manager_mcp/assets/icon.png",
+      "mimeType": "image/png",
+      "sizes": ["512x512"]
+    }
+  ]
+}
