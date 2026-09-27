@@ -1,6 +1,6 @@
 {
   "name": "manager-mcp",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "MCP server for Manager.io bookkeeping: read-first with opt-in scoped task and write tools.",
   "author": {
     "name": "Xalterra Ltd, trading as Onexur"

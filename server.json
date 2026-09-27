@@ -7,14 +7,14 @@
     "url": "https://github.com/onexurOSS/mcp-manager.io",
     "source": "github"
   },
-  "version": "1.0.0",
+  "version": "1.0.1",
   "websiteUrl": "https://github.com/onexurOSS/mcp-manager.io",
   "packages": [
     {
       "registryType": "pypi",
       "registryBaseUrl": "https://pypi.org",
       "identifier": "mcp-manager.io",
-      "version": "1.0.0",
+      "version": "1.0.1",
       "runtimeHint": "uvx",
       "transport": {
         "type": "stdio"

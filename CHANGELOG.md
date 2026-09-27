@@ -2,6 +2,12 @@
 
 All notable changes to this project are documented in this file.
 
+## [1.0.1] - 2026-09-27
+
+- Add the MCP Registry ownership validation line to README.md, required for the
+  registry to verify the `io.github.onexurOSS/manager-mcp` server name against this
+  PyPI package.
+
 ## [1.0.0] - 2026-09-26
 
 **Onexur initial release.** This is the first release under the Onexur identity

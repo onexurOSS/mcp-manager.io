@@ -1,5 +1,7 @@
 # Onexur Manager MCP
 
+<!-- mcp-name: io.github.onexurOSS/manager-mcp -->
+
 An MCP (Model Context Protocol) server that connects AI assistants such as Claude and ChatGPT to a [Manager](https://www.manager.io) accounting instance. It exposes Manager's data and operations as a set of scoped tools. The default is read-only, with reporting, diagnostic and reconciliation tools available out of the box and every write capability behind explicit configuration.
 
 This project began as a fork of [manager-mcp](https://github.com/flumpiey/manager-mcp) 0.2.6. See [Attribution](https://github.com/onexurOSS/mcp-manager.io#7-attribution) below.
