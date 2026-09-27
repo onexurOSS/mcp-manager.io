@@ -142,7 +142,7 @@ The complete MIT License text is reproduced in `LICENSE-MIT`. See `NOTICE` for t
 
 ## Contributing
 
-See `CONTRIBUTING.md` and `CLA.md`. Contributions to files identified in `PROVENANCE.json` as upstream-derived remain subject to the upstream MIT license; contributions to onexurOSS-original files are covered by the project's Contributor License Agreement.
+See `CONTRIBUTING.md` and `CLA.md`. Contributions to files identified in `PROVENANCE.json` as upstream-derived remain subject to the upstream MIT license; contributions to Onexur-original files are covered by the project's Contributor License Agreement.
 
 ## Further reading
 

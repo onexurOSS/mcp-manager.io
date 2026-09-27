@@ -1,6 +1,6 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later
 # Copyright (c) 2026 Xalterra Ltd, trading as Onexur
-"""Report tool semantics added by onexurOSS: pagination of report feeds and date rejection."""
+"""Report tool semantics added by Onexur: pagination of report feeds and date rejection."""
 
 from __future__ import annotations
 
