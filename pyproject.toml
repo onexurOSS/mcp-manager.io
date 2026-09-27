@@ -58,7 +58,9 @@ include = [
   "src/",
   "tests/",
   "README.md",
-  "LICENSE",
+  "LICENSE-MIT",
+  "LICENSE-AGPL",
+  "NOTICE",
   "pyproject.toml",
 ]
 exclude = [

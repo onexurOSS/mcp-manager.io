@@ -3,7 +3,7 @@
 These are the changelog entries of the upstream project, manager-mcp
 (https://github.com/flumpiey/manager-mcp), for releases 0.1.0 to 0.2.6. They are reproduced
 unchanged from upstream tag v0.2.6, which is released under the MIT Licence,
-Copyright (c) 2026 manager-mcp contributors (see [LICENSE](../LICENSE)).
+Copyright (c) 2026 manager-mcp contributors (see [LICENSE-MIT](../LICENSE-MIT)).
 
 This project, onexurOSS Manager MCP, was based on upstream 0.2.6. The releases below were
 made by the upstream authors, not by onexurOSS, and their artifacts exist upstream, not in
