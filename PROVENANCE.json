@@ -1,7 +1,7 @@
 {
  "generated_by": "Gate 1A provenance audit",
- "repo_head": "7e430d484a0771bd5262926aad2572105e061713",
- "repo_basis": "committed tree at HEAD 7e430d484a07; commit author identity rewritten to Onexur <github@xalterra.com>; working tree clean apart from PROVENANCE.json and PROVENANCE_SUMMARY.md",
+ "repo_head": "b619669432e3a0f805e9f982708ac225c4a4d173",
+ "repo_basis": "committed tree at HEAD b619669432e3; commit author identity rewritten to Onexur <github@xalterra.com>; working tree clean apart from PROVENANCE.json and PROVENANCE_SUMMARY.md",
  "upstream_reference": {
   "source": "github.com/flumpiey/manager-mcp tag v0.2.6",
   "commit": "c50c4d71f2aff962a8c9dbb1cce2ef14f602a51b",
@@ -224,6 +224,14 @@
     "classification": "upstream-derived, reproduced verbatim (minor modification)",
     "basis": "Byte for byte copy of the upstream v0.2.6 changelog entries for 0.1.0 to 0.2.6, with an added attribution and MIT notice paragraph. The tool matched it to upstream CHANGELOG.md by rename detection."
    }
+  },
+  {
+   "path": "docs/write-path-spike.md",
+   "category": "Onexur/original",
+   "similarity_pct": null,
+   "upstream_source_path": null,
+   "notes": "no upstream counterpart in v0.2.6",
+   "flagged_for_review": false
   },
   {
    "path": "mcp.json",
@@ -1260,6 +1268,15 @@
    "upstream_lines": 151,
    "current_lines": 151,
    "licence_header": "none"
+  },
+  {
+   "path": "tests/test_write_path_spike.py",
+   "category": "Onexur/original",
+   "similarity_pct": null,
+   "upstream_source_path": null,
+   "notes": "no upstream counterpart in v0.2.6",
+   "flagged_for_review": false,
+   "licence_header": "AGPL-3.0-or-later (SPDX, Xalterra Ltd trading as Onexur)"
   },
   {
    "path": "tests/test_write_quotes.py",
@@ -2480,7 +2497,8 @@
    "WT:tests/test_reporting.py:2:# Copyright (c) 2026 Xalterra Ltd, trading as Onexur",
    "WT:tests/test_secret_hygiene.py:2:# Copyright (c) 2026 Xalterra Ltd, trading as Onexur",
    "WT:tests/test_server_info.py:2:# Copyright (c) 2026 Xalterra Ltd, trading as Onexur",
-   "WT:tests/test_transport_warning.py:2:# Copyright (c) 2026 Xalterra Ltd, trading as Onexur"
+   "WT:tests/test_transport_warning.py:2:# Copyright (c) 2026 Xalterra Ltd, trading as Onexur",
+   "WT:tests/test_write_path_spike.py:2:# Copyright (c) 2026 Xalterra Ltd, trading as Onexur"
   ],
   "licence_file_comparison": {
    "head_LICENSE_MIT_lines": [
