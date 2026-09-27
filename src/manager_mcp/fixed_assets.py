@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import sys as _sys
 from typing import Any
 
 from manager_mcp.client import ManagerClient
@@ -122,3 +123,53 @@ async def update_fixed_asset(
         "response": response,
         "after": after,
     }
+
+
+def register_fixed_asset_read_tool(mcp: Any, get_client: Any) -> None:
+    """Register the read-only get_fixed_asset tool."""
+    _fixed_assets = _sys.modules[__name__]
+
+    @mcp.tool(description="Fetch one Fixed Asset form by key (read-only).")
+    async def get_fixed_asset(fixed_asset_key: str) -> dict[str, Any]:
+        return await _fixed_assets.get_fixed_asset(get_client(), fixed_asset_key)
+
+
+def register_fixed_asset_write_tools(
+    mcp: Any, get_client: Any, get_policy: Any, write_annotations: Any
+) -> None:
+    """Register create_fixed_asset and update_fixed_asset (ledger scope)."""
+    _fixed_assets = _sys.modules[__name__]
+
+    @mcp.tool(
+        name="create_fixed_asset",
+        description=(
+            "Register a new Fixed Asset via POST /fixed-asset-form, verifying "
+            "by read-back. Requires ledger scope. fields must include a "
+            "non-empty ItemName; DepreciationRate and similar policy fields "
+            "are accepted. Acquisition cost, book value, and depreciation are "
+            "transaction-derived and are rejected here -- reference this "
+            "asset's Name from a Purchase Invoice or Journal Entry to record "
+            "acquisition cost and depreciation."
+        ),
+        annotations=write_annotations,
+    )
+    async def create_fixed_asset(fields: dict[str, Any]) -> dict[str, Any]:
+        return await _fixed_assets.create_fixed_asset(get_client(), get_policy(), fields)
+
+    @mcp.tool(
+        name="update_fixed_asset",
+        description=(
+            "Update metadata on an existing Fixed Asset via PUT "
+            "/fixed-asset-form/{key}, preserving the complete current form "
+            "and verifying by read-back. Requires ledger scope. Acquisition "
+            "cost, book value, and depreciation are transaction-derived and "
+            "are rejected; this tool creates no accounting transactions."
+        ),
+        annotations=write_annotations,
+    )
+    async def update_fixed_asset(
+        fixed_asset_key: str, fields: dict[str, Any]
+    ) -> dict[str, Any]:
+        return await _fixed_assets.update_fixed_asset(
+            get_client(), get_policy(), fixed_asset_key, fields
+        )

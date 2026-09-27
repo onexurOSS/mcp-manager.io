@@ -21,6 +21,7 @@ from __future__ import annotations
 
 import hashlib
 import json
+import sys as _sys
 from typing import Any
 
 import httpx
@@ -656,3 +657,210 @@ async def snapshot_and_void(
         "key": key,
         "voided_snapshot": before,
     }
+
+
+def register_correction_tools(
+    mcp: Any, get_client: Any, get_policy: Any, write_annotations: Any
+) -> None:
+    """Register propose/apply correction, reallocation and reconstruction tools.
+
+    Conditions and registration order are exactly those of the original inline code.
+    """
+    _corr = _sys.modules[__name__]
+    policy = get_policy()
+    effective = policy.effective_write_scopes
+
+    if policy.any_enabled:
+
+        @mcp.tool(
+            name="propose_correction",
+            description=(
+                "Stage a create/update without writing to Manager (dry run). "
+                "Runs the same validation a real write would run and returns "
+                "a proposal_token that apply_correction must echo back."
+            ),
+            annotations=write_annotations,
+        )
+        async def propose_correction(
+            resource: str,
+            fields: dict[str, Any],
+            key: str | None = None,
+        ) -> dict[str, Any]:
+            return await _corr.propose_correction(
+                get_client(), get_policy(), resource, fields, key=key
+            )
+
+        @mcp.tool(
+            name="apply_correction",
+            description=(
+                "Commit a create/update previously staged by propose_correction. "
+                "proposal_token must match the exact (resource, key, fields) "
+                "that were proposed."
+            ),
+            annotations=write_annotations,
+        )
+        async def apply_correction(
+            proposal_token: str,
+            resource: str,
+            fields: dict[str, Any],
+            key: str | None = None,
+        ) -> dict[str, Any]:
+            return await _corr.apply_correction(
+                get_client(), get_policy(), proposal_token, resource, fields, key=key
+            )
+
+    if "banking" in effective:
+
+        @mcp.tool(
+            name="reallocate_payment_line",
+            description=(
+                "Repoint one existing payment line's AccountsPayablePurchaseInvoice "
+                "to a different, verified-to-exist purchase invoice, leaving every "
+                "other field untouched. Refuses if the target invoice does not "
+                "exist. Requires banking scope."
+            ),
+            annotations=write_annotations,
+        )
+        async def reallocate_payment_line(
+            key: str, line_index: int, new_purchase_invoice_key: str
+        ) -> dict[str, Any]:
+            return await _corr.reallocate_payment_line(
+                get_client(), get_policy(), key, line_index, new_purchase_invoice_key
+            )
+
+        @mcp.tool(
+            name="reallocate_receipt_line",
+            description=(
+                "Repoint one existing receipt line's AccountsReceivableSalesInvoice "
+                "to a different, verified-to-exist sales invoice, leaving every "
+                "other field untouched. Requires banking scope."
+            ),
+            annotations=write_annotations,
+        )
+        async def reallocate_receipt_line(
+            key: str, line_index: int, new_sales_invoice_key: str
+        ) -> dict[str, Any]:
+            return await _corr.reallocate_receipt_line(
+                get_client(), get_policy(), key, line_index, new_sales_invoice_key
+            )
+
+    if "purchases" in effective and "banking" in effective:
+
+        @mcp.tool(
+            name="propose_purchase_invoice_reconstruction",
+            description=(
+                "Investigate payments that structurally reference a missing "
+                "purchase invoice (the missing-invoice payment pattern). Returns 'unresolved' "
+                "with the exact evidence gap when the per-line breakdown can't "
+                "be derived from the payments alone -- supply it via 'lines' "
+                "once you have the real invoice document. Requires purchases "
+                "and banking scopes."
+            ),
+            annotations=write_annotations,
+        )
+        async def propose_purchase_invoice_reconstruction(
+            payment_keys: list[str],
+            lines: list[dict[str, Any]] | None = None,
+            date: str | None = None,
+            reference: str | None = None,
+        ) -> dict[str, Any]:
+            return await _corr.propose_purchase_invoice_reconstruction(
+                get_client(),
+                get_policy(),
+                payment_keys,
+                lines=lines,
+                date=date,
+                reference=reference,
+            )
+
+        @mcp.tool(
+            name="apply_purchase_invoice_reconstruction",
+            description=(
+                "Create the invoice proposed by propose_purchase_invoice_reconstruction, "
+                "reallocate the citing payments onto it, and verify the resulting "
+                "balance. Requires purchases and banking scopes."
+            ),
+            annotations=write_annotations,
+        )
+        async def apply_purchase_invoice_reconstruction(
+            proposal_token: str,
+            fields: dict[str, Any],
+            payment_keys: list[str],
+        ) -> dict[str, Any]:
+            return await _corr.apply_purchase_invoice_reconstruction(
+                get_client(), get_policy(), proposal_token, fields, payment_keys
+            )
+
+    if "sales" in effective and "banking" in effective:
+
+        @mcp.tool(
+            name="propose_sales_invoice_reconstruction",
+            description=(
+                "Same workflow as propose_purchase_invoice_reconstruction, for "
+                "receipts referencing a missing sales invoice. Requires sales "
+                "and banking scopes."
+            ),
+            annotations=write_annotations,
+        )
+        async def propose_sales_invoice_reconstruction(
+            receipt_keys: list[str],
+            lines: list[dict[str, Any]] | None = None,
+            date: str | None = None,
+            reference: str | None = None,
+        ) -> dict[str, Any]:
+            return await _corr.propose_sales_invoice_reconstruction(
+                get_client(),
+                get_policy(),
+                receipt_keys,
+                lines=lines,
+                date=date,
+                reference=reference,
+            )
+
+        @mcp.tool(
+            name="apply_sales_invoice_reconstruction",
+            description=(
+                "Create the invoice proposed by propose_sales_invoice_reconstruction, "
+                "reallocate the citing receipts onto it, and verify the resulting "
+                "balance. Requires sales and banking scopes."
+            ),
+            annotations=write_annotations,
+        )
+        async def apply_sales_invoice_reconstruction(
+            proposal_token: str,
+            fields: dict[str, Any],
+            receipt_keys: list[str],
+        ) -> dict[str, Any]:
+            return await _corr.apply_sales_invoice_reconstruction(
+                get_client(), get_policy(), proposal_token, fields, receipt_keys
+            )
+
+
+def register_snapshot_and_void(
+    mcp: Any, get_client: Any, get_policy: Any, delete_annotations: Any
+) -> None:
+    """Register the audited snapshot_and_void tool (delete scope)."""
+    _corr = _sys.modules[__name__]
+
+    @mcp.tool(
+        name="snapshot_and_void",
+        description=(
+            "Void a document only after snapshotting its full before-state to "
+            "the audit log and confirming nothing else still references it. "
+            "Requires confirmed_duplicate_of as an explicit human-reviewed "
+            "justification; refuses to delete an 'unexplained' record on its "
+            "own. Prefer this over void_document for anything found by a "
+            "diagnostic tool."
+        ),
+        annotations=delete_annotations,
+    )
+    async def snapshot_and_void(
+        resource: str, key: str, confirmed_duplicate_of: str | None = None
+    ) -> dict[str, Any]:
+        return await _corr.snapshot_and_void(
+            get_client(),
+            get_policy(),
+            resource,
+            key,
+            confirmed_duplicate_of=confirmed_duplicate_of,
+        )

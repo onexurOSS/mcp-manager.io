@@ -22,6 +22,7 @@ same resource.
 
 from __future__ import annotations
 
+import sys as _sys
 from typing import Any
 
 from manager_mcp.client import ManagerClient
@@ -287,3 +288,24 @@ async def reconcile_period(
             "entirely for the same reason (see its own 'notice').",
         ],
     }
+
+
+def register_reconciliation_tools(mcp: Any, get_client: Any) -> None:
+    """Register the read-only period reconciliation tool on the FastMCP instance."""
+    _recon = _sys.modules[__name__]
+
+    @mcp.tool(
+        description=(
+            "Read-only PERIOD reconciliation report composed entirely from "
+            "Manager's own transaction data (no external system is "
+            "consulted). Every exception carries exact Manager "
+            "Keys. P&L/Balance Sheet/VAT sections surface raw transaction "
+            "feeds with an explicit notice where Manager API2 does not expose "
+            "computed report totals -- never a fabricated total."
+        )
+    )
+    async def reconcile_period(
+        from_date: str | None = None,
+        to_date: str | None = None,
+    ) -> dict[str, Any]:
+        return await _recon.reconcile_period(get_client(), from_date, to_date)

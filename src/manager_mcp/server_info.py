@@ -12,6 +12,7 @@ from __future__ import annotations
 
 import os
 import subprocess
+import sys as _sys
 from datetime import datetime, timezone
 from importlib import metadata as _importlib_metadata
 from pathlib import Path
@@ -132,3 +133,31 @@ def build_server_info(
         info["registered_tools"] = sorted(tool_names)
     info.update(resolve_git_info(repo_root))
     return info
+
+
+def register_server_info_tool(mcp: Any, get_policy: Any, source_path: Path) -> None:
+    """Register the get_server_info tool.
+
+    source_path must be the server entrypoint file (server.py), so the reported
+    source path, version and git state describe the running server checkout.
+    """
+    _server_info = _sys.modules[__name__]
+
+    @mcp.tool(
+        description=(
+            "Identify exactly which manager-mcp process you're connected to: "
+            "package version, local source path, git commit (+ dirty flag), pid, "
+            "process start time, registered tool count/names, transport, and "
+            "effective scopes. Read-only, no Manager API call. Run this after any "
+            "source edit + reload to confirm the new code is actually live -- pid "
+            "and process_started_at change on a real restart even when git_sha "
+            "does not (uncommitted edits), which is the reliable signal."
+        )
+    )
+    async def get_server_info() -> dict[str, Any]:
+        tools = await mcp.list_tools()
+        return _server_info.build_server_info(
+            source_path=source_path,
+            policy=get_policy(),
+            tool_names=[t.name for t in tools],
+        )

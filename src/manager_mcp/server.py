@@ -221,24 +221,7 @@ async def list_resources() -> dict[str, Any]:
     }
 
 
-@mcp.tool(
-    description=(
-        "Identify exactly which manager-mcp process you're connected to: "
-        "package version, local source path, git commit (+ dirty flag), pid, "
-        "process start time, registered tool count/names, transport, and "
-        "effective scopes. Read-only, no Manager API call. Run this after any "
-        "source edit + reload to confirm the new code is actually live -- pid "
-        "and process_started_at change on a real restart even when git_sha "
-        "does not (uncommitted edits), which is the reliable signal."
-    )
-)
-async def get_server_info() -> dict[str, Any]:
-    tools = await mcp.list_tools()
-    return _server_info.build_server_info(
-        source_path=_SOURCE_PATH,
-        policy=get_policy(),
-        tool_names=[t.name for t in tools],
-    )
+_server_info.register_server_info_tool(mcp, lambda: get_policy(), _SOURCE_PATH)
 
 
 @mcp.tool(
@@ -314,9 +297,7 @@ async def get_record(resource: str, key: str) -> dict[str, Any]:
     return {"resource": resource, "key": key, "body": body}
 
 
-@mcp.tool(description="Fetch one Fixed Asset form by key (read-only).")
-async def get_fixed_asset(fixed_asset_key: str) -> dict[str, Any]:
-    return await _fixed_assets.get_fixed_asset(get_client(), fixed_asset_key)
+_fixed_assets.register_fixed_asset_read_tool(mcp, lambda: get_client())
 
 
 @mcp.tool(
@@ -412,161 +393,10 @@ async def tax_summary(
     return await _fetch_report("tax_summary", from_date=from_date, to_date=to_date)
 
 
-@mcp.tool(
-    description=(
-        "Exact-match structured filter over a collection (client-side; "
-        "Manager's own query API has no field-value filter, only term/sort/"
-        "paging). filters is {field_name: expected_value}; every field must "
-        "match exactly. Never does fuzzy/partial/amount-only matching."
-    )
-)
-async def find_records(
-    resource: str,
-    filters: dict[str, Any],
-    max_pages: int = 50,
-) -> dict[str, Any]:
-    items = await _diag.find_records(get_client(), resource, filters, max_pages=max_pages)
-    return {"resource": resource, "filters": filters, "items": items, "count": len(items)}
+_diag.register_diagnostic_tools(mcp, lambda: get_client())
 
 
-@mcp.tool(
-    description=(
-        "Payments/receipts whose structured AR/AP invoice-Key line reference "
-        "does not resolve to any current invoice -- the general form of a "
-        "'missing invoice' (e.g. a supplier payment structurally allocated "
-        "to a Purchase Invoice Key that doesn't exist yet). Never uses the "
-        "transaction's free-text description to decide this."
-    )
-)
-async def find_broken_invoice_references(
-    resource: str,
-    from_date: str | None = None,
-    to_date: str | None = None,
-) -> dict[str, Any]:
-    items = await _diag.find_broken_invoice_references(
-        get_client(), resource, from_date=from_date, to_date=to_date
-    )
-    return {"resource": resource, "broken": items, "count": len(items)}
-
-
-@mcp.tool(description="Receipts/payments with no AR/AP invoice allocation on any line.")
-async def find_unallocated_transactions(
-    resource: str,
-    from_date: str | None = None,
-    to_date: str | None = None,
-) -> dict[str, Any]:
-    items = await _diag.find_unallocated_transactions(
-        get_client(), resource, from_date=from_date, to_date=to_date
-    )
-    return {"resource": resource, "unallocated": items, "count": len(items)}
-
-
-@mcp.tool(
-    description=(
-        "Exact-match duplicate detector: Customer/Supplier + Reference + "
-        "Date + total + line signature must ALL match. Partial matches are "
-        "returned as unresolved, never flagged as duplicates."
-    )
-)
-async def find_duplicate_transactions(
-    resource: str,
-    from_date: str | None = None,
-    to_date: str | None = None,
-) -> dict[str, Any]:
-    return await _diag.find_duplicate_transactions(
-        get_client(), resource, from_date=from_date, to_date=to_date
-    )
-
-
-@mcp.tool(
-    description=(
-        "Self-computed invoice balance: invoice total (its own Lines) vs. "
-        "the sum of every receipt/payment line that structurally allocates "
-        "to it. Does not trust any computed 'balance' field Manager may or "
-        "may not expose on the form response."
-    )
-)
-async def verify_invoice_balance(resource: str, key: str) -> dict[str, Any]:
-    return await _diag.verify_invoice_balance(get_client(), resource, key)
-
-
-@mcp.tool(
-    description=(
-        "Every structured Lines[] entry across all transaction types whose "
-        "Account matches the given chart-of-accounts key -- the closest "
-        "available view to a per-account general ledger (Manager exposes "
-        "no native GL-by-account endpoint)."
-    )
-)
-async def account_ledger(
-    account: str,
-    from_date: str | None = None,
-    to_date: str | None = None,
-) -> dict[str, Any]:
-    return await _diag.account_ledger(get_client(), account, from_date=from_date, to_date=to_date)
-
-
-@mcp.tool(
-    description=(
-        "Money-in/out for one bank/cash account, assembled from receipts "
-        "(ReceivedIn), payments (PaidFrom) and transfers referencing it. "
-        "Manager has no separate 'bank transaction' entity to read directly."
-    )
-)
-async def bank_activity(
-    bank_account_key: str,
-    from_date: str | None = None,
-    to_date: str | None = None,
-) -> dict[str, Any]:
-    return await _diag.bank_activity(
-        get_client(), bank_account_key, from_date=from_date, to_date=to_date
-    )
-
-
-@mcp.tool(
-    description=(
-        "Chart-of-accounts rows whose structured Name matches common "
-        "placeholder-account naming (suspense, uncategorised, clearing, "
-        "...). Candidates for human confirmation only -- never treated as "
-        "the suspense account automatically, and never based on any "
-        "transaction's free-text description."
-    )
-)
-async def find_suspense_candidate_accounts() -> dict[str, Any]:
-    items = await _diag.find_suspense_candidate_accounts(get_client())
-    return {"candidates": items, "count": len(items)}
-
-
-@mcp.tool(
-    description=(
-        "Single-pass general-ledger consistency check: sums every Lines[] "
-        "Amount (or Debit-Credit) grouped by Account across all transaction "
-        "types. overall_net should be ~0 in a balanced ledger; "
-        "per_account_net surfaces accounts worth investigating."
-    )
-)
-async def general_ledger_summary(
-    from_date: str | None = None,
-    to_date: str | None = None,
-) -> dict[str, Any]:
-    return await _diag.general_ledger_summary(get_client(), from_date=from_date, to_date=to_date)
-
-
-@mcp.tool(
-    description=(
-        "Read-only PERIOD reconciliation report composed entirely from "
-        "Manager's own transaction data (no external system is "
-        "consulted). Every exception carries exact Manager "
-        "Keys. P&L/Balance Sheet/VAT sections surface raw transaction "
-        "feeds with an explicit notice where Manager API2 does not expose "
-        "computed report totals -- never a fabricated total."
-    )
-)
-async def reconcile_period(
-    from_date: str | None = None,
-    to_date: str | None = None,
-) -> dict[str, Any]:
-    return await _recon.reconcile_period(get_client(), from_date, to_date)
+_recon.register_reconciliation_tools(mcp, lambda: get_client())
 
 
 async def _persist_and_verify(
@@ -686,39 +516,9 @@ def register_write_tools() -> None:
     policy = get_policy()
 
     if "ledger" in policy.effective_write_scopes:
-        @mcp.tool(
-            name="create_fixed_asset",
-            description=(
-                "Register a new Fixed Asset via POST /fixed-asset-form, verifying "
-                "by read-back. Requires ledger scope. fields must include a "
-                "non-empty ItemName; DepreciationRate and similar policy fields "
-                "are accepted. Acquisition cost, book value, and depreciation are "
-                "transaction-derived and are rejected here -- reference this "
-                "asset's Name from a Purchase Invoice or Journal Entry to record "
-                "acquisition cost and depreciation."
-            ),
-            annotations=_WRITE_ANNOTATIONS,
+        _fixed_assets.register_fixed_asset_write_tools(
+            mcp, lambda: get_client(), lambda: get_policy(), _WRITE_ANNOTATIONS
         )
-        async def create_fixed_asset(fields: dict[str, Any]) -> dict[str, Any]:
-            return await _fixed_assets.create_fixed_asset(get_client(), get_policy(), fields)
-
-        @mcp.tool(
-            name="update_fixed_asset",
-            description=(
-                "Update metadata on an existing Fixed Asset via PUT "
-                "/fixed-asset-form/{key}, preserving the complete current form "
-                "and verifying by read-back. Requires ledger scope. Acquisition "
-                "cost, book value, and depreciation are transaction-derived and "
-                "are rejected; this tool creates no accounting transactions."
-            ),
-            annotations=_WRITE_ANNOTATIONS,
-        )
-        async def update_fixed_asset(
-            fixed_asset_key: str, fields: dict[str, Any]
-        ) -> dict[str, Any]:
-            return await _fixed_assets.update_fixed_asset(
-                get_client(), get_policy(), fixed_asset_key, fields
-            )
 
     def prefix_fn(stem: str) -> str:
         return _deprecation_prefix(policy, stem)
@@ -758,170 +558,9 @@ def register_task_tools() -> None:
     policy = get_policy()
     effective = policy.effective_write_scopes
 
-    if policy.any_enabled:
-
-        @mcp.tool(
-            name="propose_correction",
-            description=(
-                "Stage a create/update without writing to Manager (dry run). "
-                "Runs the same validation a real write would run and returns "
-                "a proposal_token that apply_correction must echo back."
-            ),
-            annotations=_WRITE_ANNOTATIONS,
-        )
-        async def propose_correction(
-            resource: str,
-            fields: dict[str, Any],
-            key: str | None = None,
-        ) -> dict[str, Any]:
-            return await _corr.propose_correction(
-                get_client(), get_policy(), resource, fields, key=key
-            )
-
-        @mcp.tool(
-            name="apply_correction",
-            description=(
-                "Commit a create/update previously staged by propose_correction. "
-                "proposal_token must match the exact (resource, key, fields) "
-                "that were proposed."
-            ),
-            annotations=_WRITE_ANNOTATIONS,
-        )
-        async def apply_correction(
-            proposal_token: str,
-            resource: str,
-            fields: dict[str, Any],
-            key: str | None = None,
-        ) -> dict[str, Any]:
-            return await _corr.apply_correction(
-                get_client(), get_policy(), proposal_token, resource, fields, key=key
-            )
-
-    if "banking" in effective:
-
-        @mcp.tool(
-            name="reallocate_payment_line",
-            description=(
-                "Repoint one existing payment line's AccountsPayablePurchaseInvoice "
-                "to a different, verified-to-exist purchase invoice, leaving every "
-                "other field untouched. Refuses if the target invoice does not "
-                "exist. Requires banking scope."
-            ),
-            annotations=_WRITE_ANNOTATIONS,
-        )
-        async def reallocate_payment_line(
-            key: str, line_index: int, new_purchase_invoice_key: str
-        ) -> dict[str, Any]:
-            return await _corr.reallocate_payment_line(
-                get_client(), get_policy(), key, line_index, new_purchase_invoice_key
-            )
-
-        @mcp.tool(
-            name="reallocate_receipt_line",
-            description=(
-                "Repoint one existing receipt line's AccountsReceivableSalesInvoice "
-                "to a different, verified-to-exist sales invoice, leaving every "
-                "other field untouched. Requires banking scope."
-            ),
-            annotations=_WRITE_ANNOTATIONS,
-        )
-        async def reallocate_receipt_line(
-            key: str, line_index: int, new_sales_invoice_key: str
-        ) -> dict[str, Any]:
-            return await _corr.reallocate_receipt_line(
-                get_client(), get_policy(), key, line_index, new_sales_invoice_key
-            )
-
-    if "purchases" in effective and "banking" in effective:
-
-        @mcp.tool(
-            name="propose_purchase_invoice_reconstruction",
-            description=(
-                "Investigate payments that structurally reference a missing "
-                "purchase invoice (the missing-invoice payment pattern). Returns 'unresolved' "
-                "with the exact evidence gap when the per-line breakdown can't "
-                "be derived from the payments alone -- supply it via 'lines' "
-                "once you have the real invoice document. Requires purchases "
-                "and banking scopes."
-            ),
-            annotations=_WRITE_ANNOTATIONS,
-        )
-        async def propose_purchase_invoice_reconstruction(
-            payment_keys: list[str],
-            lines: list[dict[str, Any]] | None = None,
-            date: str | None = None,
-            reference: str | None = None,
-        ) -> dict[str, Any]:
-            return await _corr.propose_purchase_invoice_reconstruction(
-                get_client(),
-                get_policy(),
-                payment_keys,
-                lines=lines,
-                date=date,
-                reference=reference,
-            )
-
-        @mcp.tool(
-            name="apply_purchase_invoice_reconstruction",
-            description=(
-                "Create the invoice proposed by propose_purchase_invoice_reconstruction, "
-                "reallocate the citing payments onto it, and verify the resulting "
-                "balance. Requires purchases and banking scopes."
-            ),
-            annotations=_WRITE_ANNOTATIONS,
-        )
-        async def apply_purchase_invoice_reconstruction(
-            proposal_token: str,
-            fields: dict[str, Any],
-            payment_keys: list[str],
-        ) -> dict[str, Any]:
-            return await _corr.apply_purchase_invoice_reconstruction(
-                get_client(), get_policy(), proposal_token, fields, payment_keys
-            )
-
-    if "sales" in effective and "banking" in effective:
-
-        @mcp.tool(
-            name="propose_sales_invoice_reconstruction",
-            description=(
-                "Same workflow as propose_purchase_invoice_reconstruction, for "
-                "receipts referencing a missing sales invoice. Requires sales "
-                "and banking scopes."
-            ),
-            annotations=_WRITE_ANNOTATIONS,
-        )
-        async def propose_sales_invoice_reconstruction(
-            receipt_keys: list[str],
-            lines: list[dict[str, Any]] | None = None,
-            date: str | None = None,
-            reference: str | None = None,
-        ) -> dict[str, Any]:
-            return await _corr.propose_sales_invoice_reconstruction(
-                get_client(),
-                get_policy(),
-                receipt_keys,
-                lines=lines,
-                date=date,
-                reference=reference,
-            )
-
-        @mcp.tool(
-            name="apply_sales_invoice_reconstruction",
-            description=(
-                "Create the invoice proposed by propose_sales_invoice_reconstruction, "
-                "reallocate the citing receipts onto it, and verify the resulting "
-                "balance. Requires sales and banking scopes."
-            ),
-            annotations=_WRITE_ANNOTATIONS,
-        )
-        async def apply_sales_invoice_reconstruction(
-            proposal_token: str,
-            fields: dict[str, Any],
-            receipt_keys: list[str],
-        ) -> dict[str, Any]:
-            return await _corr.apply_sales_invoice_reconstruction(
-                get_client(), get_policy(), proposal_token, fields, receipt_keys
-            )
+    _corr.register_correction_tools(
+        mcp, lambda: get_client(), lambda: get_policy(), _WRITE_ANNOTATIONS
+    )
 
     if "sales" in effective:
 
@@ -1153,28 +792,9 @@ def register_task_tools() -> None:
         async def void_document(resource: str, key: str) -> dict[str, Any]:
             return await _tt.void_document(get_client(), get_policy(), resource, key)
 
-        @mcp.tool(
-            name="snapshot_and_void",
-            description=(
-                "Void a document only after snapshotting its full before-state to "
-                "the audit log and confirming nothing else still references it. "
-                "Requires confirmed_duplicate_of as an explicit human-reviewed "
-                "justification; refuses to delete an 'unexplained' record on its "
-                "own. Prefer this over void_document for anything found by a "
-                "diagnostic tool."
-            ),
-            annotations=_DELETE_ANNOTATIONS,
+        _corr.register_snapshot_and_void(
+            mcp, lambda: get_client(), lambda: get_policy(), _DELETE_ANNOTATIONS
         )
-        async def snapshot_and_void(
-            resource: str, key: str, confirmed_duplicate_of: str | None = None
-        ) -> dict[str, Any]:
-            return await _corr.snapshot_and_void(
-                get_client(),
-                get_policy(),
-                resource,
-                key,
-                confirmed_duplicate_of=confirmed_duplicate_of,
-            )
 
     _task_tools_registered = True
 

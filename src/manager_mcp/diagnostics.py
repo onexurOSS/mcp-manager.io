@@ -31,6 +31,7 @@ from the write-side research alone), shape this module:
 
 from __future__ import annotations
 
+import sys as _sys
 from typing import Any
 
 import httpx
@@ -729,3 +730,151 @@ async def general_ledger_summary(
             "verified tax-computation path here)."
         ),
     }
+
+
+def register_diagnostic_tools(mcp: Any, get_client: Any) -> None:
+    """Register the read-only diagnostic tools on the FastMCP instance."""
+    _diag = _sys.modules[__name__]
+
+    @mcp.tool(
+        description=(
+            "Exact-match structured filter over a collection (client-side; "
+            "Manager's own query API has no field-value filter, only term/sort/"
+            "paging). filters is {field_name: expected_value}; every field must "
+            "match exactly. Never does fuzzy/partial/amount-only matching."
+        )
+    )
+    async def find_records(
+        resource: str,
+        filters: dict[str, Any],
+        max_pages: int = 50,
+    ) -> dict[str, Any]:
+        items = await _diag.find_records(get_client(), resource, filters, max_pages=max_pages)
+        return {"resource": resource, "filters": filters, "items": items, "count": len(items)}
+
+
+    @mcp.tool(
+        description=(
+            "Payments/receipts whose structured AR/AP invoice-Key line reference "
+            "does not resolve to any current invoice -- the general form of a "
+            "'missing invoice' (e.g. a supplier payment structurally allocated "
+            "to a Purchase Invoice Key that doesn't exist yet). Never uses the "
+            "transaction's free-text description to decide this."
+        )
+    )
+    async def find_broken_invoice_references(
+        resource: str,
+        from_date: str | None = None,
+        to_date: str | None = None,
+    ) -> dict[str, Any]:
+        items = await _diag.find_broken_invoice_references(
+            get_client(), resource, from_date=from_date, to_date=to_date
+        )
+        return {"resource": resource, "broken": items, "count": len(items)}
+
+
+    @mcp.tool(description="Receipts/payments with no AR/AP invoice allocation on any line.")
+    async def find_unallocated_transactions(
+        resource: str,
+        from_date: str | None = None,
+        to_date: str | None = None,
+    ) -> dict[str, Any]:
+        items = await _diag.find_unallocated_transactions(
+            get_client(), resource, from_date=from_date, to_date=to_date
+        )
+        return {"resource": resource, "unallocated": items, "count": len(items)}
+
+
+    @mcp.tool(
+        description=(
+            "Exact-match duplicate detector: Customer/Supplier + Reference + "
+            "Date + total + line signature must ALL match. Partial matches are "
+            "returned as unresolved, never flagged as duplicates."
+        )
+    )
+    async def find_duplicate_transactions(
+        resource: str,
+        from_date: str | None = None,
+        to_date: str | None = None,
+    ) -> dict[str, Any]:
+        return await _diag.find_duplicate_transactions(
+            get_client(), resource, from_date=from_date, to_date=to_date
+        )
+
+
+    @mcp.tool(
+        description=(
+            "Self-computed invoice balance: invoice total (its own Lines) vs. "
+            "the sum of every receipt/payment line that structurally allocates "
+            "to it. Does not trust any computed 'balance' field Manager may or "
+            "may not expose on the form response."
+        )
+    )
+    async def verify_invoice_balance(resource: str, key: str) -> dict[str, Any]:
+        return await _diag.verify_invoice_balance(get_client(), resource, key)
+
+
+    @mcp.tool(
+        description=(
+            "Every structured Lines[] entry across all transaction types whose "
+            "Account matches the given chart-of-accounts key -- the closest "
+            "available view to a per-account general ledger (Manager exposes "
+            "no native GL-by-account endpoint)."
+        )
+    )
+    async def account_ledger(
+        account: str,
+        from_date: str | None = None,
+        to_date: str | None = None,
+    ) -> dict[str, Any]:
+        return await _diag.account_ledger(
+            get_client(), account, from_date=from_date, to_date=to_date
+        )
+
+
+    @mcp.tool(
+        description=(
+            "Money-in/out for one bank/cash account, assembled from receipts "
+            "(ReceivedIn), payments (PaidFrom) and transfers referencing it. "
+            "Manager has no separate 'bank transaction' entity to read directly."
+        )
+    )
+    async def bank_activity(
+        bank_account_key: str,
+        from_date: str | None = None,
+        to_date: str | None = None,
+    ) -> dict[str, Any]:
+        return await _diag.bank_activity(
+            get_client(), bank_account_key, from_date=from_date, to_date=to_date
+        )
+
+
+    @mcp.tool(
+        description=(
+            "Chart-of-accounts rows whose structured Name matches common "
+            "placeholder-account naming (suspense, uncategorised, clearing, "
+            "...). Candidates for human confirmation only -- never treated as "
+            "the suspense account automatically, and never based on any "
+            "transaction's free-text description."
+        )
+    )
+    async def find_suspense_candidate_accounts() -> dict[str, Any]:
+        items = await _diag.find_suspense_candidate_accounts(get_client())
+        return {"candidates": items, "count": len(items)}
+
+
+    @mcp.tool(
+        description=(
+            "Single-pass general-ledger consistency check: sums every Lines[] "
+            "Amount (or Debit-Credit) grouped by Account across all transaction "
+            "types. overall_net should be ~0 in a balanced ledger; "
+            "per_account_net surfaces accounts worth investigating."
+        )
+    )
+    async def general_ledger_summary(
+        from_date: str | None = None,
+        to_date: str | None = None,
+    ) -> dict[str, Any]:
+        return await _diag.general_ledger_summary(
+            get_client(), from_date=from_date, to_date=to_date
+        )
