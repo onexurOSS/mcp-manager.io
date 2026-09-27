@@ -16,7 +16,15 @@ Before your first pull request can be merged, you must sign the project's Contri
 - If you contribute to an **Onexur-original file** (or add a new file), the CLA grants Xalterra Ltd, trading as Onexur, the rights needed to license your contribution under AGPL-3.0-or-later and, where applicable, under a commercial licence.
 - If you contribute to an **upstream-derived file**, your contribution remains subject to the upstream MIT licence. The CLA does not, and cannot, grant Xalterra Ltd ownership of upstream copyright, and your contribution to that file isn't relicensed by signing it.
 
-You will be asked to sign the CLA before your first pull request is merged.
+### How to agree to the CLA
+
+A bot comments on your first pull request. To agree to version 1.0 of the CLA, post a comment on that pull request containing exactly this sentence and nothing else, with no full stop and no other text:
+
+```
+I have read and agree to the Onexur Contributor License Agreement, Version 1.0
+```
+
+Opening a pull request does not by itself accept the CLA. The bot records your GitHub username, the pull request number and the time of your comment on the `cla-signatures` branch, and its check turns green. If it does not update, comment `recheck`. Your agreement applies to the version you accepted. If the CLA is revised, a new version and a new sentence apply to later contributions, and you will be asked to agree again for them.
 
 ## Development setup
 
