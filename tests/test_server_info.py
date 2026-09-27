@@ -43,10 +43,12 @@ def test_resolve_version_prefers_installed_package_metadata() -> None:
     # This project IS installed (editable) in the active venv, so the
     # canonical source is importlib.metadata, matching pyproject.toml's
     # own [project] version, not a value this test invents.
-    import tomllib
+    import re
 
     pyproject = Path(__file__).resolve().parent.parent / "pyproject.toml"
-    expected = tomllib.loads(pyproject.read_text())["project"]["version"]
+    match = re.search(r'^version = "([^"]+)"', pyproject.read_text(), re.MULTILINE)
+    assert match is not None
+    expected = match.group(1)
     assert resolve_version(pyproject.parent) == expected
 
 
