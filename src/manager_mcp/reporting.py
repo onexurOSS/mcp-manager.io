@@ -1,3 +1,5 @@
+# SPDX-License-Identifier: AGPL-3.0-or-later
+# Copyright (c) 2026 Xalterra Ltd, trading as Onexur
 """Read-only reporting layer for Manager.io (GET only, no writes).
 
 Authority model (never blur these):

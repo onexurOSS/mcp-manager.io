@@ -1,3 +1,5 @@
+# SPDX-License-Identifier: AGPL-3.0-or-later
+# Copyright (c) 2026 Xalterra Ltd, trading as Onexur
 """Structured-evidence-only diagnostics (respx; no live Manager, no guessing).
 
 Mocks reflect the real, live-verified Manager shape: list endpoints return

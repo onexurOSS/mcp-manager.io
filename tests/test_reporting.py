@@ -1,3 +1,5 @@
+# SPDX-License-Identifier: AGPL-3.0-or-later
+# Copyright (c) 2026 Xalterra Ltd, trading as Onexur
 """Reporting layer tests (respx, no live Manager). Everything here is GET only."""
 
 from __future__ import annotations

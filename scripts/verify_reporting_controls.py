@@ -1,3 +1,5 @@
+# SPDX-License-Identifier: AGPL-3.0-or-later
+# Copyright (c) 2026 Xalterra Ltd, trading as Onexur
 """Live validation of the read-only reporting layer against YOUR Manager instance (GET only).
 
 Run (credentials come from the environment, for example an env file you keep private):

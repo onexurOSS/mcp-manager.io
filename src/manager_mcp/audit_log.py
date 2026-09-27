@@ -1,3 +1,5 @@
+# SPDX-License-Identifier: AGPL-3.0-or-later
+# Copyright (c) 2026 Xalterra Ltd, trading as Onexur
 """Append-only audit trail for corrective writes (before/after state).
 
 Every corrective tool in `corrections.py` writes one entry here per

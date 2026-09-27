@@ -1,3 +1,5 @@
+# SPDX-License-Identifier: AGPL-3.0-or-later
+# Copyright (c) 2026 Xalterra Ltd, trading as Onexur
 """fetch_all pagination helper (respx; no live Manager)."""
 
 from __future__ import annotations

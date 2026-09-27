@@ -1,3 +1,5 @@
+# SPDX-License-Identifier: AGPL-3.0-or-later
+# Copyright (c) 2026 Xalterra Ltd, trading as Onexur
 """Registration gating for the Phase 2 reconciliation/corrective tools."""
 
 from __future__ import annotations

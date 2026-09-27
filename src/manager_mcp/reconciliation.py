@@ -1,3 +1,5 @@
+# SPDX-License-Identifier: AGPL-3.0-or-later
+# Copyright (c) 2026 Xalterra Ltd, trading as Onexur
 """Read-only PERIOD reconciliation report, composed from diagnostics.
 
 Every figure here is derived from Manager's own transaction data only --

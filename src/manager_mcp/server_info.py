@@ -1,3 +1,5 @@
+# SPDX-License-Identifier: AGPL-3.0-or-later
+# Copyright (c) 2026 Xalterra Ltd, trading as Onexur
 """Read-only server-identity diagnostics (`get_server_info`).
 
 Exists so an agent can answer "which manager-mcp process am I actually

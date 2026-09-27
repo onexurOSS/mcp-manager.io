@@ -1,3 +1,5 @@
+# SPDX-License-Identifier: AGPL-3.0-or-later
+# Copyright (c) 2026 Xalterra Ltd, trading as Onexur
 """Pagination helper for looping through Manager list collections.
 
 Manager's list query surface is `term`/`sortBy`/`sortByDesc`/`skip`/`pageSize`

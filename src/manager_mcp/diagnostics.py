@@ -1,3 +1,5 @@
+# SPDX-License-Identifier: AGPL-3.0-or-later
+# Copyright (c) 2026 Xalterra Ltd, trading as Onexur
 """Read-only diagnostics over Manager's structured transaction data.
 
 Every function here follows the source-of-truth priority: transaction

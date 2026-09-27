@@ -1,3 +1,5 @@
+# SPDX-License-Identifier: AGPL-3.0-or-later
+# Copyright (c) 2026 Xalterra Ltd, trading as Onexur
 """Read-only collection additions: Fixed Assets and Tax Codes.
 
 These two collections are not part of the base resource set. They are pure data

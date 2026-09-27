@@ -1,3 +1,5 @@
+# SPDX-License-Identifier: AGPL-3.0-or-later
+# Copyright (c) 2026 Xalterra Ltd, trading as Onexur
 """Build the Manager capability matrix from an OpenAPI /api2 document (offline, read-only).
 
 Usage: python scripts/build_capability_matrix.py LIVE_SPEC.json OUT.json

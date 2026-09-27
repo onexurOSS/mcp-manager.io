@@ -1,3 +1,5 @@
+# SPDX-License-Identifier: AGPL-3.0-or-later
+# Copyright (c) 2026 Xalterra Ltd, trading as Onexur
 """Tests for the dev-mode stdio supervisor (manager_mcp.dev_supervisor).
 
 Integration-style tests spawn a small fake child process (tests/fixtures/

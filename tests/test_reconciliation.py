@@ -1,3 +1,5 @@
+# SPDX-License-Identifier: AGPL-3.0-or-later
+# Copyright (c) 2026 Xalterra Ltd, trading as Onexur
 """reconcile_period composition (respx; no live Manager).
 
 Focus: the report is built entirely from Manager transaction data, every

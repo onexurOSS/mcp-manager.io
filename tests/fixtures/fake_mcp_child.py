@@ -1,3 +1,5 @@
+# SPDX-License-Identifier: AGPL-3.0-or-later
+# Copyright (c) 2026 Xalterra Ltd, trading as Onexur
 """Fake MCP-shaped child for dev_supervisor tests.
 
 Speaks the same newline-delimited-JSON framing as the real manager-mcp

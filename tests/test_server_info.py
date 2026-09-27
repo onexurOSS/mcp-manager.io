@@ -1,3 +1,5 @@
+# SPDX-License-Identifier: AGPL-3.0-or-later
+# Copyright (c) 2026 Xalterra Ltd, trading as Onexur
 """Server-identity diagnostics: version resolution, git metadata, and the
 `get_server_info` MCP tool. No live git SHA is asserted anywhere: fixtures
 build throwaway repos/checkouts so results are machine-independent."""

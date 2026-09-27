@@ -1,3 +1,5 @@
+# SPDX-License-Identifier: AGPL-3.0-or-later
+# Copyright (c) 2026 Xalterra Ltd, trading as Onexur
 """Two-phase (propose/apply) corrective operations.
 
 These reuse the existing write scopes, field validation, and persistence
