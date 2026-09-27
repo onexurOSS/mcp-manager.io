@@ -1,7 +1,7 @@
 {
  "generated_by": "Gate 1A provenance audit",
- "repo_head": "0999fec97ca74bcd614c483df0b47e7103926520",
- "repo_basis": "committed tree at HEAD 0999fec97ca7; commit author identity rewritten to Onexur <github@xalterra.com>; working tree clean apart from PROVENANCE.json and PROVENANCE_SUMMARY.md",
+ "repo_head": "7dd3e31942ffba6fa05e0bb5d4de103ddc60d1bb",
+ "repo_basis": "committed tree at HEAD 7dd3e31942ff; commit author identity rewritten to Onexur <github@xalterra.com>; working tree clean apart from PROVENANCE.json and PROVENANCE_SUMMARY.md",
  "upstream_reference": {
   "source": "github.com/flumpiey/manager-mcp tag v0.2.6",
   "commit": "c50c4d71f2aff962a8c9dbb1cce2ef14f602a51b",
@@ -42,6 +42,14 @@
    "new_in_current_pct": 0.0,
    "upstream_lines": 21,
    "current_lines": 21
+  },
+  {
+   "path": ".github/ISSUE_TEMPLATE/feature_request.md",
+   "category": "Onexur/original",
+   "similarity_pct": null,
+   "upstream_source_path": null,
+   "notes": "no upstream counterpart in v0.2.6",
+   "flagged_for_review": false
   },
   {
    "path": ".github/workflows/audit.yml",
@@ -190,6 +198,14 @@
    "similarity_pct": null,
    "upstream_source_path": null,
    "notes": "Generated compilation of the licence notices of the 105 third-party dependencies (107 lock entries) from package metadata and licence files. The text within each entry is the respective package's own licence text; the compilation and preface are generated.",
+   "flagged_for_review": false
+  },
+  {
+   "path": "docs/adoption-log.md",
+   "category": "Onexur/original",
+   "similarity_pct": null,
+   "upstream_source_path": null,
+   "notes": "no upstream counterpart in v0.2.6",
    "flagged_for_review": false
   },
   {
