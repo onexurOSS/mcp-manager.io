@@ -1,7 +1,7 @@
 {
  "generated_by": "Gate 1A provenance audit",
- "repo_head": "4b6a2aefb5d63ca1f4e3ff155fd44fb46a950b7d",
- "repo_basis": "committed tree at HEAD 4b6a2aefb5d6; working tree clean apart from PROVENANCE.json and PROVENANCE_SUMMARY.md",
+ "repo_head": "f92536b179c80ece5dc5dfc2bb9109cbdbb9d9b5",
+ "repo_basis": "committed tree at HEAD f92536b179c8; working tree clean apart from PROVENANCE.json and PROVENANCE_SUMMARY.md",
  "upstream_reference": {
   "source": "github.com/flumpiey/manager-mcp tag v0.2.6",
   "commit": "c50c4d71f2aff962a8c9dbb1cce2ef14f602a51b",
@@ -88,15 +88,15 @@
    "new_in_current_pct": 80.0,
    "upstream_lines": 75,
    "current_lines": 75,
-   "review_flag": "substantial rewrite - candidate for onexurOSS/original",
+   "review_flag": "substantial rewrite - candidate for Onexur/original",
    "manual_review": {
-    "classification": "substantial rewrite - candidate for onexurOSS/original",
-    "basis": "Since the changelog split the file holds only the onexurOSS 1.0.0 entry. The only upstream text retained is the two line title and introduction. The upstream release entries moved verbatim to docs/upstream-history.md. The path match to upstream CHANGELOG.md is a comparison artefact."
+    "classification": "substantial rewrite - candidate for Onexur/original",
+    "basis": "Since the changelog split the file holds only the Onexur 1.0.0 entry. The only upstream text retained is the two line title and introduction. The upstream release entries moved verbatim to docs/upstream-history.md. The path match to upstream CHANGELOG.md is a comparison artefact."
    }
   },
   {
    "path": "CONTRIBUTING.md",
-   "category": "onexurOSS/original",
+   "category": "Onexur/original",
    "similarity_pct": null,
    "upstream_source_path": null,
    "notes": "no upstream counterpart in v0.2.6",
@@ -107,7 +107,7 @@
    "category": "third-party",
    "similarity_pct": null,
    "upstream_source_path": null,
-   "notes": "Free Software Foundation licence text, copy from gnu.org (661 lines, 34523 bytes) preceded by one added copyright line naming Xalterra Ltd, trading as Onexur. Prefacing the licence text with a project copyright line is standard and leaves the licence text untouched (resolved, not flagged). The licence text is not onexurOSS or upstream authored material.",
+   "notes": "Free Software Foundation licence text, copy from gnu.org (661 lines, 34523 bytes) preceded by one added copyright line naming Xalterra Ltd, trading as Onexur. Prefacing the licence text with a project copyright line is standard and leaves the licence text untouched (resolved, not flagged). The licence text is not Onexur or upstream authored material.",
    "flagged_for_review": false
   },
   {
@@ -125,7 +125,7 @@
   },
   {
    "path": "NOTICE",
-   "category": "onexurOSS/original",
+   "category": "Onexur/original",
    "similarity_pct": null,
    "upstream_source_path": null,
    "notes": "no upstream counterpart in v0.2.6",
@@ -142,15 +142,15 @@
    "new_in_current_pct": 56.2,
    "upstream_lines": 536,
    "current_lines": 153,
-   "review_flag": "substantial rewrite - candidate for onexurOSS/original",
+   "review_flag": "substantial rewrite - candidate for Onexur/original",
    "manual_review": {
-    "classification": "substantial rewrite - candidate for onexurOSS/original",
+    "classification": "substantial rewrite - candidate for Onexur/original",
     "basis": "Rewritten from scratch in the solicitor's structure and checked against the code. Similarity to the upstream README is 19.4%. Of 199 non-trivial upstream lines, only one repeated line survives (the example MANAGER_API_URL value, Manager's default local address, a configuration fact). No upstream prose is retained."
    }
   },
   {
    "path": "SECURITY.md",
-   "category": "onexurOSS/original",
+   "category": "Onexur/original",
    "similarity_pct": null,
    "upstream_source_path": null,
    "notes": "no upstream counterpart in v0.2.6",
@@ -166,7 +166,7 @@
   },
   {
    "path": "docs/publishing-review.md",
-   "category": "onexurOSS/original",
+   "category": "Onexur/original",
    "similarity_pct": null,
    "upstream_source_path": null,
    "notes": "no upstream counterpart in v0.2.6",
@@ -174,7 +174,7 @@
   },
   {
    "path": "docs/reporting.md",
-   "category": "onexurOSS/original",
+   "category": "Onexur/original",
    "similarity_pct": null,
    "upstream_source_path": null,
    "notes": "no upstream counterpart in v0.2.6",
@@ -367,7 +367,7 @@
   },
   {
    "path": "scripts/build_capability_matrix.py",
-   "category": "onexurOSS/original",
+   "category": "Onexur/original",
    "similarity_pct": null,
    "upstream_source_path": null,
    "notes": "no upstream counterpart in v0.2.6",
@@ -376,7 +376,7 @@
   },
   {
    "path": "scripts/verify_reporting_controls.py",
-   "category": "onexurOSS/original",
+   "category": "Onexur/original",
    "similarity_pct": null,
    "upstream_source_path": null,
    "notes": "no upstream counterpart in v0.2.6",
@@ -599,7 +599,7 @@
   },
   {
    "path": "src/manager_mcp/audit_log.py",
-   "category": "onexurOSS/original",
+   "category": "Onexur/original",
    "similarity_pct": null,
    "upstream_source_path": null,
    "notes": "no upstream counterpart in v0.2.6",
@@ -621,7 +621,7 @@
   },
   {
    "path": "src/manager_mcp/corrections.py",
-   "category": "onexurOSS/original",
+   "category": "Onexur/original",
    "similarity_pct": null,
    "upstream_source_path": null,
    "notes": "no upstream counterpart in v0.2.6",
@@ -630,7 +630,7 @@
   },
   {
    "path": "src/manager_mcp/dev_supervisor.py",
-   "category": "onexurOSS/original",
+   "category": "Onexur/original",
    "similarity_pct": null,
    "upstream_source_path": null,
    "notes": "no upstream counterpart in v0.2.6",
@@ -639,7 +639,7 @@
   },
   {
    "path": "src/manager_mcp/diagnostics.py",
-   "category": "onexurOSS/original",
+   "category": "Onexur/original",
    "similarity_pct": null,
    "upstream_source_path": null,
    "notes": "no upstream counterpart in v0.2.6",
@@ -648,7 +648,7 @@
   },
   {
    "path": "src/manager_mcp/extra_read_collections.py",
-   "category": "onexurOSS/original",
+   "category": "Onexur/original",
    "similarity_pct": null,
    "upstream_source_path": null,
    "notes": "no upstream counterpart in v0.2.6",
@@ -657,7 +657,7 @@
   },
   {
    "path": "src/manager_mcp/fixed_assets.py",
-   "category": "onexurOSS/original",
+   "category": "Onexur/original",
    "similarity_pct": null,
    "upstream_source_path": null,
    "notes": "no upstream counterpart in v0.2.6",
@@ -666,7 +666,7 @@
   },
   {
    "path": "src/manager_mcp/paging.py",
-   "category": "onexurOSS/original",
+   "category": "Onexur/original",
    "similarity_pct": null,
    "upstream_source_path": null,
    "notes": "no upstream counterpart in v0.2.6",
@@ -688,7 +688,7 @@
   },
   {
    "path": "src/manager_mcp/reconciliation.py",
-   "category": "onexurOSS/original",
+   "category": "Onexur/original",
    "similarity_pct": null,
    "upstream_source_path": null,
    "notes": "no upstream counterpart in v0.2.6",
@@ -697,7 +697,7 @@
   },
   {
    "path": "src/manager_mcp/reporting.py",
-   "category": "onexurOSS/original",
+   "category": "Onexur/original",
    "similarity_pct": null,
    "upstream_source_path": null,
    "notes": "no upstream counterpart in v0.2.6",
@@ -742,12 +742,12 @@
    "new_in_current_pct": 17.7,
    "upstream_lines": 697,
    "current_lines": 792,
-   "review_flag": "substantial rewrite - candidate for onexurOSS/original",
+   "review_flag": "substantial rewrite - candidate for Onexur/original",
    "licence_header": "none"
   },
   {
    "path": "src/manager_mcp/server_info.py",
-   "category": "onexurOSS/original",
+   "category": "Onexur/original",
    "similarity_pct": null,
    "upstream_source_path": null,
    "notes": "no upstream counterpart in v0.2.6",
@@ -795,7 +795,7 @@
   },
   {
    "path": "tests/fixtures/fake_mcp_child.py",
-   "category": "onexurOSS/original",
+   "category": "Onexur/original",
    "similarity_pct": null,
    "upstream_source_path": null,
    "notes": "no upstream counterpart in v0.2.6",
@@ -908,7 +908,7 @@
   },
   {
    "path": "tests/test_audit_log.py",
-   "category": "onexurOSS/original",
+   "category": "Onexur/original",
    "similarity_pct": null,
    "upstream_source_path": null,
    "notes": "no upstream counterpart in v0.2.6",
@@ -930,7 +930,7 @@
   },
   {
    "path": "tests/test_corrections.py",
-   "category": "onexurOSS/original",
+   "category": "Onexur/original",
    "similarity_pct": null,
    "upstream_source_path": null,
    "notes": "no upstream counterpart in v0.2.6",
@@ -952,7 +952,7 @@
   },
   {
    "path": "tests/test_dev_supervisor.py",
-   "category": "onexurOSS/original",
+   "category": "Onexur/original",
    "similarity_pct": null,
    "upstream_source_path": null,
    "notes": "no upstream counterpart in v0.2.6",
@@ -961,7 +961,7 @@
   },
   {
    "path": "tests/test_diagnostics.py",
-   "category": "onexurOSS/original",
+   "category": "Onexur/original",
    "similarity_pct": null,
    "upstream_source_path": null,
    "notes": "no upstream counterpart in v0.2.6",
@@ -970,7 +970,7 @@
   },
   {
    "path": "tests/test_extra_read_collections.py",
-   "category": "onexurOSS/original",
+   "category": "Onexur/original",
    "similarity_pct": null,
    "upstream_source_path": null,
    "notes": "no upstream counterpart in v0.2.6",
@@ -979,7 +979,7 @@
   },
   {
    "path": "tests/test_fixed_assets.py",
-   "category": "onexurOSS/original",
+   "category": "Onexur/original",
    "similarity_pct": null,
    "upstream_source_path": null,
    "notes": "no upstream counterpart in v0.2.6",
@@ -988,7 +988,7 @@
   },
   {
    "path": "tests/test_migration_collections.py",
-   "category": "onexurOSS/original",
+   "category": "Onexur/original",
    "similarity_pct": null,
    "upstream_source_path": null,
    "notes": "no upstream counterpart in v0.2.6",
@@ -997,7 +997,7 @@
   },
   {
    "path": "tests/test_new_tool_registration.py",
-   "category": "onexurOSS/original",
+   "category": "Onexur/original",
    "similarity_pct": null,
    "upstream_source_path": null,
    "notes": "no upstream counterpart in v0.2.6",
@@ -1006,7 +1006,7 @@
   },
   {
    "path": "tests/test_paging.py",
-   "category": "onexurOSS/original",
+   "category": "Onexur/original",
    "similarity_pct": null,
    "upstream_source_path": null,
    "notes": "no upstream counterpart in v0.2.6",
@@ -1041,7 +1041,7 @@
   },
   {
    "path": "tests/test_reconciliation.py",
-   "category": "onexurOSS/original",
+   "category": "Onexur/original",
    "similarity_pct": null,
    "upstream_source_path": null,
    "notes": "no upstream counterpart in v0.2.6",
@@ -1050,16 +1050,16 @@
   },
   {
    "path": "tests/test_report_semantics.py",
-   "category": "onexurOSS/original",
+   "category": "Onexur/original",
    "similarity_pct": null,
    "upstream_source_path": null,
-   "notes": "no upstream counterpart in v0.2.6; five onexurOSS tests moved verbatim out of tests/test_server_tools.py",
+   "notes": "no upstream counterpart in v0.2.6; five Onexur tests moved verbatim out of tests/test_server_tools.py",
    "flagged_for_review": false,
    "licence_header": "AGPL-3.0-or-later (SPDX, Xalterra Ltd trading as Onexur)"
   },
   {
    "path": "tests/test_reporting.py",
-   "category": "onexurOSS/original",
+   "category": "Onexur/original",
    "similarity_pct": null,
    "upstream_source_path": null,
    "notes": "no upstream counterpart in v0.2.6",
@@ -1127,7 +1127,7 @@
   },
   {
    "path": "tests/test_server_info.py",
-   "category": "onexurOSS/original",
+   "category": "Onexur/original",
    "similarity_pct": null,
    "upstream_source_path": null,
    "notes": "no upstream counterpart in v0.2.6",
@@ -2126,7 +2126,7 @@
    "WT:README.md:127:The complete AGPL-3.0-or-later text is reproduced in `LICENSE-AGPL`, and the complete MIT License text is reproduced in `LICENSE-MIT`.",
    "WT:README.md:131:This project incorporates material from [manager-mcp](https://github.com/flumpiey/manager-mcp) 0.2.6, released under the MIT License, copyright (c) 2026 manager-mcp contributors.",
    "WT:README.md:135:The complete MIT License text is reproduced in `LICENSE-MIT`. See `NOTICE` for the full attribution statement.",
-   "WT:README.md:145:See `CONTRIBUTING.md` and `CLA.md`. Contributions to files identified in `PROVENANCE.json` as upstream-derived remain subject to the upstream MIT license; contributions to onexurOSS-original files are covered by the project's Contributor License Agreement.",
+   "WT:README.md:145:See `CONTRIBUTING.md` and `CLA.md`. Contributions to files identified in `PROVENANCE.json` as upstream-derived remain subject to the upstream MIT license; contributions to Onexur-original files are covered by the project's Contributor License Agreement.",
    "WT:THIRD-PARTY-NOTICES:37:The MIT License (MIT)",
    "WT:THIRD-PARTY-NOTICES:39:Copyright (c) 2022 the contributors",
    "WT:THIRD-PARTY-NOTICES:41:Permission is hereby granted, free of charge, to any person obtaining a copy",

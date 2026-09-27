@@ -1,6 +1,6 @@
 # Provenance summary (Gate 1A, analysis only)
 
-Nothing was decided legally here. This is evidence for solicitor review. Committed tree at HEAD 4b6a2aefb5d6; working tree clean apart from PROVENANCE.json and PROVENANCE_SUMMARY.md.
+Nothing was decided legally here. This is evidence for solicitor review. Committed tree at HEAD f92536b179c8; working tree clean apart from PROVENANCE.json and PROVENANCE_SUMMARY.md.
 
 ## History rewrite
 
@@ -21,7 +21,7 @@ This regeneration follows a history rewrite, which is why every commit hash diff
 | Lines in the file | 1197 | 792 |
 | Approximate lines added | 519 | 140 |
 
-The new-content share fell from 43.4% to 17.7% (25.7 percentage points, a 59% relative reduction). The onexurOSS tool wrappers that were in `server.py` now live in `diagnostics.py`, `reconciliation.py`, `corrections.py`, `fixed_assets.py` and `server_info.py` (all `onexurOSS/original`). Tool names, schemas, order and behaviour are unchanged (snapshot-verified). The embedded-icon code was also removed.
+The new-content share fell from 43.4% to 17.7% (25.7 percentage points, a 59% relative reduction). The Onexur tool wrappers that were in `server.py` now live in `diagnostics.py`, `reconciliation.py`, `corrections.py`, `fixed_assets.py` and `server_info.py` (all `Onexur/original`). Tool names, schemas, order and behaviour are unchanged (snapshot-verified). The embedded-icon code was also removed.
 
 What remains new in `server.py`, and why it still trips the 60-added-line heuristic: the thin `register_*` wiring calls, the date-rejection and `semantics` block in `_fetch_report` (a modified upstream function), reworded descriptions on the upstream report tools, and the dev-supervisor branch in `main()`. Whether these residual additions are separable from the upstream-derived remainder is a question for review.
 
@@ -31,7 +31,7 @@ What remains new in `server.py`, and why it still trips the 60-added-line heuris
 |---|---|---|
 | upstream/unmodified | 51 | 53 |
 | upstream/modified | 18 | 16 |
-| onexurOSS/original | 31 | 27 |
+| Onexur/original | 31 | 27 |
 | third-party | 1 | 7 |
 | generated/artifact | 3 | 3 |
 | **Total** | **104** | **106** |
@@ -44,9 +44,9 @@ The total is -2 net against the first manifest: 7 third-party logo and API descr
 |---|---|---|
 | `tests/test_server_tools.py` similarity to upstream | 77.3% | **96.4%** |
 | `tests/test_server_tools.py` share that is new | 35.8% | 1.1% |
-| `tests/test_report_semantics.py` | absent | `onexurOSS/original`, 134 lines |
+| `tests/test_report_semantics.py` | absent | `Onexur/original`, 134 lines |
 
-Five onexurOSS tests (three profit and loss pagination tests, two `aged_receivables` tests) moved verbatim into `tests/test_report_semantics.py`. The suite has 299 tests before and after, with identical test names and function bodies.
+Five Onexur tests (three profit and loss pagination tests, two `aged_receivables` tests) moved verbatim into `tests/test_report_semantics.py`. The suite has 299 tests before and after, with identical test names and function bodies.
 
 ## Substantial-rewrite candidates (flagged for solicitor review)
 
@@ -61,8 +61,8 @@ Five onexurOSS tests (three profit and loss pagination tests, two `aged_receivab
 These four changed after the first manifest was written and were read directly against upstream v0.2.6. The rewrites (`CHANGELOG.md`, `README.md`) are flagged for the eventual solicitor follow-up.
 
 - **`tests/test_server_icons.py`:** minor modification - likely remains upstream-derived (manual override of the automatic flag). 12-line upstream test whose icon assertions were inverted. The module skeleton and two assertion lines (mcp.name and website_url) are verbatim upstream. The automatic substantial flag is a small-file percentage artefact. Automatic figures: similarity 38.9%, 70.8% of upstream lines changed, 41.7% of the file new.
-- **`CHANGELOG.md`:** substantial rewrite - candidate for onexurOSS/original. Since the changelog split the file holds only the onexurOSS 1.0.0 entry. The only upstream text retained is the two line title and introduction. The upstream release entries moved verbatim to docs/upstream-history.md. The path match to upstream CHANGELOG.md is a comparison artefact. Automatic figures: similarity 20.0%, 80.0% of upstream lines changed, 80.0% of the file new.
-- **`README.md`:** substantial rewrite - candidate for onexurOSS/original. Rewritten from scratch in the solicitor's structure and checked against the code. Similarity to the upstream README is 19.4%. Of 199 non-trivial upstream lines, only one repeated line survives (the example MANAGER_API_URL value, Manager's default local address, a configuration fact). No upstream prose is retained. Automatic figures: similarity 19.4%, 87.5% of upstream lines changed, 56.2% of the file new.
+- **`CHANGELOG.md`:** substantial rewrite - candidate for Onexur/original. Since the changelog split the file holds only the Onexur 1.0.0 entry. The only upstream text retained is the two line title and introduction. The upstream release entries moved verbatim to docs/upstream-history.md. The path match to upstream CHANGELOG.md is a comparison artefact. Automatic figures: similarity 20.0%, 80.0% of upstream lines changed, 80.0% of the file new.
+- **`README.md`:** substantial rewrite - candidate for Onexur/original. Rewritten from scratch in the solicitor's structure and checked against the code. Similarity to the upstream README is 19.4%. Of 199 non-trivial upstream lines, only one repeated line survives (the example MANAGER_API_URL value, Manager's default local address, a configuration fact). No upstream prose is retained. Automatic figures: similarity 19.4%, 87.5% of upstream lines changed, 56.2% of the file new.
 - **`docs/upstream-history.md`:** upstream-derived, reproduced verbatim (minor modification). Byte for byte copy of the upstream v0.2.6 changelog entries for 0.1.0 to 0.2.6, with an added attribution and MIT notice paragraph. The tool matched it to upstream CHANGELOG.md by rename detection. Automatic figures: similarity 93.0%, 2.7% of upstream lines changed, 11.0% of the file new.
 
 ### Minor modifications (likely remain upstream-derived)
@@ -111,11 +111,11 @@ One: `LICENSE-AGPL`, the Free Software Foundation text of the GNU Affero General
 
 ## Upstream MIT notices
 
-The upstream MIT licence and copyright notice **are present** in `LICENSE-MIT`: the MIT text with `Copyright (c) 2026 manager-mcp contributors` (as in upstream's `LICENSE`) and one added line `Copyright (c) 2026 Xalterra Ltd, trading as Onexur`. The former single `LICENSE` file was deleted. `LICENSE-AGPL` holds the unaltered FSF AGPL-3.0 text preceded by the same Xalterra copyright line. `NOTICE` repeats the upstream copyright line and source URL and names the same holder for material added for this project. **Resolved:** all three licence documents now name one holder, Xalterra Ltd, trading as Onexur (an earlier mismatch with `onexurOSS`, the GitHub namespace, was fixed). Prefacing the AGPL text with a project copyright line is standard practice and is not an edit to the licence text, so it is not flagged. `pyproject.toml` now declares `AGPL-3.0-or-later`; built artifacts carry `License-Expression: AGPL-3.0-or-later` and `License-File` entries for `LICENSE-AGPL`, `LICENSE-MIT` and `NOTICE`. Still naming onexurOSS as an author rather than as the holder: the `authors` field in `pyproject.toml`, `server.json`, `mcpb/manifest.json` and `.cursor-plugin/plugin.json`. Other attribution: `README.md:5:This project began as a fork of [manager-mcp](https://github.com/flu`; `README.md:131:This project incorporates material from [manager-mcp](https://gith`; `pyproject.toml:12:authors = [{ name = "Dru Connold" }, { name = "onexurOSS" }]`. `THIRD-PARTY-NOTICES` (dependency licence texts) is now present and is packaged in the sdist and wheel. Per-file headers: see the next section. **Not present yet:** `CLA.md` (draft, awaiting solicitor review; present in the working tree but deliberately uncommitted).
+The upstream MIT licence and copyright notice **are present** in `LICENSE-MIT`: the MIT text with `Copyright (c) 2026 manager-mcp contributors` (as in upstream's `LICENSE`) and one added line `Copyright (c) 2026 Xalterra Ltd, trading as Onexur`. The former single `LICENSE` file was deleted. `LICENSE-AGPL` holds the unaltered FSF AGPL-3.0 text preceded by the same Xalterra copyright line. `NOTICE` repeats the upstream copyright line and source URL and names the same holder for material added for this project. **Resolved:** all three licence documents now name one holder, Xalterra Ltd, trading as Onexur (an earlier mismatch with `onexurOSS`, the GitHub namespace, was fixed). Prefacing the AGPL text with a project copyright line is standard practice and is not an edit to the licence text, so it is not flagged. `pyproject.toml` now declares `AGPL-3.0-or-later`; built artifacts carry `License-Expression: AGPL-3.0-or-later` and `License-File` entries for `LICENSE-AGPL`, `LICENSE-MIT` and `NOTICE`. Author metadata (`authors` in `pyproject.toml`, and the author fields in `mcpb/manifest.json` and `.cursor-plugin/plugin.json`) now names Xalterra Ltd, trading as Onexur, and `pyproject.toml` also keeps the upstream author, Dru Connold. `.cursor-plugin/plugin.json` still declares `license` as `MIT`, which does not match the package's AGPL-3.0-or-later declaration; it has not been changed and is open. Other attribution: `README.md:5:This project began as a fork of [manager-mcp](https://github.com/flu`; `README.md:131:This project incorporates material from [manager-mcp](https://gith`; `pyproject.toml:12:authors = [{ name = "Xalterra Ltd, trading as Onexur" }, { nam`. `THIRD-PARTY-NOTICES` (dependency licence texts) is now present and is packaged in the sdist and wheel. Per-file headers: see the next section. **Not present yet:** `CLA.md` (draft, awaiting solicitor review; present in the working tree but deliberately uncommitted).
 
 ## Per-file licence headers
 
-26 of 65 Python files carry the two line AGPL-3.0-or-later header (`SPDX-License-Identifier: AGPL-3.0-or-later` and `Copyright (c) 2026 Xalterra Ltd, trading as Onexur`). They are exactly the files classified `onexurOSS/original`: ten modules under `src/manager_mcp`, two scripts and fourteen test files. The header pass added two lines to each file and changed nothing else (unchanged ASTs, identical tool snapshot, tests passing).
+26 of 65 Python files carry the two line AGPL-3.0-or-later header (`SPDX-License-Identifier: AGPL-3.0-or-later` and `Copyright (c) 2026 Xalterra Ltd, trading as Onexur`). They are exactly the files classified `Onexur/original`: ten modules under `src/manager_mcp`, two scripts and fourteen test files. The header pass added two lines to each file and changed nothing else (unchanged ASTs, identical tool snapshot, tests passing).
 
 Deliberately without headers: every `upstream/unmodified` file, every `upstream/modified` Python file including the mixed files `src/manager_mcp/server.py` and `tests/test_server_tools.py` (per the second solicitor opinion: mixed, no further splitting or headers), and non-Python files.
 
