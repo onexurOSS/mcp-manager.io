@@ -2,13 +2,11 @@
 
 from __future__ import annotations
 
-import base64
 from pathlib import Path
 from typing import Any
 
 import httpx
 from fastmcp import FastMCP
-from mcp.types import Icon
 
 from manager_mcp import corrections as _corr
 from manager_mcp import diagnostics as _diag
@@ -33,33 +31,10 @@ _PERIOD_ALIASES = {
     "to": "toDate",
 }
 
-_ICON_PATH = Path(__file__).resolve().parent / "assets" / "icon.png"
-_ICON_HTTPS = (
-    "https://raw.githubusercontent.com/onexurOSS/mcp-manager.io/main/docs/icon-512.png"
-)
-
-
-def server_icons() -> list[Icon]:
-    """Icons for initialize serverInfo (data URI + public HTTPS fallback)."""
-    icons: list[Icon] = []
-    if _ICON_PATH.is_file():
-        b64 = base64.standard_b64encode(_ICON_PATH.read_bytes()).decode("ascii")
-        icons.append(
-            Icon(
-                src=f"data:image/png;base64,{b64}",
-                mimeType="image/png",
-                sizes=["512x512"],
-            )
-        )
-    icons.append(Icon(src=_ICON_HTTPS, mimeType="image/png", sizes=["512x512"]))
-    return icons
-
-
 mcp = FastMCP(
     "manager-mcp",
     version=_server_info.resolve_version(_SOURCE_PATH.parent.parent),
     website_url="https://www.manager.io/",
-    icons=server_icons(),
 )
 _client: ManagerClient | None = None
 _policy: WritePolicy | None = None

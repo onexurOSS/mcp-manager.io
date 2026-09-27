@@ -45,12 +45,5 @@
         }
       ]
     }
-  ],
-  "icons": [
-    {
-      "src": "https://raw.githubusercontent.com/onexurOSS/mcp-manager.io/main/src/manager_mcp/assets/icon.png",
-      "mimeType": "image/png",
-      "sizes": ["512x512"]
-    }
   ]
 }

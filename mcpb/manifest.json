@@ -11,7 +11,6 @@
   "homepage": "https://github.com/onexurOSS/mcp-manager.io",
   "documentation": "https://github.com/onexurOSS/mcp-manager.io#readme",
   "support": "https://github.com/onexurOSS/mcp-manager.io/issues",
-  "icon": "icon.png",
   "server": {
     "type": "uv",
     "entry_point": "server/main.py",
