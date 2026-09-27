@@ -130,7 +130,7 @@ The complete AGPL-3.0-or-later text is reproduced in `LICENSE-AGPL`, and the com
 
 This project incorporates material from [manager-mcp](https://github.com/flumpiey/manager-mcp) 0.2.6, released under the MIT License, copyright (c) 2026 manager-mcp contributors.
 
-A detailed, file-level breakdown of which parts of this repository are upstream-derived and which are original to onexurOSS is maintained in `PROVENANCE.json`, alongside a human-readable summary in `PROVENANCE_SUMMARY.md`. Historical upstream release notes (versions 0.1.0 through 0.2.6) are preserved unchanged in [docs/upstream-history.md](docs/upstream-history.md). Current release notes are in [CHANGELOG.md](CHANGELOG.md).
+A detailed, file-level breakdown of which parts of this repository are upstream-derived and which are original to Xalterra Ltd, trading as Onexur, is maintained in `PROVENANCE.json`, alongside a human-readable summary in `PROVENANCE_SUMMARY.md`. Historical upstream release notes (versions 0.1.0 through 0.2.6) are preserved unchanged in [docs/upstream-history.md](docs/upstream-history.md). Current release notes are in [CHANGELOG.md](CHANGELOG.md).
 
 The complete MIT License text is reproduced in `LICENSE-MIT`. See `NOTICE` for the full attribution statement.
 
