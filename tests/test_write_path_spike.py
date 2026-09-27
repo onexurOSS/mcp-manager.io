@@ -47,19 +47,19 @@ LINES = [
 ]
 
 # The full request sequence apply makes for two receipts, as observed (18 calls, 3 writes).
-# One extra GET per receipt versus the pre-fix sequence: Fix 1 checks, before repointing,
-# that the receipt's current reference (missing-inv-key) does not already resolve to a
-# real, existing invoice.
+# The eligibility check (Fix 1: does the receipt's current reference already resolve to a
+# real invoice?) now runs for every receipt BEFORE the invoice is created (the orphan fix),
+# so both "GET .../missing-inv-key" checks happen up front, ahead of the POST.
 EXPECTED_HAPPY_PATH_CALLS: list[str] = [
-    "POST /sales-invoice-form",
     "GET /receipt-form/rc-a",
     "GET /sales-invoice-form/missing-inv-key",
+    "GET /receipt-form/rc-b",
+    "GET /sales-invoice-form/missing-inv-key",
+    "POST /sales-invoice-form",
     "GET /sales-invoice-form/new-inv-1",
     "GET /receipt-form/rc-a",
     "PUT /receipt-form/rc-a",
     "GET /receipt-form/rc-a",
-    "GET /receipt-form/rc-b",
-    "GET /sales-invoice-form/missing-inv-key",
     "GET /sales-invoice-form/new-inv-1",
     "GET /receipt-form/rc-b",
     "PUT /receipt-form/rc-b",
@@ -306,14 +306,15 @@ async def test_apply_refuses_a_token_that_was_not_computed_over_the_receipt_keys
 
 
 @pytest.mark.asyncio
-async def test_apply_refuses_to_repoint_a_receipt_that_already_references_a_real_invoice(
+async def test_apply_refuses_the_whole_operation_when_every_transaction_is_already_fixed(
     fake: FakeManager,
 ) -> None:
-    """Fix 1: a correctly-computed token (bound to the right resource, fields and
-    receipt keys) is not enough on its own -- apply also checks, live, that the receipt
-    still references a genuinely missing invoice before repointing it. A receipt that
-    was never missing one (or was already fixed) is refused, not repointed, even though
-    the token passed is exactly the one the real proposal function would have produced.
+    """Fix 1 plus the orphan fix: a correctly-computed token (bound to the right
+    resource, fields and receipt keys) is not enough on its own -- apply also checks,
+    live, that each receipt still references a genuinely missing invoice before
+    repointing it, and does this BEFORE creating anything. A receipt that was never
+    missing one (or was already fixed) is refused, and if every cited receipt turns out
+    that way, no invoice is created at all: there is nothing left to reconstruct.
     """
     client = _client()
     fields = {
@@ -332,7 +333,8 @@ async def test_apply_refuses_to_repoint_a_receipt_that_already_references_a_real
     )
     await client.aclose()
 
-    assert result["status"] == "partial"
+    assert result["status"] == "refused"
+    assert "nothing left to reconstruct" in result["reason"]
     assert result["reallocations"] == [
         {
             "key": "rc-other",
@@ -346,7 +348,42 @@ async def test_apply_refuses_to_repoint_a_receipt_that_already_references_a_real
         }
     ]
     assert fake.references("inv-existing") == ["rc-other"]  # untouched
-    assert fake.references(result["invoice"]["key"]) == []  # the new invoice is an orphan
+    assert fake.writes() == []  # no invoice created, nothing else changed
+    assert list(fake.invoices) == ["inv-existing"]
+
+
+@pytest.mark.asyncio
+async def test_apply_refuses_the_whole_operation_when_every_cited_transaction_is_fixed(
+    fake: FakeManager,
+) -> None:
+    """Same as above, generalised to more than one transaction: if ALL of them are
+    already fixed by the time apply runs, nothing is created and nothing is touched,
+    rather than creating an orphan invoice with zero transactions ever pointing at it.
+    """
+    client = _client()
+    fields = {
+        "Customer": CUSTOMER,
+        "Lines": LINES,
+        "IssueDate": "2025-02-10",
+        "Reference": "INV-EXAMPLE-0001",
+    }
+    fake.invoices["inv-existing"] = {"Key": "inv-existing", "Lines": [{"Amount": 415.0}]}
+    fake.receipts["rc-a"] = _receipt("rc-a", 380.00, invoice="inv-existing")
+    fake.receipts["rc-b"] = _receipt("rc-b", 35.00, invoice="inv-existing")
+    token = _reconstruction_token("sales_invoices", fields, ["rc-a", "rc-b"])
+
+    result = await apply_sales_invoice_reconstruction(
+        client, client.policy, token, fields, ["rc-a", "rc-b"]
+    )
+    await client.aclose()
+
+    assert result["status"] == "refused"
+    assert "nothing left to reconstruct" in result["reason"]
+    assert {r["key"] for r in result["reallocations"]} == {"rc-a", "rc-b"}
+    assert all(r["status"] == "refused" for r in result["reallocations"])
+    assert fake.writes() == []
+    assert list(fake.invoices) == ["inv-existing"]
+    assert fake.references("inv-existing") == ["rc-a", "rc-b"]
 
 
 # ---------------------------------------------------------------------------------------

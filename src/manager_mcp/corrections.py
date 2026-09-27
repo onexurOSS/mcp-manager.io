@@ -615,8 +615,59 @@ async def _apply_invoice_reconstruction(
             "propose_sales_invoice_reconstruction again with the exact fields and "
             "transaction keys you intend to apply."
         )
-    plain_token = _proposal_token(invoice_resource, None, fields)
+    # Determine, before creating anything, whether each cited transaction still needs
+    # this invoice -- one fetch per transaction, its outcome stored for reuse below so
+    # nothing is fetched twice. A transaction whose allocation has since been fixed (or
+    # a validly-computed token for one that never needed it, per Fix 1) is marked
+    # "refused" here rather than repointed. If NONE of them still need it, there is
+    # nothing to reconstruct: refuse the whole operation instead of creating an invoice
+    # that nothing will ever reference.
+    plans: list[dict[str, Any]] = []
+    for txn_key in txn_keys:
+        path = form_path(txn_resource, txn_key)
+        txn = await client.get(path) if path else None
+        line_index = None
+        current_ref: str | None = None
+        if isinstance(txn, dict):
+            for idx, line in enumerate(_lines_of(txn)):
+                ref = _first(line, invoice_aliases)
+                if ref:
+                    line_index = idx
+                    current_ref = str(ref)
+                    break
+        if line_index is None:
+            plans.append(
+                {"key": txn_key, "status": "skipped", "reason": "no matching line found"}
+            )
+            continue
+        if current_ref is not None and await _invoice_exists(client, invoice_resource, current_ref):
+            plans.append(
+                {
+                    "key": txn_key,
+                    "status": "refused",
+                    "reason": (
+                        f"currently references {current_ref!r}, which already exists as "
+                        f"an invoice, not a missing one; refusing to repoint it. Use "
+                        "reallocate_payment_line/reallocate_receipt_line instead if this "
+                        "linkage needs to change."
+                    ),
+                }
+            )
+            continue
+        plans.append({"key": txn_key, "status": "pending", "line_index": line_index})
 
+    if not any(plan["status"] == "pending" for plan in plans):
+        return {
+            "status": "refused",
+            "reason": (
+                "None of the cited transactions still reference a missing invoice; "
+                "there is nothing left to reconstruct. No invoice was created and "
+                "nothing was changed."
+            ),
+            "reallocations": plans,
+        }
+
+    plain_token = _proposal_token(invoice_resource, None, fields)
     try:
         created = await apply_correction(
             client, policy, plain_token, invoice_resource, fields, key=None
@@ -632,51 +683,19 @@ async def _apply_invoice_reconstruction(
         }
 
     reallocations: list[dict[str, Any]] = []
-    for txn_key in txn_keys:
-        path = form_path(txn_resource, txn_key)
-        txn = await client.get(path) if path else None
-        line_index = None
-        current_ref: str | None = None
-        if isinstance(txn, dict):
-            for idx, line in enumerate(_lines_of(txn)):
-                ref = _first(line, invoice_aliases)
-                if ref:
-                    line_index = idx
-                    current_ref = str(ref)
-                    break
-        if line_index is None:
+    for plan in plans:
+        if plan["status"] != "pending":
             reallocations.append(
-                {"key": txn_key, "status": "skipped", "reason": "no matching line found"}
+                {"key": plan["key"], "status": plan["status"], "reason": plan["reason"]}
             )
             continue
-
-        # Fix 1: only repoint a line that still references a genuinely missing invoice.
-        # If it already references one that exists -- because it was reallocated since
-        # this was proposed, or a validly-computed token was crafted for a transaction
-        # that was never missing an invoice in the first place -- refuse this line
-        # rather than repointing it away from a real invoice.
-        if current_ref is not None and await _invoice_exists(client, invoice_resource, current_ref):
-            reallocations.append(
-                {
-                    "key": txn_key,
-                    "status": "refused",
-                    "reason": (
-                        f"currently references {current_ref!r}, which already exists as "
-                        f"an invoice, not a missing one; refusing to repoint it. Use "
-                        "reallocate_payment_line/reallocate_receipt_line instead if this "
-                        "linkage needs to change."
-                    ),
-                }
-            )
-            continue
-
         try:
             detail = await _reallocate(
-                client, policy, txn_resource, txn_key, line_index, str(new_key)
+                client, policy, txn_resource, plan["key"], plan["line_index"], str(new_key)
             )
         except (ManagerApiError, ManagerUnavailableError) as exc:
             raise type(exc)(_partial_reconstruction_message(str(new_key), exc)) from exc
-        reallocations.append({"key": txn_key, "status": "ok", "detail": detail})
+        reallocations.append({"key": plan["key"], "status": "ok", "detail": detail})
 
     verification = await verify_invoice_balance(client, invoice_resource, str(new_key))
     return {
