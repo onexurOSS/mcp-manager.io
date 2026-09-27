@@ -1,7 +1,7 @@
 {
  "generated_by": "Gate 1A provenance audit",
- "repo_head": "cbc8e5ab0e11fc5af9961c51d20eb60944522155",
- "repo_basis": "committed tree at HEAD cbc8e5ab0e11; working tree clean apart from PROVENANCE.json and PROVENANCE_SUMMARY.md",
+ "repo_head": "2cf9c2a7be0fad25cc505848c9f7e878b97185ad",
+ "repo_basis": "committed tree at HEAD 2cf9c2a7be0f; working tree clean apart from PROVENANCE.json and PROVENANCE_SUMMARY.md",
  "upstream_reference": {
   "source": "github.com/flumpiey/manager-mcp tag v0.2.6",
   "commit": "c50c4d71f2aff962a8c9dbb1cce2ef14f602a51b",
@@ -147,6 +147,14 @@
     "classification": "substantial rewrite - candidate for onexurOSS/original",
     "basis": "Rewritten from scratch in the solicitor's structure and checked against the code. Similarity to the upstream README is 19.4%. Of 199 non-trivial upstream lines, only one repeated line survives (the example MANAGER_API_URL value, Manager's default local address, a configuration fact). No upstream prose is retained."
    }
+  },
+  {
+   "path": "SECURITY.md",
+   "category": "onexurOSS/original",
+   "similarity_pct": null,
+   "upstream_source_path": null,
+   "notes": "no upstream counterpart in v0.2.6",
+   "flagged_for_review": false
   },
   {
    "path": "THIRD-PARTY-NOTICES",
