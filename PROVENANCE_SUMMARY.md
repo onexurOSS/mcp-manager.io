@@ -1,6 +1,6 @@
 # Provenance summary (Gate 1A, analysis only)
 
-Nothing was decided legally here. This is evidence for solicitor review. Committed tree at HEAD 517dfa9cde1e; working tree clean apart from PROVENANCE.json and PROVENANCE_SUMMARY.md.
+Nothing was decided legally here. This is evidence for solicitor review. Committed tree at HEAD 129043da8cc9; working tree clean apart from PROVENANCE.json and PROVENANCE_SUMMARY.md.
 
 ## History rewrite
 
@@ -33,10 +33,10 @@ What remains new in `server.py`, and why it still trips the 60-added-line heuris
 | upstream/modified | 18 | 16 |
 | onexurOSS/original | 29 | 27 |
 | third-party | 1 | 7 |
-| generated/artifact | 2 | 3 |
-| **Total** | **101** | **106** |
+| generated/artifact | 3 | 3 |
+| **Total** | **102** | **106** |
 
-The total is -5 net against the first manifest: 7 third-party logo and API description files, the generated capability matrix and `spec/README.md` were removed, and `.cursor-plugin/plugin.json`, `tests/test_report_semantics.py`, `docs/upstream-history.md` and `NOTICE` were added. `upstream/modified` splits into 3 substantial-rewrite candidates and 15 minor modifications (after the manual classifications below).
+The total is -4 net against the first manifest: 7 third-party logo and API description files, the generated capability matrix and `spec/README.md` were removed, and `.cursor-plugin/plugin.json`, `tests/test_report_semantics.py`, `docs/upstream-history.md` and `NOTICE` were added. `upstream/modified` splits into 3 substantial-rewrite candidates and 15 minor modifications (after the manual classifications below).
 
 ## Test split: `test_server_tools.py`
 
@@ -77,7 +77,7 @@ These four changed after the first manifest was written and were read directly a
 | `mcp.json` | 92.9% | configuration/metadata edits |
 | `mcpb/manifest.json` | 86.2% | configuration/metadata edits |
 | `mcpb/pyproject.toml` | 80.0% | configuration/metadata edits |
-| `pyproject.toml` | 87.4% | configuration/metadata edits |
+| `pyproject.toml` | 86.4% | configuration/metadata edits |
 | `server.json` | 80.0% | configuration/metadata edits |
 | `src/manager_mcp/resources.py` | 95.6% | new logic: adds _merge_extra_read_only_collections |
 | `tests/test_resources.py` | 96.2% | edits to existing logic/strings |
@@ -93,7 +93,8 @@ One: `LICENSE-AGPL`, the Free Software Foundation text of the GNU Affero General
 
 ### Dependencies (104 distributions in `uv.lock`, 75 runtime, 29 dev/build only; unchanged since the first manifest)
 
-- **GPL/LGPL/AGPL in the closure:** none. **Unlicensed or undeclared:** none after checking installed metadata, licence files and PyPI (source recorded per package in `PROVENANCE.json`).
+- **Copyleft in the closure (corrected):** no package is declared GPL, LGPL or AGPL, but `pywin32` (Windows-only, required by `mcp` when `sys_platform == 'win32'`, not installed on Linux) declares PSF-2.0 while bundling licence files for several components, including `adodbapi` under the GNU Lesser General Public License 2.1. Earlier manifests said the closure had no GPL-family licence; that missed this bundled component. All of pywin32's bundled licence files are reproduced in `THIRD-PARTY-NOTICES`. Two MPL-2.0 packages (`certifi`, `pathspec`) are file-level copyleft, used unmodified. **Unlicensed or undeclared:** none after checking installed metadata, licence files and PyPI.
+- **Full notices:** `THIRD-PARTY-NOTICES` (committed) reproduces the licence text shipped by each of the 106 name and version entries, generated from package metadata by `pip-licenses` plus the dist-info licence files, and from PyPI wheel metadata for the 11 entries not installable on the audit platform. Distinct packages by family: MIT 54, BSD 20, Apache-2.0 14, PSF 5, ISC 5, MPL-2.0 2, Dual-licensed (SPDX OR expression) 3, Other 1. Dual-licensed (SPDX OR): `cryptography`, `packaging`, `uv`. Other: `email-validator` (Unlicense).
 - **Worth a solicitor's glance** (none is incompatible with MIT or AGPLv3 distribution on its declared terms):
   - `backports-asyncio-runner` 1.2.0 (dev/build only): PSF-2.0
   - `backports-zstd` 1.6.0 (dev/build only): PSF-2.0
@@ -110,7 +111,7 @@ One: `LICENSE-AGPL`, the Free Software Foundation text of the GNU Affero General
 
 ## Upstream MIT notices
 
-The upstream MIT licence and copyright notice **are present** in `LICENSE-MIT`: the MIT text with `Copyright (c) 2026 manager-mcp contributors` (as in upstream's `LICENSE`) and one added line `Copyright (c) 2026 Xalterra Ltd, trading as Onexur`. The former single `LICENSE` file was deleted. `LICENSE-AGPL` holds the unaltered FSF AGPL-3.0 text preceded by the same Xalterra copyright line. `NOTICE` repeats the upstream copyright line and source URL and names the same holder for material added for this project. **Resolved:** all three licence documents now name one holder, Xalterra Ltd, trading as Onexur (an earlier mismatch with `onexurOSS`, the GitHub namespace, was fixed). Prefacing the AGPL text with a project copyright line is standard practice and is not an edit to the licence text, so it is not flagged. `pyproject.toml` now declares `AGPL-3.0-or-later`; built artifacts carry `License-Expression: AGPL-3.0-or-later` and `License-File` entries for `LICENSE-AGPL`, `LICENSE-MIT` and `NOTICE`. Still naming onexurOSS as an author rather than as the holder: the `authors` field in `pyproject.toml`, `server.json`, `mcpb/manifest.json` and `.cursor-plugin/plugin.json`. Other attribution: `README.md:5:This project began as a fork of [manager-mcp](https://github.com/flu`; `README.md:131:This project incorporates material from [manager-mcp](https://gith`; `pyproject.toml:11:authors = [{ name = "Dru Connold" }, { name = "onexurOSS" }]`. **Not present yet:** per-file headers (0 files), `CLA.md`, `CONTRIBUTING.md`, `SECURITY.md` and `THIRD-PARTY-NOTICES`.
+The upstream MIT licence and copyright notice **are present** in `LICENSE-MIT`: the MIT text with `Copyright (c) 2026 manager-mcp contributors` (as in upstream's `LICENSE`) and one added line `Copyright (c) 2026 Xalterra Ltd, trading as Onexur`. The former single `LICENSE` file was deleted. `LICENSE-AGPL` holds the unaltered FSF AGPL-3.0 text preceded by the same Xalterra copyright line. `NOTICE` repeats the upstream copyright line and source URL and names the same holder for material added for this project. **Resolved:** all three licence documents now name one holder, Xalterra Ltd, trading as Onexur (an earlier mismatch with `onexurOSS`, the GitHub namespace, was fixed). Prefacing the AGPL text with a project copyright line is standard practice and is not an edit to the licence text, so it is not flagged. `pyproject.toml` now declares `AGPL-3.0-or-later`; built artifacts carry `License-Expression: AGPL-3.0-or-later` and `License-File` entries for `LICENSE-AGPL`, `LICENSE-MIT` and `NOTICE`. Still naming onexurOSS as an author rather than as the holder: the `authors` field in `pyproject.toml`, `server.json`, `mcpb/manifest.json` and `.cursor-plugin/plugin.json`. Other attribution: `README.md:5:This project began as a fork of [manager-mcp](https://github.com/flu`; `README.md:131:This project incorporates material from [manager-mcp](https://gith`; `pyproject.toml:12:authors = [{ name = "Dru Connold" }, { name = "onexurOSS" }]`. `THIRD-PARTY-NOTICES` (dependency licence texts) is now present and is packaged in the sdist and wheel. **Not present yet:** per-file headers (0 files), `CLA.md`, `CONTRIBUTING.md` and `SECURITY.md`.
 
 ## Parallel checks (report only)
 
