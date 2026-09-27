@@ -1,6 +1,6 @@
 # Provenance summary (Gate 1A, analysis only)
 
-Nothing was decided legally here. This is evidence for solicitor review. Committed tree at HEAD c606cf551e72; commit author identity rewritten to Onexur <github@xalterra.com>; working tree clean apart from PROVENANCE.json and PROVENANCE_SUMMARY.md.
+Nothing was decided legally here. This is evidence for solicitor review. Committed tree at HEAD e61ba087f0da; commit author identity rewritten to Onexur <github@xalterra.com>; working tree clean apart from PROVENANCE.json and PROVENANCE_SUMMARY.md.
 
 ## History rewrite
 
@@ -76,7 +76,7 @@ These five changed after the first manifest was written and were read directly a
 | `LICENSE-MIT` | 97.7% | configuration/metadata edits; renamed from LICENSE |
 | `docs/upstream-history.md` | 93.0% | documentation rewritten/extended; renamed from CHANGELOG.md |
 | `mcp.json` | 92.9% | configuration/metadata edits |
-| `mcpb/manifest.json` | 86.2% | configuration/metadata edits |
+| `mcpb/manifest.json` | 85.5% | configuration/metadata edits |
 | `mcpb/pyproject.toml` | 80.0% | configuration/metadata edits |
 | `pyproject.toml` | 86.4% | configuration/metadata edits |
 | `server.json` | 80.0% | configuration/metadata edits |
