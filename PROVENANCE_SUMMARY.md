@@ -1,6 +1,6 @@
 # Provenance summary (Gate 1A, analysis only)
 
-Nothing was decided legally here. This is evidence for solicitor review. Committed tree at HEAD 308cdfc16dd1; working tree clean apart from PROVENANCE.json and PROVENANCE_SUMMARY.md.
+Nothing was decided legally here. This is evidence for solicitor review. Committed tree at HEAD 6d06e24dfcd3; working tree clean apart from PROVENANCE.json and PROVENANCE_SUMMARY.md.
 
 ## Basis
 
@@ -27,12 +27,22 @@ What remains new in `server.py`, and why it still trips the 60-added-line heuris
 |---|---|---|
 | upstream/unmodified | 51 | 53 |
 | upstream/modified | 18 | 16 |
-| onexurOSS/original | 27 | 27 |
+| onexurOSS/original | 28 | 27 |
 | third-party | 0 | 7 |
 | generated/artifact | 3 | 3 |
-| **Total** | **99** | **106** |
+| **Total** | **100** | **106** |
 
-The total fell by 6 net: 7 third-party logo and API description files were removed and `.cursor-plugin/plugin.json` was added. `upstream/modified` splits into 5 substantial-rewrite candidates and 13 minor modifications (after the two manual classifications below).
+The total is -6 net against the first manifest: 7 third-party logo and API description files were removed, and `.cursor-plugin/plugin.json` and `tests/test_report_semantics.py` were added. `upstream/modified` splits into 4 substantial-rewrite candidates and 14 minor modifications (after the two manual classifications below).
+
+## Test split: `test_server_tools.py`
+
+| Measure | First manifest | Now (committed) |
+|---|---|---|
+| `tests/test_server_tools.py` similarity to upstream | 77.3% | **96.4%** |
+| `tests/test_server_tools.py` share that is new | 35.8% | 1.1% |
+| `tests/test_report_semantics.py` | absent | `onexurOSS/original`, 132 lines |
+
+Five onexurOSS tests (three profit and loss pagination tests, two `aged_receivables` tests) moved verbatim into `tests/test_report_semantics.py`. The suite has 299 tests before and after, with identical test names and function bodies.
 
 ## Substantial-rewrite candidates (flagged for solicitor review)
 
@@ -42,7 +52,6 @@ The total fell by 6 net: 7 third-party logo and API description files were remov
 | `README.md` | 74.4% | 11.0% | 36.1% | documentation rewritten/extended |
 | `src/manager_mcp/server.py` | 87.7% | 6.3% | 17.6% | edits to existing logic/strings; removes server_icons |
 | `src/manager_mcp/spec/README.md` | 12.5% | 90.0% | 83.3% | documentation rewritten/extended |
-| `tests/test_server_tools.py` | 77.3% | 2.7% | 35.8% | new logic: adds test_aged_receivables_labels_itself_current_state, test_aged_receivables_rejects_period_instead_of_returning_current_data, test_profit_and_loss_pages_through_all_records, test_profit_and_loss_reports_incomplete_when_capped, test_profit_and_loss_unable_to_determine_without_total; removes test_aged_receivables_period_unsupported_notice |
 
 ### Manual classification of two files flagged after the first manifest
 
@@ -68,6 +77,7 @@ These two changed after the first manifest was written and were read directly ag
 | `tests/test_resources.py` | 96.2% | edits to existing logic/strings |
 | `tests/test_sdist_contents.py` | 97.7% | edits to existing logic/strings |
 | `tests/test_server_icons.py` | 38.9% | new logic: adds test_fastmcp_advertises_website_and_no_embedded_icons; removes test_fastmcp_configured_with_icons_and_website, test_server_icons_include_data_uri_and_https |
+| `tests/test_server_tools.py` | 96.4% | edits to existing logic/strings; removes test_aged_receivables_period_unsupported_notice |
 
 ## Third-party concerns
 

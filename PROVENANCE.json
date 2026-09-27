@@ -1,7 +1,7 @@
 {
  "generated_by": "Gate 1A provenance audit",
- "repo_head": "308cdfc16dd1a083ef93dda1434cca9d5c9d6811",
- "repo_basis": "committed tree at HEAD 308cdfc16dd1; working tree clean apart from PROVENANCE.json and PROVENANCE_SUMMARY.md",
+ "repo_head": "6d06e24dfcd3569ebab1983096bb070dd3231c1a",
+ "repo_basis": "committed tree at HEAD 6d06e24dfcd3; working tree clean apart from PROVENANCE.json and PROVENANCE_SUMMARY.md",
  "upstream_reference": {
   "source": "github.com/flumpiey/manager-mcp tag v0.2.6",
   "commit": "c50c4d71f2aff962a8c9dbb1cce2ef14f602a51b",
@@ -957,6 +957,14 @@
    "flagged_for_review": false
   },
   {
+   "path": "tests/test_report_semantics.py",
+   "category": "onexurOSS/original",
+   "similarity_pct": null,
+   "upstream_source_path": null,
+   "notes": "no upstream counterpart in v0.2.6; five onexurOSS tests moved verbatim out of tests/test_server_tools.py",
+   "flagged_for_review": false
+  },
+  {
    "path": "tests/test_reporting.py",
    "category": "onexurOSS/original",
    "similarity_pct": null,
@@ -1013,7 +1021,7 @@
    "new_in_current_pct": 41.7,
    "upstream_lines": 24,
    "current_lines": 12,
-   "review_flag": "minor modification - likely remains upstream-derived (manual override)",
+   "review_flag": "minor modification - likely remains upstream-derived (manual override of the automatic flag)",
    "manual_review": {
     "classification": "minor modification - likely remains upstream-derived (manual override of the automatic flag)",
     "basis": "12-line upstream test whose icon assertions were inverted. The module skeleton and two assertion lines (mcp.name and website_url) are verbatim upstream. The automatic substantial flag is a small-file percentage artefact."
@@ -1030,15 +1038,15 @@
   {
    "path": "tests/test_server_tools.py",
    "category": "upstream/modified",
-   "similarity_pct": 77.3,
+   "similarity_pct": 96.4,
    "upstream_source_path": "tests/test_server_tools.py",
-   "notes": "2.7% of upstream lines changed, 35.8% of current file is new; new logic: adds test_aged_receivables_labels_itself_current_state, test_aged_receivables_rejects_period_instead_of_returning_current_data, test_profit_and_loss_pages_through_all_records, test_profit_and_loss_reports_incomplete_when_capped, test_profit_and_loss_unable_to_determine_without_total; removes test_aged_receivables_period_unsupported_notice",
-   "flagged_for_review": true,
-   "changed_from_upstream_pct": 2.7,
-   "new_in_current_pct": 35.8,
+   "notes": "6.0% of upstream lines changed, 1.1% of current file is new; edits to existing logic/strings; removes test_aged_receivables_period_unsupported_notice",
+   "flagged_for_review": false,
+   "changed_from_upstream_pct": 6.0,
+   "new_in_current_pct": 1.1,
    "upstream_lines": 184,
-   "current_lines": 279,
-   "review_flag": "substantial rewrite - candidate for onexurOSS/original"
+   "current_lines": 175,
+   "review_flag": "minor modification - likely remains upstream-derived"
   },
   {
    "path": "tests/test_task_tools.py",
