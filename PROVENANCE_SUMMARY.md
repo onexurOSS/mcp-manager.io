@@ -1,6 +1,10 @@
 # Provenance summary (Gate 1A, analysis only)
 
-Nothing was decided legally here. This is evidence for solicitor review. Committed tree at HEAD 062abbe6e645; working tree clean apart from PROVENANCE.json and PROVENANCE_SUMMARY.md.
+Nothing was decided legally here. This is evidence for solicitor review. Committed tree at HEAD 1449c0ad169e; history rewritten to exclude nine removed third-party and generated paths; working tree clean apart from PROVENANCE.json and PROVENANCE_SUMMARY.md.
+
+## History rewrite
+
+This regeneration follows a history rewrite, which is why every commit hash differs from those quoted in earlier manifests. Local history was rewritten with `git filter-branch` so that the nine removed paths (`docs/favicon.ico`, `docs/icon-512.png`, `docs/manager-icon.svg`, `mcpb/icon.png`, `src/manager_mcp/assets/icon.png`, `src/manager_mcp/spec/api2.json`, `src/manager_mcp/spec/api2.live-26.8.4.3664.json.gz`, `src/manager_mcp/spec/api2.live-capabilities.json`, `src/manager_mcp/spec/README.md`) never appear in any commit. The initial commit is now `d1ddc77` (was `3e458b5`), author, dates and messages preserved. Verified: `git rev-list --objects --all` lists none of those paths, and none of the eight distinct blobs they contained (two paths shared identical content) exists in the object store after garbage collection. The remote origin still holds the old initial commit until a force push replaces it. Old commit hashes quoted in commit messages or documents written before the rewrite no longer resolve.
 
 ## Basis
 
@@ -84,7 +88,7 @@ These three changed after the first manifest was written and were read directly 
 
 ### Files
 
-None remain. The 7 Manager.io logo and API description files flagged in the first manifest were removed (commit `26031ef`). The generated capability matrix (`src/manager_mcp/spec/api2.live-capabilities.json`, kept in the first pass) and `spec/README.md` were also removed; a matrix is now built by users from their own instance with `scripts/build_capability_matrix.py`. The file remains in the initial commit 3e458b5, as do the seven earlier removals.
+None remain. The 7 Manager.io logo and API description files flagged in the first manifest were removed (commit `995e8af`). The generated capability matrix (`src/manager_mcp/spec/api2.live-capabilities.json`, kept in the first pass) and `spec/README.md` were also removed; a matrix is now built by users from their own instance with `scripts/build_capability_matrix.py`. All nine files are also absent from history since the rewrite described above.
 
 ### Dependencies (104 distributions in `uv.lock`, 75 runtime, 29 dev/build only; unchanged since the first manifest)
 
