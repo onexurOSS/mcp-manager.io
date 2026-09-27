@@ -2,12 +2,16 @@
 
 from __future__ import annotations
 
+import logging
 import os
 from typing import Any
 
 import httpx
 
 from manager_mcp.scopes import WRITE_METHODS, WritePolicy
+from manager_mcp.transport_check import plaintext_remote_warning
+
+_LOG = logging.getLogger(__name__)
 
 BASE_QUERY_KEYS = frozenset(
     {"term", "sortBy", "sortByDesc", "skip", "pageSize", "fields"}
@@ -43,6 +47,9 @@ class ManagerClient:
         if not api_key or not api_key.strip():
             raise ConfigError("MANAGER_API_KEY is required")
         self.base_url = base_url.rstrip("/")
+        warning = plaintext_remote_warning(self.base_url)
+        if warning:
+            _LOG.warning(warning)
         self._api_key = api_key.strip()
         self._extra_query_keys = extra_query_keys or frozenset()
         self.policy = policy or WritePolicy(frozenset(), frozenset())

@@ -48,7 +48,7 @@ The Manager API key is the primary credential this project handles. It is sent i
 
 - Use a dedicated token for each deployment, so it can be revoked without disturbing others.
 - Keep the key out of version control and out of shared client configuration. Store it in the environment of the MCP client or in a private file with restricted permissions.
-- Use `https`, or a loopback or private network address, for `MANAGER_API_URL`. The key travels in a header on every request, so a plain `http` URL to a remote host exposes it to the network.
+- Use `https`, or a loopback or private network address, for `MANAGER_API_URL`. The key travels in a header on every request, so a plain `http` URL to a remote host exposes it to the network. The server logs a warning to standard error when `MANAGER_API_URL` is plain `http` to any host other than a loopback address.
 - Do not expose the Manager API to the public internet.
 - Enable only the scopes your use case needs, to limit what an assistant can do.
 
