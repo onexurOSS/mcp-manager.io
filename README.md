@@ -176,7 +176,7 @@ Configs below use the package name `mcp-manager.io`, which is **not yet publishe
 
 Marketplace listing is a separate submit at [cursor.com/marketplace/publish](https://cursor.com/marketplace/publish).
 
-**Manual `mcp.json`:** project [`.cursor/mcp.json`](.cursor/mcp.json) or user-wide `~/.cursor/mcp.json`.
+**Manual `mcp.json`:** project `.cursor/mcp.json` or user-wide `~/.cursor/mcp.json`.
 
 From PyPI:
 
@@ -316,7 +316,7 @@ Or edit `~/.claude.json` / project MCP config:
 <details>
 <summary><strong>VS Code / GitHub Copilot</strong></summary>
 
-Create [`.vscode/mcp.json`](.vscode/mcp.json) in the project root:
+Create `.vscode/mcp.json` in your project root:
 
 ```json
 {
