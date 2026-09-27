@@ -1,6 +1,6 @@
 # Provenance summary (Gate 1A, analysis only)
 
-Nothing was decided legally here. This is evidence for solicitor review. Committed tree at HEAD afe1c6819380; commit author identity rewritten to Onexur <github@xalterra.com>; working tree clean apart from PROVENANCE.json and PROVENANCE_SUMMARY.md.
+Nothing was decided legally here. This is evidence for solicitor review. Committed tree at HEAD ab53b0bffa37; commit author identity rewritten to Onexur <github@xalterra.com>; working tree clean apart from PROVENANCE.json and PROVENANCE_SUMMARY.md.
 
 ## History rewrite
 
@@ -92,15 +92,15 @@ These five changed after the first manifest was written and were read directly a
 
 One: `LICENSE-AGPL`, the Free Software Foundation text of the GNU Affero General Public License version 3, unaltered apart from one added copyright line at the top; the licence text itself may be copied verbatim but not altered. It is the licence itself, not third-party code. Apart from it, none remain. The 7 Manager.io logo and API description files flagged in the first manifest were removed (commit `995e8af`). The generated capability matrix (`src/manager_mcp/spec/api2.live-capabilities.json`, kept in the first pass) and `spec/README.md` were also removed; a matrix is now built by users from their own instance with `scripts/build_capability_matrix.py`. All nine files are also absent from history since the rewrite described above.
 
-### Dependencies (104 distributions in `uv.lock`, 75 runtime, 29 dev/build only; unchanged since the first manifest)
+### Dependencies (105 distributions in `uv.lock`, 75 runtime, 30 dev/build only; unchanged since the first manifest)
 
 - **Copyleft in the closure (corrected):** no package is declared GPL, LGPL or AGPL, but `pywin32` (Windows-only, required by `mcp` when `sys_platform == 'win32'`, not installed on Linux) declares PSF-2.0 while bundling licence files for several components, including `adodbapi` under the GNU Lesser General Public License 2.1. Earlier manifests said the closure had no GPL-family licence; that missed this bundled component. All of pywin32's bundled licence files are reproduced in `THIRD-PARTY-NOTICES`. **Flagged for the solicitor package (open, not resolved):** transitive Windows-only dependency (`pywin32`, via `mcp`) bundles an LGPL-2.1 component (`adodbapi`); not installed or vendored in this build; confirm no action is needed. Two MPL-2.0 packages (`certifi`, `pathspec`) are file-level copyleft, used unmodified. **Unlicensed or undeclared:** none after checking installed metadata, licence files and PyPI.
-- **Full notices:** `THIRD-PARTY-NOTICES` (committed) reproduces the licence text shipped by each of the 106 name and version entries, generated from package metadata by `pip-licenses` plus the dist-info licence files, and from PyPI wheel metadata for the 11 entries not installable on the audit platform. Distinct packages by family: MIT 54, BSD 20, Apache-2.0 14, PSF 5, ISC 5, MPL-2.0 2, Dual-licensed (SPDX OR expression) 3, Other 1. Dual-licensed (SPDX OR): `cryptography`, `packaging`, `uv`. Other: `email-validator` (Unlicense).
+- **Full notices:** `THIRD-PARTY-NOTICES` (committed) reproduces the licence text shipped by each of the 107 name and version entries, generated from package metadata by `pip-licenses` plus the dist-info licence files, and from PyPI wheel metadata for the 12 entries not installable on the audit platform. Distinct packages by family: MIT 54, BSD 21, Apache-2.0 14, PSF 5, ISC 5, MPL-2.0 2, Dual-licensed (SPDX OR expression) 3, Other 1. Dual-licensed (SPDX OR): `cryptography`, `packaging`, `uv`. Other: `email-validator` (Unlicense).
 - **Worth a solicitor's glance** (none is incompatible with MIT or AGPLv3 distribution on its declared terms):
   - `backports-asyncio-runner` 1.2.0 (dev/build only): PSF-2.0
   - `backports-zstd` 1.6.0 (dev/build only): PSF-2.0
   - `certifi` 2026.7.22 (runtime): MPL-2.0
-  - `cryptography` 49.0.0 (runtime): Apache-2.0 OR BSD-3-Clause
+  - `cryptography` 50.0.1 (runtime): Apache-2.0 OR BSD-3-Clause
   - `distlib` 0.4.3 (dev/build only): PSF-2.0
   - `packaging` 26.2 (runtime): Apache-2.0 OR BSD-2-Clause
   - `pathspec` 1.1.1 (dev/build only): Mozilla Public License 2.0 (MPL 2.0). identified from licence text as MPL-2.0; MPL-2.0 is file-level copyleft, compatible with AGPLv3 and fine as an unmodified dependency
