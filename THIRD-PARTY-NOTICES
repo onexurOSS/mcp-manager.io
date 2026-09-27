@@ -1,14 +1,14 @@
 THIRD-PARTY NOTICES
 
-Onexur Manager MCP depends on the third-party software packages listed below.
+onexurOSS Manager MCP depends on the third-party software packages listed below.
 This file reproduces their licence notices. The packages are not vendored in this
 repository. They are installed from PyPI as dependencies of mcp-manager.io, and each
 remains under its own licence. Nothing in this file changes those licences.
 
 The list is generated from the package metadata and licence files of every entry in
-uv.lock other than this project itself: 106 name and version entries covering 104
+uv.lock other than this project itself: 107 name and version entries covering 105
 distinct packages (aiofile and rpds-py each appear at two versions). 75 packages are
-runtime dependencies and 29 are development or build only. Licence identifiers are the
+runtime dependencies and 30 are development or build only. Licence identifiers are the
 packages' own declarations, mapped to SPDX names, and where a package declared only a
 family (for example "BSD License") the clause count was read from its licence text.
 Entries that carry a Note were not installable on the audit platform or need extra
@@ -16,14 +16,14 @@ explanation.
 
 Summary by licence family (distinct packages):
   MIT: 54
-  BSD: 20
+  BSD: 21
   Apache-2.0: 14
   PSF: 5
   ISC: 5
   MPL-2.0: 2
   Dual-licensed (SPDX OR expression): 3
   Other (Unlicense): 1
-  Total: 104
+  Total: 105
 
 ==============================================================================
 
@@ -2418,7 +2418,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 ---
 
-httpcore2 (2.9.1)
+httpcore2 (2.13.1)
 License: BSD-3-Clause
 Source: https://github.com/pydantic/httpx2
 
@@ -2472,9 +2472,33 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 
 ---
 
-httpx2 (2.9.1)
+httpx2 (2.13.1)
 License: BSD-3-Clause
 Source: https://github.com/pydantic/httpx2
+
+Copyright © 2026 to present Pydantic Services Inc. and individual contributors.
+Copyright © 2019, [Encode OSS Ltd](https://www.encode.io/).
+All rights reserved.
+
+Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
+
+* Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
+
+* Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
+
+* Neither the name of the copyright holder nor the names of its contributors may be used to endorse or promote products derived from this software without specific prior written permission.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+---
+
+httpx2-jsfetch (1.0)
+License: BSD-3-Clause
+Source: https://pypi.org/project/httpx2-jsfetch/
+
+Note: Not installed on the audit platform (Linux, Python 3.14). Metadata and
+licence files were read from the published httpx2_jsfetch-1.0-py3-none-any.whl
+on PyPI.
 
 Copyright © 2026 to present Pydantic Services Inc. and individual contributors.
 Copyright © 2019, [Encode OSS Ltd](https://www.encode.io/).
@@ -9117,7 +9141,7 @@ Exhibit B - "Incompatible With Secondary Licenses" Notice
 LICENCE FAMILY: Dual-licensed (SPDX OR expression)
 ==============================================================================
 
-cryptography (49.0.0)
+cryptography (50.0.1)
 License: Apache-2.0 OR BSD-3-Clause
 Source: https://github.com/pyca/cryptography
 
