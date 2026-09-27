@@ -1,6 +1,6 @@
 # Provenance summary (Gate 1A, analysis only)
 
-Nothing was decided legally here. This is evidence for solicitor review. Committed tree at HEAD 1449c0ad169e; history rewritten to exclude nine removed third-party and generated paths; working tree clean apart from PROVENANCE.json and PROVENANCE_SUMMARY.md.
+Nothing was decided legally here. This is evidence for solicitor review. Committed tree at HEAD 1f31d537466e; history rewritten to exclude nine removed third-party and generated paths; working tree clean apart from PROVENANCE.json and PROVENANCE_SUMMARY.md.
 
 ## History rewrite
 
@@ -31,12 +31,12 @@ What remains new in `server.py`, and why it still trips the 60-added-line heuris
 |---|---|---|
 | upstream/unmodified | 51 | 53 |
 | upstream/modified | 18 | 16 |
-| onexurOSS/original | 28 | 27 |
+| onexurOSS/original | 29 | 27 |
 | third-party | 0 | 7 |
 | generated/artifact | 2 | 3 |
-| **Total** | **99** | **106** |
+| **Total** | **100** | **106** |
 
-The total is -7 net against the first manifest: 7 third-party logo and API description files, the generated capability matrix and `spec/README.md` were removed, and `.cursor-plugin/plugin.json`, `tests/test_report_semantics.py` and `docs/upstream-history.md` were added. `upstream/modified` splits into 3 substantial-rewrite candidates and 15 minor modifications (after the manual classifications below).
+The total is -6 net against the first manifest: 7 third-party logo and API description files, the generated capability matrix and `spec/README.md` were removed, and `.cursor-plugin/plugin.json`, `tests/test_report_semantics.py`, `docs/upstream-history.md` and `NOTICE` were added. `upstream/modified` splits into 3 substantial-rewrite candidates and 15 minor modifications (after the manual classifications below).
 
 ## Test split: `test_server_tools.py`
 
@@ -53,15 +53,16 @@ Five onexurOSS tests (three profit and loss pagination tests, two `aged_receivab
 | File | Similarity | Upstream lines changed | Share of file that is new | What changed |
 |---|---|---|---|---|
 | `CHANGELOG.md` | 20.0% | 80.0% | 80.0% | documentation rewritten/extended |
-| `README.md` | 74.4% | 11.0% | 36.1% | documentation rewritten/extended |
+| `README.md` | 19.4% | 87.5% | 56.2% | documentation rewritten/extended |
 | `src/manager_mcp/server.py` | 87.7% | 6.3% | 17.6% | edits to existing logic/strings; removes server_icons |
 
-### Manual classification of three files
+### Manual classification of four files
 
-These three changed after the first manifest was written and were read directly against upstream v0.2.6. The rewrite (`CHANGELOG.md`) is flagged for the eventual solicitor follow-up.
+These four changed after the first manifest was written and were read directly against upstream v0.2.6. The rewrites (`CHANGELOG.md`, `README.md`) are flagged for the eventual solicitor follow-up.
 
 - **`tests/test_server_icons.py`:** minor modification - likely remains upstream-derived (manual override of the automatic flag). 12-line upstream test whose icon assertions were inverted. The module skeleton and two assertion lines (mcp.name and website_url) are verbatim upstream. The automatic substantial flag is a small-file percentage artefact. Automatic figures: similarity 38.9%, 70.8% of upstream lines changed, 41.7% of the file new.
 - **`CHANGELOG.md`:** substantial rewrite - candidate for onexurOSS/original. Since the changelog split the file holds only the onexurOSS 1.0.0 entry. The only upstream text retained is the two line title and introduction. The upstream release entries moved verbatim to docs/upstream-history.md. The path match to upstream CHANGELOG.md is a comparison artefact. Automatic figures: similarity 20.0%, 80.0% of upstream lines changed, 80.0% of the file new.
+- **`README.md`:** substantial rewrite - candidate for onexurOSS/original. Rewritten from scratch in the solicitor's structure and checked against the code. Similarity to the upstream README is 19.4%. Of 199 non-trivial upstream lines, only one repeated line survives (the example MANAGER_API_URL value, Manager's default local address, a configuration fact). No upstream prose is retained. Automatic figures: similarity 19.4%, 87.5% of upstream lines changed, 56.2% of the file new.
 - **`docs/upstream-history.md`:** upstream-derived, reproduced verbatim (minor modification). Byte for byte copy of the upstream v0.2.6 changelog entries for 0.1.0 to 0.2.6, with an added attribution and MIT notice paragraph. The tool matched it to upstream CHANGELOG.md by rename detection. Automatic figures: similarity 93.0%, 2.7% of upstream lines changed, 11.0% of the file new.
 
 ### Minor modifications (likely remain upstream-derived)
@@ -109,7 +110,7 @@ None remain. The 7 Manager.io logo and API description files flagged in the firs
 
 ## Upstream MIT notices
 
-The upstream MIT licence and copyright notice **are present** in `LICENSE` only: the MIT text, `Copyright (c) 2026 manager-mcp contributors` (identical to upstream's `LICENSE`) and one added line `Copyright (c) 2026 onexurOSS`. Other attribution: `README.md:3:First release under the onexurOSS identity (v1.0.0), based on the up`; `pyproject.toml:11:authors = [{ name = "Dru Connold" }, { name = "onexurOSS" }]`. **Not present:** a `NOTICE` file, per-file headers (0 files), or any file-level record of which files are upstream-derived.
+The upstream MIT licence and copyright notice **are present** in `LICENSE` (the MIT text, `Copyright (c) 2026 manager-mcp contributors`, identical to upstream's `LICENSE`, and one added line `Copyright (c) 2026 onexurOSS`) and in the new `NOTICE`, which repeats the upstream copyright line and source URL and names Xalterra Ltd, trading as Onexur, on the onexurOSS side. The onexurOSS copyright line in `LICENSE` and the NOTICE line are not yet aligned (`LICENSE` is deliberately untouched until the licence pass). Other attribution: `README.md:5:This project began as a fork of [manager-mcp](https://github.com/flu`; `README.md:131:This project incorporates material from [manager-mcp](https://gith`; `pyproject.toml:11:authors = [{ name = "Dru Connold" }, { name = "onexurOSS" }]`. **Not present yet:** `LICENSE-MIT` and `LICENSE-AGPL` (referenced by `NOTICE` and the README) and per-file headers (0 files). File-level provenance is in this manifest.
 
 ## Parallel checks (report only)
 
