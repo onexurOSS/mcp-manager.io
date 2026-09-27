@@ -1,0 +1,28 @@
+name: dependency-audit
+
+# Checks the locked dependencies (runtime and dev) for known vulnerabilities with
+# pip-audit. It runs on every push to main and every pull request, and weekly, so that
+# a new advisory against an unchanged lock file is still noticed. The job fails if any
+# known vulnerability is reported. GitHub Dependabot alerts run separately.
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+  schedule:
+    - cron: "23 5 * * 1"
+
+permissions:
+  contents: read
+
+jobs:
+  pip-audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - name: Install uv
+        uses: astral-sh/setup-uv@v7
+      - name: Export the locked requirements
+        run: uv export --frozen --no-hashes --all-extras --no-emit-project > requirements-audit.txt
+      - name: Audit
+        run: uvx pip-audit==2.10.1 -r requirements-audit.txt --no-deps --disable-pip
