@@ -1,5 +1,3 @@
-onexurOSS Manager MCP
-
 This project incorporates material from manager-mcp 0.2.6,
 released under the MIT License.
 
@@ -8,11 +6,13 @@ Copyright (c) 2026 manager-mcp contributors.
 The upstream material was obtained from:
 https://github.com/flumpiey/manager-mcp
 
-Material added or authored by onexurOSS is copyright (c) 2026
+Material added or authored for this project is copyright (c) 2026
 Xalterra Ltd, trading as Onexur, and is separately identified in
 PROVENANCE.json. PROVENANCE.json is provided for provenance and
 licensing identification and does not alter the applicable licence
 terms of upstream material.
+
+Licensing enquiries: licensing@xalterra.com
 
 The complete MIT License is reproduced in LICENSE-MIT. The complete
 GNU Affero General Public License v3.0 is reproduced in LICENSE-AGPL.
