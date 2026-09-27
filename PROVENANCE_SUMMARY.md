@@ -1,10 +1,10 @@
 # Provenance summary (Gate 1A, analysis only)
 
-Nothing was decided legally here. This is evidence for solicitor review. Committed tree at HEAD 785184f6d7b2; commit author identity rewritten to Onexur <github@xalterra.com>; working tree clean apart from PROVENANCE.json and PROVENANCE_SUMMARY.md.
+Nothing was decided legally here. This is evidence for solicitor review. Committed tree at HEAD d44ffadb8128; commit author identity rewritten to Onexur <github@xalterra.com>; working tree clean apart from PROVENANCE.json and PROVENANCE_SUMMARY.md.
 
 ## History rewrite
 
-This regeneration follows a history rewrite, which is why every commit hash differs from those quoted in earlier manifests. Local history was rewritten with `git filter-branch` so that the nine removed paths (`docs/favicon.ico`, `docs/icon-512.png`, `docs/manager-icon.svg`, `mcpb/icon.png`, `src/manager_mcp/assets/icon.png`, `src/manager_mcp/spec/api2.json`, `src/manager_mcp/spec/api2.live-26.8.4.3664.json.gz`, `src/manager_mcp/spec/api2.live-capabilities.json`, `src/manager_mcp/spec/README.md`) never appear in any commit. The initial commit was `3e458b5` in the first version of this history. Later rewrites replaced the commit author and committer identity on all commits (from the GitHub namespace `onexurOSS <github@onexur.org>` to `Onexur <github@xalterra.com>`), so the initial commit is now `0f95e08`. Both rewrites preserved commit count, messages, author and committer dates and every tree (verified on the final rewrite: 41 commits before and after, identical trees, dates and full messages, except that one commit message line quoting an interim address was corrected). Verified: `git rev-list --objects --all` lists none of those paths, and none of the eight distinct blobs they contained (two paths shared identical content) exists in the object store after garbage collection. The remote origin still holds the old initial commit until a force push replaces it. Old commit hashes quoted in commit messages or documents written before the rewrite no longer resolve.
+This regeneration follows a history rewrite, which is why every commit hash differs from those quoted in earlier manifests. Local history was rewritten with `git filter-branch` so that the nine removed paths (`docs/favicon.ico`, `docs/icon-512.png`, `docs/manager-icon.svg`, `mcpb/icon.png`, `src/manager_mcp/assets/icon.png`, `src/manager_mcp/spec/api2.json`, `src/manager_mcp/spec/api2.live-26.8.4.3664.json.gz`, `src/manager_mcp/spec/api2.live-capabilities.json`, `src/manager_mcp/spec/README.md`) never appear in any commit. The initial commit was `3e458b5` in the first version of this history. Later rewrites replaced the commit author and committer identity on all commits (from the GitHub namespace `onexurOSS` to `Onexur <github@xalterra.com>`), so the initial commit is now `0f95e08`. Both rewrites preserved commit count, messages, author and committer dates and every tree (verified on the final rewrite: 41 commits before and after, identical trees, dates and full messages, except that one commit message line quoting an interim address was corrected). Verified: `git rev-list --objects --all` lists none of those paths, and none of the eight distinct blobs they contained (two paths shared identical content) exists in the object store after garbage collection. The remote origin still holds the old initial commit until a force push replaces it. Old commit hashes quoted in commit messages or documents written before the rewrite no longer resolve.
 
 ## Basis
 
@@ -31,12 +31,12 @@ What remains new in `server.py`, and why it still trips the 60-added-line heuris
 |---|---|---|
 | upstream/unmodified | 51 | 53 |
 | upstream/modified | 18 | 16 |
-| Onexur/original | 34 | 27 |
+| Onexur/original | 36 | 27 |
 | third-party | 1 | 7 |
 | generated/artifact | 3 | 3 |
-| **Total** | **107** | **106** |
+| **Total** | **109** | **106** |
 
-The total is +1 net against the first manifest: 7 third-party logo and API description files, the generated capability matrix and `spec/README.md` were removed, and `.cursor-plugin/plugin.json`, `tests/test_report_semantics.py`, `docs/upstream-history.md` and `NOTICE` were added. `upstream/modified` splits into 3 substantial-rewrite candidates and 15 minor modifications (after the manual classifications below).
+The total is +3 net against the first manifest: 7 third-party logo and API description files, the generated capability matrix and `spec/README.md` were removed, and `.cursor-plugin/plugin.json`, `tests/test_report_semantics.py`, `docs/upstream-history.md` and `NOTICE` were added. `upstream/modified` splits into 3 substantial-rewrite candidates and 15 minor modifications (after the manual classifications below).
 
 ## Test split: `test_server_tools.py`
 
@@ -116,7 +116,7 @@ The upstream MIT licence and copyright notice **are present** in `LICENSE-MIT`: 
 
 ## Per-file licence headers
 
-26 of 65 Python files carry the two line AGPL-3.0-or-later header (`SPDX-License-Identifier: AGPL-3.0-or-later` and `Copyright (c) 2026 Xalterra Ltd, trading as Onexur`). They are exactly the files classified `Onexur/original`: ten modules under `src/manager_mcp`, two scripts and fourteen test files. The header pass added two lines to each file and changed nothing else (unchanged ASTs, identical tool snapshot, tests passing).
+28 of 67 Python files carry the two line AGPL-3.0-or-later header (`SPDX-License-Identifier: AGPL-3.0-or-later` and `Copyright (c) 2026 Xalterra Ltd, trading as Onexur`). They are exactly the files classified `Onexur/original`: ten modules under `src/manager_mcp`, two scripts and sixteen test files. The header pass added two lines to each file and changed nothing else (unchanged ASTs, identical tool snapshot, tests passing).
 
 Deliberately without headers: every `upstream/unmodified` file, every `upstream/modified` Python file including the mixed files `src/manager_mcp/server.py` and `tests/test_server_tools.py` (per the second solicitor opinion: mixed, no further splitting or headers), and non-Python files.
 
