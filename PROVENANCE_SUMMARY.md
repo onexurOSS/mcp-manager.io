@@ -1,6 +1,6 @@
 # Provenance summary (Gate 1A, analysis only)
 
-Nothing was decided legally here. This is evidence for solicitor review. Committed tree at HEAD 6d06e24dfcd3; working tree clean apart from PROVENANCE.json and PROVENANCE_SUMMARY.md.
+Nothing was decided legally here. This is evidence for solicitor review. Committed tree at HEAD b8b87e2662e0; working tree clean apart from PROVENANCE.json and PROVENANCE_SUMMARY.md.
 
 ## Basis
 
@@ -26,13 +26,13 @@ What remains new in `server.py`, and why it still trips the 60-added-line heuris
 | Category | Files now | First manifest |
 |---|---|---|
 | upstream/unmodified | 51 | 53 |
-| upstream/modified | 18 | 16 |
+| upstream/modified | 19 | 16 |
 | onexurOSS/original | 28 | 27 |
 | third-party | 0 | 7 |
 | generated/artifact | 3 | 3 |
-| **Total** | **100** | **106** |
+| **Total** | **101** | **106** |
 
-The total is -6 net against the first manifest: 7 third-party logo and API description files were removed, and `.cursor-plugin/plugin.json` and `tests/test_report_semantics.py` were added. `upstream/modified` splits into 4 substantial-rewrite candidates and 14 minor modifications (after the two manual classifications below).
+The total is -5 net against the first manifest: 7 third-party logo and API description files were removed, and `.cursor-plugin/plugin.json` and `tests/test_report_semantics.py` were added. `upstream/modified` splits into 4 substantial-rewrite candidates and 15 minor modifications (after the manual classifications below).
 
 ## Test split: `test_server_tools.py`
 
@@ -48,17 +48,19 @@ Five onexurOSS tests (three profit and loss pagination tests, two `aged_receivab
 
 | File | Similarity | Upstream lines changed | Share of file that is new | What changed |
 |---|---|---|---|---|
-| `CHANGELOG.md` | 67.6% | 0.0% | 49.0% | documentation rewritten/extended |
+| `CHANGELOG.md` | 19.9% | 80.0% | 80.3% | documentation rewritten/extended |
 | `README.md` | 74.4% | 11.0% | 36.1% | documentation rewritten/extended |
 | `src/manager_mcp/server.py` | 87.7% | 6.3% | 17.6% | edits to existing logic/strings; removes server_icons |
 | `src/manager_mcp/spec/README.md` | 12.5% | 90.0% | 83.3% | documentation rewritten/extended |
 
-### Manual classification of two files flagged after the first manifest
+### Manual classification of four files
 
-These two changed after the first manifest was written and were read directly against upstream v0.2.6. Both are flagged here for the eventual solicitor follow-up; neither waits for a separate review round.
+These four changed after the first manifest was written and were read directly against upstream v0.2.6. The rewrites (`spec/README.md`, `CHANGELOG.md`) are flagged for the eventual solicitor follow-up.
 
 - **`src/manager_mcp/spec/README.md`:** substantial rewrite - candidate for onexurOSS/original. The upstream document (vendored OpenAPI provenance note and its live-validation notes) was replaced wholesale with new text describing the generated capability matrix. No upstream sentence is retained. Automatic figures: similarity 12.5%, 90.0% of upstream lines changed, 83.3% of the file new.
 - **`tests/test_server_icons.py`:** minor modification - likely remains upstream-derived (manual override of the automatic flag). 12-line upstream test whose icon assertions were inverted. The module skeleton and two assertion lines (mcp.name and website_url) are verbatim upstream. The automatic substantial flag is a small-file percentage artefact. Automatic figures: similarity 38.9%, 70.8% of upstream lines changed, 41.7% of the file new.
+- **`CHANGELOG.md`:** substantial rewrite - candidate for onexurOSS/original. Since the changelog split the file holds only the onexurOSS 1.0.0 entry. The only upstream text retained is the two line title and introduction. The upstream release entries moved verbatim to docs/upstream-history.md. The path match to upstream CHANGELOG.md is a comparison artefact. Automatic figures: similarity 19.9%, 80.0% of upstream lines changed, 80.3% of the file new.
+- **`docs/upstream-history.md`:** upstream-derived, reproduced verbatim (minor modification). Byte for byte copy of the upstream v0.2.6 changelog entries for 0.1.0 to 0.2.6, with an added attribution and MIT notice paragraph. The tool matched it to upstream CHANGELOG.md by rename detection. Automatic figures: similarity 93.0%, 2.7% of upstream lines changed, 11.0% of the file new.
 
 ### Minor modifications (likely remain upstream-derived)
 
@@ -68,6 +70,7 @@ These two changed after the first manifest was written and were read directly ag
 | `.github/workflows/publish.yml` | 88.3% | configuration/metadata edits |
 | `.gitignore` | 97.3% | configuration/metadata edits |
 | `LICENSE` | 97.7% | configuration/metadata edits |
+| `docs/upstream-history.md` | 93.0% | documentation rewritten/extended; renamed from CHANGELOG.md |
 | `mcp.json` | 92.9% | configuration/metadata edits |
 | `mcpb/manifest.json` | 86.2% | configuration/metadata edits |
 | `mcpb/pyproject.toml` | 80.0% | configuration/metadata edits |

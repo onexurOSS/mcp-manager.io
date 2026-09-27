@@ -1,7 +1,7 @@
 {
  "generated_by": "Gate 1A provenance audit",
- "repo_head": "6d06e24dfcd3569ebab1983096bb070dd3231c1a",
- "repo_basis": "committed tree at HEAD 6d06e24dfcd3; working tree clean apart from PROVENANCE.json and PROVENANCE_SUMMARY.md",
+ "repo_head": "b8b87e2662e0151d8b83fa914d01a813b592ed7d",
+ "repo_basis": "committed tree at HEAD b8b87e2662e0; working tree clean apart from PROVENANCE.json and PROVENANCE_SUMMARY.md",
  "upstream_reference": {
   "source": "github.com/flumpiey/manager-mcp tag v0.2.6",
   "commit": "c50c4d71f2aff962a8c9dbb1cce2ef14f602a51b",
@@ -80,15 +80,19 @@
   {
    "path": "CHANGELOG.md",
    "category": "upstream/modified",
-   "similarity_pct": 67.6,
+   "similarity_pct": 19.9,
    "upstream_source_path": "CHANGELOG.md",
-   "notes": "0.0% of upstream lines changed, 49.0% of current file is new; documentation rewritten/extended",
+   "notes": "80.0% of upstream lines changed, 80.3% of current file is new; documentation rewritten/extended",
    "flagged_for_review": true,
-   "changed_from_upstream_pct": 0.0,
-   "new_in_current_pct": 49.0,
+   "changed_from_upstream_pct": 80.0,
+   "new_in_current_pct": 80.3,
    "upstream_lines": 75,
-   "current_lines": 147,
-   "review_flag": "substantial rewrite - candidate for onexurOSS/original"
+   "current_lines": 76,
+   "review_flag": "substantial rewrite - candidate for onexurOSS/original",
+   "manual_review": {
+    "classification": "substantial rewrite - candidate for onexurOSS/original",
+    "basis": "Since the changelog split the file holds only the onexurOSS 1.0.0 entry. The only upstream text retained is the two line title and introduction. The upstream release entries moved verbatim to docs/upstream-history.md. The path match to upstream CHANGELOG.md is a comparison artefact."
+   }
   },
   {
    "path": "LICENSE",
@@ -131,6 +135,23 @@
    "upstream_source_path": null,
    "notes": "no upstream counterpart in v0.2.6",
    "flagged_for_review": false
+  },
+  {
+   "path": "docs/upstream-history.md",
+   "category": "upstream/modified",
+   "similarity_pct": 93.0,
+   "upstream_source_path": "CHANGELOG.md",
+   "notes": "2.7% of upstream lines changed, 11.0% of current file is new; documentation rewritten/extended; renamed from CHANGELOG.md",
+   "flagged_for_review": false,
+   "changed_from_upstream_pct": 2.7,
+   "new_in_current_pct": 11.0,
+   "upstream_lines": 75,
+   "current_lines": 82,
+   "review_flag": "upstream-derived, reproduced verbatim (minor modification)",
+   "manual_review": {
+    "classification": "upstream-derived, reproduced verbatim (minor modification)",
+    "basis": "Byte for byte copy of the upstream v0.2.6 changelog entries for 0.1.0 to 0.2.6, with an added attribution and MIT notice paragraph. The tool matched it to upstream CHANGELOG.md by rename detection."
+   }
   },
   {
    "path": "mcp.json",
@@ -2009,7 +2030,8 @@
    "WT:LICENSE:1:MIT License",
    "WT:LICENSE:3:Copyright (c) 2026 manager-mcp contributors",
    "WT:LICENSE:4:Copyright (c) 2026 onexurOSS",
-   "WT:LICENSE:6:Permission is hereby granted, free of charge, to any person obtaining a copy"
+   "WT:LICENSE:6:Permission is hereby granted, free of charge, to any person obtaining a copy",
+   "WT:docs/upstream-history.md:6:Copyright (c) 2026 manager-mcp contributors (see [LICENSE](../LICENSE))."
   ],
   "licence_file_comparison": {
    "head_LICENSE_lines": [
