@@ -1,0 +1,110 @@
+# Provenance summary (Gate 1A, analysis only)
+
+Nothing was decided legally here. This is evidence for solicitor review. Committed tree at HEAD 308cdfc16dd1; working tree clean apart from PROVENANCE.json and PROVENANCE_SUMMARY.md.
+
+## Basis
+
+- **Upstream reference:** github.com/flumpiey/manager-mcp tag `v0.2.6`, commit `c50c4d71f2aff962a8c9dbb1cce2ef14f602a51b`. Cross-check: the PyPI sdist `manager_mcp-0.2.6.tar.gz` (sha256 `f9a1069913f5126ed78686396177cdf3d7e720674facaae718f41147adb7971f`) has a `src/` tree byte-identical to the tag's `src/`.
+- **Method:** line-level `difflib` similarity per file. `changed_from_upstream_pct` is the share of upstream lines replaced or deleted; `new_in_current_pct` is the share of the current file that is added. A file is flagged as a substantial-rewrite candidate when it adds at least 60 non-blank lines or at least 30% of it is new. These are triage heuristics, not a measure of copyrightable expression. Two files carry a manual classification (below).
+
+## `server.py`: new-content share after the split
+
+| Measure | Before the split (first manifest) | Now (committed) |
+|---|---|---|
+| Similarity to upstream v0.2.6 | 71.5% | **87.7%** |
+| Share of the file that is new | 43.4% | **17.6%** |
+| Upstream lines changed | 2.9% | 6.3% |
+| Lines in the file | 1197 | 792 |
+| Approximate lines added | 519 | 139 |
+
+The new-content share fell from 43.4% to 17.6% (25.8 percentage points, a 59% relative reduction). The onexurOSS tool wrappers that were in `server.py` now live in `diagnostics.py`, `reconciliation.py`, `corrections.py`, `fixed_assets.py` and `server_info.py` (all `onexurOSS/original`). Tool names, schemas, order and behaviour are unchanged (snapshot-verified). The embedded-icon code was also removed.
+
+What remains new in `server.py`, and why it still trips the 60-added-line heuristic: the thin `register_*` wiring calls, the date-rejection and `semantics` block in `_fetch_report` (a modified upstream function), reworded descriptions on the upstream report tools, and the dev-supervisor branch in `main()`. Whether these residual additions are separable from the upstream-derived remainder is a question for review.
+
+## Counts per category
+
+| Category | Files now | First manifest |
+|---|---|---|
+| upstream/unmodified | 51 | 53 |
+| upstream/modified | 18 | 16 |
+| onexurOSS/original | 27 | 27 |
+| third-party | 0 | 7 |
+| generated/artifact | 3 | 3 |
+| **Total** | **99** | **106** |
+
+The total fell by 6 net: 7 third-party logo and API description files were removed and `.cursor-plugin/plugin.json` was added. `upstream/modified` splits into 5 substantial-rewrite candidates and 13 minor modifications (after the two manual classifications below).
+
+## Substantial-rewrite candidates (flagged for solicitor review)
+
+| File | Similarity | Upstream lines changed | Share of file that is new | What changed |
+|---|---|---|---|---|
+| `CHANGELOG.md` | 67.6% | 0.0% | 49.0% | documentation rewritten/extended |
+| `README.md` | 74.4% | 11.0% | 36.1% | documentation rewritten/extended |
+| `src/manager_mcp/server.py` | 87.7% | 6.3% | 17.6% | edits to existing logic/strings; removes server_icons |
+| `src/manager_mcp/spec/README.md` | 12.5% | 90.0% | 83.3% | documentation rewritten/extended |
+| `tests/test_server_tools.py` | 77.3% | 2.7% | 35.8% | new logic: adds test_aged_receivables_labels_itself_current_state, test_aged_receivables_rejects_period_instead_of_returning_current_data, test_profit_and_loss_pages_through_all_records, test_profit_and_loss_reports_incomplete_when_capped, test_profit_and_loss_unable_to_determine_without_total; removes test_aged_receivables_period_unsupported_notice |
+
+### Manual classification of two files flagged after the first manifest
+
+These two changed after the first manifest was written and were read directly against upstream v0.2.6. Both are flagged here for the eventual solicitor follow-up; neither waits for a separate review round.
+
+- **`src/manager_mcp/spec/README.md`:** substantial rewrite - candidate for onexurOSS/original. The upstream document (vendored OpenAPI provenance note and its live-validation notes) was replaced wholesale with new text describing the generated capability matrix. No upstream sentence is retained. Automatic figures: similarity 12.5%, 90.0% of upstream lines changed, 83.3% of the file new.
+- **`tests/test_server_icons.py`:** minor modification - likely remains upstream-derived (manual override of the automatic flag). 12-line upstream test whose icon assertions were inverted. The module skeleton and two assertion lines (mcp.name and website_url) are verbatim upstream. The automatic substantial flag is a small-file percentage artefact. Automatic figures: similarity 38.9%, 70.8% of upstream lines changed, 41.7% of the file new.
+
+### Minor modifications (likely remain upstream-derived)
+
+| File | Similarity | Note |
+|---|---|---|
+| `.cursor-plugin/plugin.json` | 76.9% | configuration/metadata edits |
+| `.github/workflows/publish.yml` | 88.3% | configuration/metadata edits |
+| `.gitignore` | 97.3% | configuration/metadata edits |
+| `LICENSE` | 97.7% | configuration/metadata edits |
+| `mcp.json` | 92.9% | configuration/metadata edits |
+| `mcpb/manifest.json` | 86.2% | configuration/metadata edits |
+| `mcpb/pyproject.toml` | 80.0% | configuration/metadata edits |
+| `pyproject.toml` | 90.9% | configuration/metadata edits |
+| `server.json` | 80.0% | configuration/metadata edits |
+| `src/manager_mcp/resources.py` | 95.6% | new logic: adds _merge_extra_read_only_collections |
+| `tests/test_resources.py` | 96.2% | edits to existing logic/strings |
+| `tests/test_sdist_contents.py` | 97.7% | edits to existing logic/strings |
+| `tests/test_server_icons.py` | 38.9% | new logic: adds test_fastmcp_advertises_website_and_no_embedded_icons; removes test_fastmcp_configured_with_icons_and_website, test_server_icons_include_data_uri_and_https |
+
+## Third-party concerns
+
+### Files
+
+None remain. The 7 Manager.io logo and API description files flagged in the first manifest were removed (commit `26031ef`). The generated `src/manager_mcp/spec/api2.live-capabilities.json` is kept for now and is subject to the solicitor's view on whether it is factual interface data.
+
+### Dependencies (104 distributions in `uv.lock`, 75 runtime, 29 dev/build only; unchanged since the first manifest)
+
+- **GPL/LGPL/AGPL in the closure:** none. **Unlicensed or undeclared:** none after checking installed metadata, licence files and PyPI (source recorded per package in `PROVENANCE.json`).
+- **Worth a solicitor's glance** (none is incompatible with MIT or AGPLv3 distribution on its declared terms):
+  - `backports-asyncio-runner` 1.2.0 (dev/build only): PSF-2.0
+  - `backports-zstd` 1.6.0 (dev/build only): PSF-2.0
+  - `certifi` 2026.7.22 (runtime): MPL-2.0
+  - `cryptography` 49.0.0 (runtime): Apache-2.0 OR BSD-3-Clause
+  - `distlib` 0.4.3 (dev/build only): PSF-2.0
+  - `packaging` 26.2 (runtime): Apache-2.0 OR BSD-2-Clause
+  - `pathspec` 1.1.1 (dev/build only): Mozilla Public License 2.0 (MPL 2.0). identified from licence text as MPL-2.0; MPL-2.0 is file-level copyleft, compatible with AGPLv3 and fine as an unmodified dependency
+  - `ptyprocess` 0.7.0 (dev/build only): UNKNOWN. identified from licence text as ISC
+  - `pywin32` 312 (runtime): PSF
+  - `typing-extensions` 4.16.0 (runtime): PSF-2.0
+  - `uv` 0.12.0 (dev/build only): MIT OR Apache-2.0
+- `ptyprocess` (dev/build only) declares `UNKNOWN` in package metadata; its licence file text is ISC. Apache-2.0 packages are compatible with AGPLv3 one way (not GPLv2-only). MPL-2.0 packages (`certifi` runtime, `pathspec` dev/build) are file-level copyleft and used unmodified. No dependency code is vendored.
+
+## Upstream MIT notices
+
+The upstream MIT licence and copyright notice **are present** in `LICENSE` only: the MIT text, `Copyright (c) 2026 manager-mcp contributors` (identical to upstream's `LICENSE`) and one added line `Copyright (c) 2026 onexurOSS`. Other attribution: `README.md:3:First release under the onexurOSS identity (v1.0.0), based on the up`; `pyproject.toml:11:authors = [{ name = "Dru Connold" }, { name = "onexurOSS" }]`. **Not present:** a `NOTICE` file, per-file headers (0 files), or any file-level record of which files are upstream-derived.
+
+## Parallel checks (report only)
+
+- **"Malva dev":** 7 occurrences, all also present in the upstream v0.2.6 tag (so upstream-inherited): `specs/001-manager-readonly-mcp/research-v02-deposits.md:3:**Source**: `; `specs/001-manager-readonly-mcp/research-v02-deposits.md:17:## 3. Recei`; `specs/001-manager-readonly-mcp/research-writes-banking.md:3:**Instance`; `specs/001-manager-readonly-mcp/research-writes-banking.md:29:| `Amount`; `specs/001-manager-readonly-mcp/research-writes-quotes.md:3:**Instance*`; `specs/001-manager-readonly-mcp/research-writes-scopes.md:3:**Instance*`; `src/manager_mcp/writable.py:162:# Paths confirmed via live OpenAPI (Ma`. Real or not is unconfirmed.
+- **`mcpb.mcpb`:** on disk **False** (deleted), tracked in HEAD **False**, referenced by a CI workflow **False**. Upstream tracked it at v0.2.6.
+- **Editor files:** `.cursor-plugin/plugin.json` present; `.cursor/mcp.json` missing; `.vscode/mcp.json` missing. `.cursor-plugin/plugin.json` was restored from the upstream tag (adapted, no logo). The other two were never repo files: they are paths users create in their own projects, and are now plain-text mentions.
+
+## Limits
+
+- Similarity is line-based; additive documentation scores as "new".
+- Renames were checked at a 60% threshold against same-type upstream files; none matched.
+- Files added in upstream versions later than 0.2.6 were not considered.
+- No legal conclusion is drawn on which files may be relicensed.

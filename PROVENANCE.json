@@ -1,0 +1,2026 @@
+{
+ "generated_by": "Gate 1A provenance audit",
+ "repo_head": "308cdfc16dd1a083ef93dda1434cca9d5c9d6811",
+ "repo_basis": "committed tree at HEAD 308cdfc16dd1; working tree clean apart from PROVENANCE.json and PROVENANCE_SUMMARY.md",
+ "upstream_reference": {
+  "source": "github.com/flumpiey/manager-mcp tag v0.2.6",
+  "commit": "c50c4d71f2aff962a8c9dbb1cce2ef14f602a51b",
+  "cross_check": "PyPI sdist manager_mcp-0.2.6.tar.gz sha256 f9a1069913f5126ed78686396177cdf3d7e720674facaae718f41147adb7971f; its src/ is byte-identical to the tag's src/ (12 files)"
+ },
+ "method": {
+  "similarity_pct": "difflib SequenceMatcher line ratio x100",
+  "changed_from_upstream_pct": "upstream lines replaced/deleted / upstream lines",
+  "new_in_current_pct": "lines added / current lines",
+  "thresholds": "unmodified >=98% similarity; substantial-rewrite flag when >=60 non-blank added lines OR >=30% of current file is new. Heuristic only; not a legal determination."
+ },
+ "files": [
+  {
+   "path": ".cursor-plugin/plugin.json",
+   "category": "upstream/modified",
+   "similarity_pct": 76.9,
+   "upstream_source_path": ".cursor-plugin/plugin.json",
+   "notes": "16.7% of upstream lines changed, 28.6% of current file is new; configuration/metadata edits",
+   "flagged_for_review": false,
+   "changed_from_upstream_pct": 16.7,
+   "new_in_current_pct": 28.6,
+   "upstream_lines": 42,
+   "current_lines": 49,
+   "review_flag": "minor modification - likely remains upstream-derived"
+  },
+  {
+   "path": ".env.example",
+   "category": "upstream/unmodified",
+   "similarity_pct": 100.0,
+   "upstream_source_path": ".env.example",
+   "notes": "byte-identical",
+   "flagged_for_review": false,
+   "changed_from_upstream_pct": 0.0,
+   "new_in_current_pct": 0.0,
+   "upstream_lines": 21,
+   "current_lines": 21
+  },
+  {
+   "path": ".github/workflows/ci.yml",
+   "category": "upstream/unmodified",
+   "similarity_pct": 100.0,
+   "upstream_source_path": ".github/workflows/ci.yml",
+   "notes": "byte-identical",
+   "flagged_for_review": false,
+   "changed_from_upstream_pct": 0.0,
+   "new_in_current_pct": 0.0,
+   "upstream_lines": 27,
+   "current_lines": 27
+  },
+  {
+   "path": ".github/workflows/publish.yml",
+   "category": "upstream/modified",
+   "similarity_pct": 88.3,
+   "upstream_source_path": ".github/workflows/publish.yml",
+   "notes": "2.0% of upstream lines changed, 19.7% of current file is new; configuration/metadata edits",
+   "flagged_for_review": false,
+   "changed_from_upstream_pct": 2.0,
+   "new_in_current_pct": 19.7,
+   "upstream_lines": 50,
+   "current_lines": 61,
+   "review_flag": "minor modification - likely remains upstream-derived"
+  },
+  {
+   "path": ".gitignore",
+   "category": "upstream/modified",
+   "similarity_pct": 97.3,
+   "upstream_source_path": ".gitignore",
+   "notes": "0.0% of upstream lines changed, 5.2% of current file is new; configuration/metadata edits",
+   "flagged_for_review": false,
+   "changed_from_upstream_pct": 0.0,
+   "new_in_current_pct": 5.2,
+   "upstream_lines": 73,
+   "current_lines": 77,
+   "review_flag": "minor modification - likely remains upstream-derived"
+  },
+  {
+   "path": "CHANGELOG.md",
+   "category": "upstream/modified",
+   "similarity_pct": 67.6,
+   "upstream_source_path": "CHANGELOG.md",
+   "notes": "0.0% of upstream lines changed, 49.0% of current file is new; documentation rewritten/extended",
+   "flagged_for_review": true,
+   "changed_from_upstream_pct": 0.0,
+   "new_in_current_pct": 49.0,
+   "upstream_lines": 75,
+   "current_lines": 147,
+   "review_flag": "substantial rewrite - candidate for onexurOSS/original"
+  },
+  {
+   "path": "LICENSE",
+   "category": "upstream/modified",
+   "similarity_pct": 97.7,
+   "upstream_source_path": "LICENSE",
+   "notes": "0.0% of upstream lines changed, 4.5% of current file is new; configuration/metadata edits",
+   "flagged_for_review": false,
+   "changed_from_upstream_pct": 0.0,
+   "new_in_current_pct": 4.5,
+   "upstream_lines": 21,
+   "current_lines": 22,
+   "review_flag": "minor modification - likely remains upstream-derived"
+  },
+  {
+   "path": "README.md",
+   "category": "upstream/modified",
+   "similarity_pct": 74.4,
+   "upstream_source_path": "README.md",
+   "notes": "11.0% of upstream lines changed, 36.1% of current file is new; documentation rewritten/extended",
+   "flagged_for_review": true,
+   "changed_from_upstream_pct": 11.0,
+   "new_in_current_pct": 36.1,
+   "upstream_lines": 536,
+   "current_lines": 747,
+   "review_flag": "substantial rewrite - candidate for onexurOSS/original"
+  },
+  {
+   "path": "docs/publishing-review.md",
+   "category": "onexurOSS/original",
+   "similarity_pct": null,
+   "upstream_source_path": null,
+   "notes": "no upstream counterpart in v0.2.6",
+   "flagged_for_review": false
+  },
+  {
+   "path": "docs/reporting.md",
+   "category": "onexurOSS/original",
+   "similarity_pct": null,
+   "upstream_source_path": null,
+   "notes": "no upstream counterpart in v0.2.6",
+   "flagged_for_review": false
+  },
+  {
+   "path": "mcp.json",
+   "category": "upstream/modified",
+   "similarity_pct": 92.9,
+   "upstream_source_path": "mcp.json",
+   "notes": "7.1% of upstream lines changed, 7.1% of current file is new; configuration/metadata edits",
+   "flagged_for_review": false,
+   "changed_from_upstream_pct": 7.1,
+   "new_in_current_pct": 7.1,
+   "upstream_lines": 14,
+   "current_lines": 14,
+   "review_flag": "minor modification - likely remains upstream-derived"
+  },
+  {
+   "path": "mcpb/.mcpbignore",
+   "category": "upstream/unmodified",
+   "similarity_pct": 100.0,
+   "upstream_source_path": "mcpb/.mcpbignore",
+   "notes": "byte-identical",
+   "flagged_for_review": false,
+   "changed_from_upstream_pct": 0.0,
+   "new_in_current_pct": 0.0,
+   "upstream_lines": 2,
+   "current_lines": 2
+  },
+  {
+   "path": "mcpb/manifest.json",
+   "category": "upstream/modified",
+   "similarity_pct": 86.2,
+   "upstream_source_path": "mcpb/manifest.json",
+   "notes": "14.5% of upstream lines changed, 13.1% of current file is new; configuration/metadata edits",
+   "flagged_for_review": false,
+   "changed_from_upstream_pct": 14.5,
+   "new_in_current_pct": 13.1,
+   "upstream_lines": 62,
+   "current_lines": 61,
+   "review_flag": "minor modification - likely remains upstream-derived"
+  },
+  {
+   "path": "mcpb/pyproject.toml",
+   "category": "upstream/modified",
+   "similarity_pct": 80.0,
+   "upstream_source_path": "mcpb/pyproject.toml",
+   "notes": "20.0% of upstream lines changed, 20.0% of current file is new; configuration/metadata edits",
+   "flagged_for_review": false,
+   "changed_from_upstream_pct": 20.0,
+   "new_in_current_pct": 20.0,
+   "upstream_lines": 5,
+   "current_lines": 5,
+   "review_flag": "minor modification - likely remains upstream-derived"
+  },
+  {
+   "path": "mcpb/server/main.py",
+   "category": "upstream/unmodified",
+   "similarity_pct": 100.0,
+   "upstream_source_path": "mcpb/server/main.py",
+   "notes": "byte-identical",
+   "flagged_for_review": false,
+   "changed_from_upstream_pct": 0.0,
+   "new_in_current_pct": 0.0,
+   "upstream_lines": 6,
+   "current_lines": 6
+  },
+  {
+   "path": "pyproject.toml",
+   "category": "upstream/modified",
+   "similarity_pct": 90.9,
+   "upstream_source_path": "pyproject.toml",
+   "notes": "9.6% of upstream lines changed, 8.5% of current file is new; configuration/metadata edits",
+   "flagged_for_review": false,
+   "changed_from_upstream_pct": 9.6,
+   "new_in_current_pct": 8.5,
+   "upstream_lines": 83,
+   "current_lines": 82,
+   "review_flag": "minor modification - likely remains upstream-derived"
+  },
+  {
+   "path": "scripts/_probe_banking_forms.py",
+   "category": "upstream/unmodified",
+   "similarity_pct": 100.0,
+   "upstream_source_path": "scripts/_probe_banking_forms.py",
+   "notes": "byte-identical",
+   "flagged_for_review": false,
+   "changed_from_upstream_pct": 0.0,
+   "new_in_current_pct": 0.0,
+   "upstream_lines": 82,
+   "current_lines": 82
+  },
+  {
+   "path": "scripts/_probe_quotes.py",
+   "category": "upstream/unmodified",
+   "similarity_pct": 100.0,
+   "upstream_source_path": "scripts/_probe_quotes.py",
+   "notes": "byte-identical",
+   "flagged_for_review": false,
+   "changed_from_upstream_pct": 0.0,
+   "new_in_current_pct": 0.0,
+   "upstream_lines": 91,
+   "current_lines": 91
+  },
+  {
+   "path": "scripts/_probe_quotes_minimal.py",
+   "category": "upstream/unmodified",
+   "similarity_pct": 100.0,
+   "upstream_source_path": "scripts/_probe_quotes_minimal.py",
+   "notes": "byte-identical",
+   "flagged_for_review": false,
+   "changed_from_upstream_pct": 0.0,
+   "new_in_current_pct": 0.0,
+   "upstream_lines": 145,
+   "current_lines": 145
+  },
+  {
+   "path": "scripts/_probe_quotes_write.py",
+   "category": "upstream/unmodified",
+   "similarity_pct": 100.0,
+   "upstream_source_path": "scripts/_probe_quotes_write.py",
+   "notes": "byte-identical",
+   "flagged_for_review": false,
+   "changed_from_upstream_pct": 0.0,
+   "new_in_current_pct": 0.0,
+   "upstream_lines": 308,
+   "current_lines": 308
+  },
+  {
+   "path": "scripts/_probe_scope_paths.py",
+   "category": "upstream/unmodified",
+   "similarity_pct": 100.0,
+   "upstream_source_path": "scripts/_probe_scope_paths.py",
+   "notes": "byte-identical",
+   "flagged_for_review": false,
+   "changed_from_upstream_pct": 0.0,
+   "new_in_current_pct": 0.0,
+   "upstream_lines": 120,
+   "current_lines": 120
+  },
+  {
+   "path": "scripts/_smoke_quotes_scopes.py",
+   "category": "upstream/unmodified",
+   "similarity_pct": 100.0,
+   "upstream_source_path": "scripts/_smoke_quotes_scopes.py",
+   "notes": "byte-identical",
+   "flagged_for_review": false,
+   "changed_from_upstream_pct": 0.0,
+   "new_in_current_pct": 0.0,
+   "upstream_lines": 107,
+   "current_lines": 107
+  },
+  {
+   "path": "scripts/_smoke_receipt_readback.py",
+   "category": "upstream/unmodified",
+   "similarity_pct": 100.0,
+   "upstream_source_path": "scripts/_smoke_receipt_readback.py",
+   "notes": "byte-identical",
+   "flagged_for_review": false,
+   "changed_from_upstream_pct": 0.0,
+   "new_in_current_pct": 0.0,
+   "upstream_lines": 91,
+   "current_lines": 91
+  },
+  {
+   "path": "scripts/build_capability_matrix.py",
+   "category": "onexurOSS/original",
+   "similarity_pct": null,
+   "upstream_source_path": null,
+   "notes": "no upstream counterpart in v0.2.6",
+   "flagged_for_review": false
+  },
+  {
+   "path": "scripts/verify_reporting_controls.py",
+   "category": "onexurOSS/original",
+   "similarity_pct": null,
+   "upstream_source_path": null,
+   "notes": "no upstream counterpart in v0.2.6",
+   "flagged_for_review": false
+  },
+  {
+   "path": "server.json",
+   "category": "upstream/modified",
+   "similarity_pct": 80.0,
+   "upstream_source_path": "server.json",
+   "notes": "25.0% of upstream lines changed, 14.3% of current file is new; configuration/metadata edits",
+   "flagged_for_review": false,
+   "changed_from_upstream_pct": 25.0,
+   "new_in_current_pct": 14.3,
+   "upstream_lines": 56,
+   "current_lines": 49,
+   "review_flag": "minor modification - likely remains upstream-derived"
+  },
+  {
+   "path": "skills-lock.json",
+   "category": "generated/artifact",
+   "similarity_pct": 100.0,
+   "upstream_source_path": "skills-lock.json",
+   "notes": "lockfile or generated by a repo script",
+   "flagged_for_review": false
+  },
+  {
+   "path": "skills/manager-accounting/SKILL.md",
+   "category": "upstream/unmodified",
+   "similarity_pct": 100.0,
+   "upstream_source_path": "skills/manager-accounting/SKILL.md",
+   "notes": "byte-identical",
+   "flagged_for_review": false,
+   "changed_from_upstream_pct": 0.0,
+   "new_in_current_pct": 0.0,
+   "upstream_lines": 116,
+   "current_lines": 116
+  },
+  {
+   "path": "specs/001-manager-readonly-mcp/checklists/readonly-api.md",
+   "category": "upstream/unmodified",
+   "similarity_pct": 100.0,
+   "upstream_source_path": "specs/001-manager-readonly-mcp/checklists/readonly-api.md",
+   "notes": "byte-identical",
+   "flagged_for_review": false,
+   "changed_from_upstream_pct": 0.0,
+   "new_in_current_pct": 0.0,
+   "upstream_lines": 68,
+   "current_lines": 68
+  },
+  {
+   "path": "specs/001-manager-readonly-mcp/checklists/requirements.md",
+   "category": "upstream/unmodified",
+   "similarity_pct": 100.0,
+   "upstream_source_path": "specs/001-manager-readonly-mcp/checklists/requirements.md",
+   "notes": "byte-identical",
+   "flagged_for_review": false,
+   "changed_from_upstream_pct": 0.0,
+   "new_in_current_pct": 0.0,
+   "upstream_lines": 37,
+   "current_lines": 37
+  },
+  {
+   "path": "specs/001-manager-readonly-mcp/contracts/mcp-tools.md",
+   "category": "upstream/unmodified",
+   "similarity_pct": 100.0,
+   "upstream_source_path": "specs/001-manager-readonly-mcp/contracts/mcp-tools.md",
+   "notes": "byte-identical",
+   "flagged_for_review": false,
+   "changed_from_upstream_pct": 0.0,
+   "new_in_current_pct": 0.0,
+   "upstream_lines": 111,
+   "current_lines": 111
+  },
+  {
+   "path": "specs/001-manager-readonly-mcp/data-model.md",
+   "category": "upstream/unmodified",
+   "similarity_pct": 100.0,
+   "upstream_source_path": "specs/001-manager-readonly-mcp/data-model.md",
+   "notes": "byte-identical",
+   "flagged_for_review": false,
+   "changed_from_upstream_pct": 0.0,
+   "new_in_current_pct": 0.0,
+   "upstream_lines": 80,
+   "current_lines": 80
+  },
+  {
+   "path": "specs/001-manager-readonly-mcp/plan.md",
+   "category": "upstream/unmodified",
+   "similarity_pct": 100.0,
+   "upstream_source_path": "specs/001-manager-readonly-mcp/plan.md",
+   "notes": "byte-identical",
+   "flagged_for_review": false,
+   "changed_from_upstream_pct": 0.0,
+   "new_in_current_pct": 0.0,
+   "upstream_lines": 119,
+   "current_lines": 119
+  },
+  {
+   "path": "specs/001-manager-readonly-mcp/quickstart.md",
+   "category": "upstream/unmodified",
+   "similarity_pct": 100.0,
+   "upstream_source_path": "specs/001-manager-readonly-mcp/quickstart.md",
+   "notes": "byte-identical",
+   "flagged_for_review": false,
+   "changed_from_upstream_pct": 0.0,
+   "new_in_current_pct": 0.0,
+   "upstream_lines": 58,
+   "current_lines": 58
+  },
+  {
+   "path": "specs/001-manager-readonly-mcp/research-v02-deposits.md",
+   "category": "upstream/unmodified",
+   "similarity_pct": 100.0,
+   "upstream_source_path": "specs/001-manager-readonly-mcp/research-v02-deposits.md",
+   "notes": "byte-identical",
+   "flagged_for_review": false,
+   "changed_from_upstream_pct": 0.0,
+   "new_in_current_pct": 0.0,
+   "upstream_lines": 41,
+   "current_lines": 41
+  },
+  {
+   "path": "specs/001-manager-readonly-mcp/research-writes-banking.md",
+   "category": "upstream/unmodified",
+   "similarity_pct": 100.0,
+   "upstream_source_path": "specs/001-manager-readonly-mcp/research-writes-banking.md",
+   "notes": "byte-identical",
+   "flagged_for_review": false,
+   "changed_from_upstream_pct": 0.0,
+   "new_in_current_pct": 0.0,
+   "upstream_lines": 59,
+   "current_lines": 59
+  },
+  {
+   "path": "specs/001-manager-readonly-mcp/research-writes-quotes.md",
+   "category": "upstream/unmodified",
+   "similarity_pct": 100.0,
+   "upstream_source_path": "specs/001-manager-readonly-mcp/research-writes-quotes.md",
+   "notes": "byte-identical",
+   "flagged_for_review": false,
+   "changed_from_upstream_pct": 0.0,
+   "new_in_current_pct": 0.0,
+   "upstream_lines": 49,
+   "current_lines": 49
+  },
+  {
+   "path": "specs/001-manager-readonly-mcp/research-writes-scopes.md",
+   "category": "upstream/unmodified",
+   "similarity_pct": 100.0,
+   "upstream_source_path": "specs/001-manager-readonly-mcp/research-writes-scopes.md",
+   "notes": "byte-identical",
+   "flagged_for_review": false,
+   "changed_from_upstream_pct": 0.0,
+   "new_in_current_pct": 0.0,
+   "upstream_lines": 40,
+   "current_lines": 40
+  },
+  {
+   "path": "specs/001-manager-readonly-mcp/research.md",
+   "category": "upstream/unmodified",
+   "similarity_pct": 100.0,
+   "upstream_source_path": "specs/001-manager-readonly-mcp/research.md",
+   "notes": "byte-identical",
+   "flagged_for_review": false,
+   "changed_from_upstream_pct": 0.0,
+   "new_in_current_pct": 0.0,
+   "upstream_lines": 144,
+   "current_lines": 144
+  },
+  {
+   "path": "specs/001-manager-readonly-mcp/spec.md",
+   "category": "upstream/unmodified",
+   "similarity_pct": 100.0,
+   "upstream_source_path": "specs/001-manager-readonly-mcp/spec.md",
+   "notes": "byte-identical",
+   "flagged_for_review": false,
+   "changed_from_upstream_pct": 0.0,
+   "new_in_current_pct": 0.0,
+   "upstream_lines": 199,
+   "current_lines": 199
+  },
+  {
+   "path": "specs/001-manager-readonly-mcp/tasks.md",
+   "category": "upstream/unmodified",
+   "similarity_pct": 100.0,
+   "upstream_source_path": "specs/001-manager-readonly-mcp/tasks.md",
+   "notes": "byte-identical",
+   "flagged_for_review": false,
+   "changed_from_upstream_pct": 0.0,
+   "new_in_current_pct": 0.0,
+   "upstream_lines": 251,
+   "current_lines": 251
+  },
+  {
+   "path": "specs/001-manager-readonly-mcp/version-guard-report.md",
+   "category": "upstream/unmodified",
+   "similarity_pct": 100.0,
+   "upstream_source_path": "specs/001-manager-readonly-mcp/version-guard-report.md",
+   "notes": "byte-identical",
+   "flagged_for_review": false,
+   "changed_from_upstream_pct": 0.0,
+   "new_in_current_pct": 0.0,
+   "upstream_lines": 21,
+   "current_lines": 21
+  },
+  {
+   "path": "src/manager_mcp/__init__.py",
+   "category": "upstream/unmodified",
+   "similarity_pct": 100.0,
+   "upstream_source_path": "src/manager_mcp/__init__.py",
+   "notes": "byte-identical",
+   "flagged_for_review": false,
+   "changed_from_upstream_pct": 0.0,
+   "new_in_current_pct": 0.0,
+   "upstream_lines": 3,
+   "current_lines": 3
+  },
+  {
+   "path": "src/manager_mcp/audit_log.py",
+   "category": "onexurOSS/original",
+   "similarity_pct": null,
+   "upstream_source_path": null,
+   "notes": "no upstream counterpart in v0.2.6",
+   "flagged_for_review": false
+  },
+  {
+   "path": "src/manager_mcp/client.py",
+   "category": "upstream/unmodified",
+   "similarity_pct": 100.0,
+   "upstream_source_path": "src/manager_mcp/client.py",
+   "notes": "byte-identical",
+   "flagged_for_review": false,
+   "changed_from_upstream_pct": 0.0,
+   "new_in_current_pct": 0.0,
+   "upstream_lines": 151,
+   "current_lines": 151
+  },
+  {
+   "path": "src/manager_mcp/corrections.py",
+   "category": "onexurOSS/original",
+   "similarity_pct": null,
+   "upstream_source_path": null,
+   "notes": "no upstream counterpart in v0.2.6",
+   "flagged_for_review": false
+  },
+  {
+   "path": "src/manager_mcp/dev_supervisor.py",
+   "category": "onexurOSS/original",
+   "similarity_pct": null,
+   "upstream_source_path": null,
+   "notes": "no upstream counterpart in v0.2.6",
+   "flagged_for_review": false
+  },
+  {
+   "path": "src/manager_mcp/diagnostics.py",
+   "category": "onexurOSS/original",
+   "similarity_pct": null,
+   "upstream_source_path": null,
+   "notes": "no upstream counterpart in v0.2.6",
+   "flagged_for_review": false
+  },
+  {
+   "path": "src/manager_mcp/extra_read_collections.py",
+   "category": "onexurOSS/original",
+   "similarity_pct": null,
+   "upstream_source_path": null,
+   "notes": "no upstream counterpart in v0.2.6",
+   "flagged_for_review": false
+  },
+  {
+   "path": "src/manager_mcp/fixed_assets.py",
+   "category": "onexurOSS/original",
+   "similarity_pct": null,
+   "upstream_source_path": null,
+   "notes": "no upstream counterpart in v0.2.6",
+   "flagged_for_review": false
+  },
+  {
+   "path": "src/manager_mcp/paging.py",
+   "category": "onexurOSS/original",
+   "similarity_pct": null,
+   "upstream_source_path": null,
+   "notes": "no upstream counterpart in v0.2.6",
+   "flagged_for_review": false
+  },
+  {
+   "path": "src/manager_mcp/preconditions.py",
+   "category": "upstream/unmodified",
+   "similarity_pct": 100.0,
+   "upstream_source_path": "src/manager_mcp/preconditions.py",
+   "notes": "byte-identical",
+   "flagged_for_review": false,
+   "changed_from_upstream_pct": 0.0,
+   "new_in_current_pct": 0.0,
+   "upstream_lines": 45,
+   "current_lines": 45
+  },
+  {
+   "path": "src/manager_mcp/reconciliation.py",
+   "category": "onexurOSS/original",
+   "similarity_pct": null,
+   "upstream_source_path": null,
+   "notes": "no upstream counterpart in v0.2.6",
+   "flagged_for_review": false
+  },
+  {
+   "path": "src/manager_mcp/reporting.py",
+   "category": "onexurOSS/original",
+   "similarity_pct": null,
+   "upstream_source_path": null,
+   "notes": "no upstream counterpart in v0.2.6",
+   "flagged_for_review": false
+  },
+  {
+   "path": "src/manager_mcp/resources.py",
+   "category": "upstream/modified",
+   "similarity_pct": 95.6,
+   "upstream_source_path": "src/manager_mcp/resources.py",
+   "notes": "0.5% of upstream lines changed, 8.0% of current file is new; new logic: adds _merge_extra_read_only_collections",
+   "flagged_for_review": false,
+   "changed_from_upstream_pct": 0.5,
+   "new_in_current_pct": 8.0,
+   "upstream_lines": 196,
+   "current_lines": 212,
+   "review_flag": "minor modification - likely remains upstream-derived"
+  },
+  {
+   "path": "src/manager_mcp/scopes.py",
+   "category": "upstream/unmodified",
+   "similarity_pct": 99.6,
+   "upstream_source_path": "src/manager_mcp/scopes.py",
+   "notes": "near-identical (2 lines added, 0 removed)",
+   "flagged_for_review": false,
+   "changed_from_upstream_pct": 0.0,
+   "new_in_current_pct": 0.7,
+   "upstream_lines": 267,
+   "current_lines": 269
+  },
+  {
+   "path": "src/manager_mcp/server.py",
+   "category": "upstream/modified",
+   "similarity_pct": 87.7,
+   "upstream_source_path": "src/manager_mcp/server.py",
+   "notes": "6.3% of upstream lines changed, 17.6% of current file is new; edits to existing logic/strings; removes server_icons",
+   "flagged_for_review": true,
+   "changed_from_upstream_pct": 6.3,
+   "new_in_current_pct": 17.6,
+   "upstream_lines": 697,
+   "current_lines": 792,
+   "review_flag": "substantial rewrite - candidate for onexurOSS/original"
+  },
+  {
+   "path": "src/manager_mcp/server_info.py",
+   "category": "onexurOSS/original",
+   "similarity_pct": null,
+   "upstream_source_path": null,
+   "notes": "no upstream counterpart in v0.2.6",
+   "flagged_for_review": false
+  },
+  {
+   "path": "src/manager_mcp/spec/README.md",
+   "category": "upstream/modified",
+   "similarity_pct": 12.5,
+   "upstream_source_path": "src/manager_mcp/spec/README.md",
+   "notes": "90.0% of upstream lines changed, 83.3% of current file is new; documentation rewritten/extended",
+   "flagged_for_review": true,
+   "changed_from_upstream_pct": 90.0,
+   "new_in_current_pct": 83.3,
+   "upstream_lines": 20,
+   "current_lines": 12,
+   "review_flag": "substantial rewrite - candidate for onexurOSS/original",
+   "manual_review": {
+    "classification": "substantial rewrite - candidate for onexurOSS/original",
+    "basis": "The upstream document (vendored OpenAPI provenance note and its live-validation notes) was replaced wholesale with new text describing the generated capability matrix. No upstream sentence is retained."
+   }
+  },
+  {
+   "path": "src/manager_mcp/spec/api2.live-capabilities.json",
+   "category": "generated/artifact",
+   "similarity_pct": null,
+   "upstream_source_path": null,
+   "notes": "lockfile or generated by a repo script; derived from Manager's API description",
+   "flagged_for_review": false
+  },
+  {
+   "path": "src/manager_mcp/task_tools.py",
+   "category": "upstream/unmodified",
+   "similarity_pct": 100.0,
+   "upstream_source_path": "src/manager_mcp/task_tools.py",
+   "notes": "byte-identical",
+   "flagged_for_review": false,
+   "changed_from_upstream_pct": 0.0,
+   "new_in_current_pct": 0.0,
+   "upstream_lines": 473,
+   "current_lines": 473
+  },
+  {
+   "path": "src/manager_mcp/writable.py",
+   "category": "upstream/unmodified",
+   "similarity_pct": 100.0,
+   "upstream_source_path": "src/manager_mcp/writable.py",
+   "notes": "byte-identical",
+   "flagged_for_review": false,
+   "changed_from_upstream_pct": 0.0,
+   "new_in_current_pct": 0.0,
+   "upstream_lines": 440,
+   "current_lines": 440
+  },
+  {
+   "path": "src/manager_mcp/write_validate.py",
+   "category": "upstream/unmodified",
+   "similarity_pct": 100.0,
+   "upstream_source_path": "src/manager_mcp/write_validate.py",
+   "notes": "byte-identical",
+   "flagged_for_review": false,
+   "changed_from_upstream_pct": 0.0,
+   "new_in_current_pct": 0.0,
+   "upstream_lines": 100,
+   "current_lines": 100
+  },
+  {
+   "path": "tests/fixtures/fake_mcp_child.py",
+   "category": "onexurOSS/original",
+   "similarity_pct": null,
+   "upstream_source_path": null,
+   "notes": "no upstream counterpart in v0.2.6",
+   "flagged_for_review": false
+  },
+  {
+   "path": "tests/integration/__init__.py",
+   "category": "upstream/unmodified",
+   "similarity_pct": 100.0,
+   "upstream_source_path": "tests/integration/__init__.py",
+   "notes": "byte-identical",
+   "flagged_for_review": false,
+   "changed_from_upstream_pct": 0.0,
+   "new_in_current_pct": 0.0,
+   "upstream_lines": 0,
+   "current_lines": 0
+  },
+  {
+   "path": "tests/integration/conftest.py",
+   "category": "upstream/unmodified",
+   "similarity_pct": 100.0,
+   "upstream_source_path": "tests/integration/conftest.py",
+   "notes": "byte-identical",
+   "flagged_for_review": false,
+   "changed_from_upstream_pct": 0.0,
+   "new_in_current_pct": 0.0,
+   "upstream_lines": 228,
+   "current_lines": 228
+  },
+  {
+   "path": "tests/integration/test_banking_ledger.py",
+   "category": "upstream/unmodified",
+   "similarity_pct": 100.0,
+   "upstream_source_path": "tests/integration/test_banking_ledger.py",
+   "notes": "byte-identical",
+   "flagged_for_review": false,
+   "changed_from_upstream_pct": 0.0,
+   "new_in_current_pct": 0.0,
+   "upstream_lines": 104,
+   "current_lines": 104
+  },
+  {
+   "path": "tests/integration/test_deposits.py",
+   "category": "upstream/unmodified",
+   "similarity_pct": 100.0,
+   "upstream_source_path": "tests/integration/test_deposits.py",
+   "notes": "byte-identical",
+   "flagged_for_review": false,
+   "changed_from_upstream_pct": 0.0,
+   "new_in_current_pct": 0.0,
+   "upstream_lines": 183,
+   "current_lines": 183
+  },
+  {
+   "path": "tests/integration/test_parties.py",
+   "category": "upstream/unmodified",
+   "similarity_pct": 100.0,
+   "upstream_source_path": "tests/integration/test_parties.py",
+   "notes": "byte-identical",
+   "flagged_for_review": false,
+   "changed_from_upstream_pct": 0.0,
+   "new_in_current_pct": 0.0,
+   "upstream_lines": 63,
+   "current_lines": 63
+  },
+  {
+   "path": "tests/integration/test_payments.py",
+   "category": "upstream/unmodified",
+   "similarity_pct": 100.0,
+   "upstream_source_path": "tests/integration/test_payments.py",
+   "notes": "byte-identical",
+   "flagged_for_review": false,
+   "changed_from_upstream_pct": 0.0,
+   "new_in_current_pct": 0.0,
+   "upstream_lines": 108,
+   "current_lines": 108
+  },
+  {
+   "path": "tests/integration/test_reads.py",
+   "category": "upstream/unmodified",
+   "similarity_pct": 100.0,
+   "upstream_source_path": "tests/integration/test_reads.py",
+   "notes": "byte-identical",
+   "flagged_for_review": false,
+   "changed_from_upstream_pct": 0.0,
+   "new_in_current_pct": 0.0,
+   "upstream_lines": 79,
+   "current_lines": 79
+  },
+  {
+   "path": "tests/integration/test_sales.py",
+   "category": "upstream/unmodified",
+   "similarity_pct": 100.0,
+   "upstream_source_path": "tests/integration/test_sales.py",
+   "notes": "byte-identical",
+   "flagged_for_review": false,
+   "changed_from_upstream_pct": 0.0,
+   "new_in_current_pct": 0.0,
+   "upstream_lines": 138,
+   "current_lines": 138
+  },
+  {
+   "path": "tests/test_audit_log.py",
+   "category": "onexurOSS/original",
+   "similarity_pct": null,
+   "upstream_source_path": null,
+   "notes": "no upstream counterpart in v0.2.6",
+   "flagged_for_review": false
+  },
+  {
+   "path": "tests/test_client.py",
+   "category": "upstream/unmodified",
+   "similarity_pct": 100.0,
+   "upstream_source_path": "tests/test_client.py",
+   "notes": "byte-identical",
+   "flagged_for_review": false,
+   "changed_from_upstream_pct": 0.0,
+   "new_in_current_pct": 0.0,
+   "upstream_lines": 147,
+   "current_lines": 147
+  },
+  {
+   "path": "tests/test_corrections.py",
+   "category": "onexurOSS/original",
+   "similarity_pct": null,
+   "upstream_source_path": null,
+   "notes": "no upstream counterpart in v0.2.6",
+   "flagged_for_review": false
+  },
+  {
+   "path": "tests/test_denylist_comprehensive.py",
+   "category": "upstream/unmodified",
+   "similarity_pct": 100.0,
+   "upstream_source_path": "tests/test_denylist_comprehensive.py",
+   "notes": "byte-identical",
+   "flagged_for_review": false,
+   "changed_from_upstream_pct": 0.0,
+   "new_in_current_pct": 0.0,
+   "upstream_lines": 55,
+   "current_lines": 55
+  },
+  {
+   "path": "tests/test_dev_supervisor.py",
+   "category": "onexurOSS/original",
+   "similarity_pct": null,
+   "upstream_source_path": null,
+   "notes": "no upstream counterpart in v0.2.6",
+   "flagged_for_review": false
+  },
+  {
+   "path": "tests/test_diagnostics.py",
+   "category": "onexurOSS/original",
+   "similarity_pct": null,
+   "upstream_source_path": null,
+   "notes": "no upstream counterpart in v0.2.6",
+   "flagged_for_review": false
+  },
+  {
+   "path": "tests/test_extra_read_collections.py",
+   "category": "onexurOSS/original",
+   "similarity_pct": null,
+   "upstream_source_path": null,
+   "notes": "no upstream counterpart in v0.2.6",
+   "flagged_for_review": false
+  },
+  {
+   "path": "tests/test_fixed_assets.py",
+   "category": "onexurOSS/original",
+   "similarity_pct": null,
+   "upstream_source_path": null,
+   "notes": "no upstream counterpart in v0.2.6",
+   "flagged_for_review": false
+  },
+  {
+   "path": "tests/test_migration_collections.py",
+   "category": "onexurOSS/original",
+   "similarity_pct": null,
+   "upstream_source_path": null,
+   "notes": "no upstream counterpart in v0.2.6",
+   "flagged_for_review": false
+  },
+  {
+   "path": "tests/test_new_tool_registration.py",
+   "category": "onexurOSS/original",
+   "similarity_pct": null,
+   "upstream_source_path": null,
+   "notes": "no upstream counterpart in v0.2.6",
+   "flagged_for_review": false
+  },
+  {
+   "path": "tests/test_paging.py",
+   "category": "onexurOSS/original",
+   "similarity_pct": null,
+   "upstream_source_path": null,
+   "notes": "no upstream counterpart in v0.2.6",
+   "flagged_for_review": false
+  },
+  {
+   "path": "tests/test_precondition.py",
+   "category": "upstream/unmodified",
+   "similarity_pct": 100.0,
+   "upstream_source_path": "tests/test_precondition.py",
+   "notes": "byte-identical",
+   "flagged_for_review": false,
+   "changed_from_upstream_pct": 0.0,
+   "new_in_current_pct": 0.0,
+   "upstream_lines": 118,
+   "current_lines": 118
+  },
+  {
+   "path": "tests/test_readonly_guard.py",
+   "category": "upstream/unmodified",
+   "similarity_pct": 100.0,
+   "upstream_source_path": "tests/test_readonly_guard.py",
+   "notes": "byte-identical",
+   "flagged_for_review": false,
+   "changed_from_upstream_pct": 0.0,
+   "new_in_current_pct": 0.0,
+   "upstream_lines": 40,
+   "current_lines": 40
+  },
+  {
+   "path": "tests/test_reconciliation.py",
+   "category": "onexurOSS/original",
+   "similarity_pct": null,
+   "upstream_source_path": null,
+   "notes": "no upstream counterpart in v0.2.6",
+   "flagged_for_review": false
+  },
+  {
+   "path": "tests/test_reporting.py",
+   "category": "onexurOSS/original",
+   "similarity_pct": null,
+   "upstream_source_path": null,
+   "notes": "no upstream counterpart in v0.2.6",
+   "flagged_for_review": false
+  },
+  {
+   "path": "tests/test_resources.py",
+   "category": "upstream/modified",
+   "similarity_pct": 96.2,
+   "upstream_source_path": "tests/test_resources.py",
+   "notes": "1.0% of upstream lines changed, 6.5% of current file is new; edits to existing logic/strings",
+   "flagged_for_review": false,
+   "changed_from_upstream_pct": 1.0,
+   "new_in_current_pct": 6.5,
+   "upstream_lines": 101,
+   "current_lines": 107,
+   "review_flag": "minor modification - likely remains upstream-derived"
+  },
+  {
+   "path": "tests/test_scopes.py",
+   "category": "upstream/unmodified",
+   "similarity_pct": 100.0,
+   "upstream_source_path": "tests/test_scopes.py",
+   "notes": "byte-identical",
+   "flagged_for_review": false,
+   "changed_from_upstream_pct": 0.0,
+   "new_in_current_pct": 0.0,
+   "upstream_lines": 80,
+   "current_lines": 80
+  },
+  {
+   "path": "tests/test_sdist_contents.py",
+   "category": "upstream/modified",
+   "similarity_pct": 97.7,
+   "upstream_source_path": "tests/test_sdist_contents.py",
+   "notes": "2.3% of upstream lines changed, 2.3% of current file is new; edits to existing logic/strings",
+   "flagged_for_review": false,
+   "changed_from_upstream_pct": 2.3,
+   "new_in_current_pct": 2.3,
+   "upstream_lines": 43,
+   "current_lines": 43,
+   "review_flag": "minor modification - likely remains upstream-derived"
+  },
+  {
+   "path": "tests/test_server_icons.py",
+   "category": "upstream/modified",
+   "similarity_pct": 38.9,
+   "upstream_source_path": "tests/test_server_icons.py",
+   "notes": "70.8% of upstream lines changed, 41.7% of current file is new; new logic: adds test_fastmcp_advertises_website_and_no_embedded_icons; removes test_fastmcp_configured_with_icons_and_website, test_server_icons_include_data_uri_and_https",
+   "flagged_for_review": false,
+   "changed_from_upstream_pct": 70.8,
+   "new_in_current_pct": 41.7,
+   "upstream_lines": 24,
+   "current_lines": 12,
+   "review_flag": "minor modification - likely remains upstream-derived (manual override)",
+   "manual_review": {
+    "classification": "minor modification - likely remains upstream-derived (manual override of the automatic flag)",
+    "basis": "12-line upstream test whose icon assertions were inverted. The module skeleton and two assertion lines (mcp.name and website_url) are verbatim upstream. The automatic substantial flag is a small-file percentage artefact."
+   }
+  },
+  {
+   "path": "tests/test_server_info.py",
+   "category": "onexurOSS/original",
+   "similarity_pct": null,
+   "upstream_source_path": null,
+   "notes": "no upstream counterpart in v0.2.6",
+   "flagged_for_review": false
+  },
+  {
+   "path": "tests/test_server_tools.py",
+   "category": "upstream/modified",
+   "similarity_pct": 77.3,
+   "upstream_source_path": "tests/test_server_tools.py",
+   "notes": "2.7% of upstream lines changed, 35.8% of current file is new; new logic: adds test_aged_receivables_labels_itself_current_state, test_aged_receivables_rejects_period_instead_of_returning_current_data, test_profit_and_loss_pages_through_all_records, test_profit_and_loss_reports_incomplete_when_capped, test_profit_and_loss_unable_to_determine_without_total; removes test_aged_receivables_period_unsupported_notice",
+   "flagged_for_review": true,
+   "changed_from_upstream_pct": 2.7,
+   "new_in_current_pct": 35.8,
+   "upstream_lines": 184,
+   "current_lines": 279,
+   "review_flag": "substantial rewrite - candidate for onexurOSS/original"
+  },
+  {
+   "path": "tests/test_task_tools.py",
+   "category": "upstream/unmodified",
+   "similarity_pct": 100.0,
+   "upstream_source_path": "tests/test_task_tools.py",
+   "notes": "byte-identical",
+   "flagged_for_review": false,
+   "changed_from_upstream_pct": 0.0,
+   "new_in_current_pct": 0.0,
+   "upstream_lines": 119,
+   "current_lines": 119
+  },
+  {
+   "path": "tests/test_writable_notes.py",
+   "category": "upstream/unmodified",
+   "similarity_pct": 100.0,
+   "upstream_source_path": "tests/test_writable_notes.py",
+   "notes": "byte-identical",
+   "flagged_for_review": false,
+   "changed_from_upstream_pct": 0.0,
+   "new_in_current_pct": 0.0,
+   "upstream_lines": 20,
+   "current_lines": 20
+  },
+  {
+   "path": "tests/test_write_hardening.py",
+   "category": "upstream/unmodified",
+   "similarity_pct": 100.0,
+   "upstream_source_path": "tests/test_write_hardening.py",
+   "notes": "byte-identical",
+   "flagged_for_review": false,
+   "changed_from_upstream_pct": 0.0,
+   "new_in_current_pct": 0.0,
+   "upstream_lines": 151,
+   "current_lines": 151
+  },
+  {
+   "path": "tests/test_write_quotes.py",
+   "category": "upstream/unmodified",
+   "similarity_pct": 100.0,
+   "upstream_source_path": "tests/test_write_quotes.py",
+   "notes": "byte-identical",
+   "flagged_for_review": false,
+   "changed_from_upstream_pct": 0.0,
+   "new_in_current_pct": 0.0,
+   "upstream_lines": 157,
+   "current_lines": 157
+  },
+  {
+   "path": "tests/test_write_scopes.py",
+   "category": "upstream/unmodified",
+   "similarity_pct": 100.0,
+   "upstream_source_path": "tests/test_write_scopes.py",
+   "notes": "byte-identical",
+   "flagged_for_review": false,
+   "changed_from_upstream_pct": 0.0,
+   "new_in_current_pct": 0.0,
+   "upstream_lines": 100,
+   "current_lines": 100
+  },
+  {
+   "path": "uv.lock",
+   "category": "generated/artifact",
+   "similarity_pct": null,
+   "upstream_source_path": null,
+   "notes": "lockfile or generated by a repo script",
+   "flagged_for_review": false
+  }
+ ],
+ "dependencies": [
+  {
+   "name": "aiofile",
+   "version": "3.11.1",
+   "scope": "runtime",
+   "declared_license": "Apache-2.0",
+   "concern": null
+  },
+  {
+   "name": "annotated-types",
+   "version": "0.8.0",
+   "scope": "runtime",
+   "declared_license": "MIT",
+   "concern": null
+  },
+  {
+   "name": "anyio",
+   "version": "4.14.2",
+   "scope": "runtime",
+   "declared_license": "MIT",
+   "concern": null
+  },
+  {
+   "name": "attrs",
+   "version": "26.1.0",
+   "scope": "runtime",
+   "declared_license": "MIT",
+   "concern": null
+  },
+  {
+   "name": "authlib",
+   "version": "1.7.2",
+   "scope": "runtime",
+   "declared_license": "BSD-3-Clause",
+   "concern": null
+  },
+  {
+   "name": "backports-asyncio-runner",
+   "version": "1.2.0",
+   "scope": "dev/build only",
+   "declared_license": "PSF-2.0",
+   "concern": null,
+   "license_evidence": {
+    "file": null,
+    "head": null,
+    "classifiers": null,
+    "license_field": null
+   },
+   "license_source": "PyPI metadata (package not installed in this environment)"
+  },
+  {
+   "name": "backports-tarfile",
+   "version": "1.2.0",
+   "scope": "runtime",
+   "declared_license": "MIT License",
+   "concern": null,
+   "license_evidence": {
+    "file": null,
+    "head": null,
+    "classifiers": null,
+    "license_field": null
+   },
+   "license_source": "PyPI metadata (package not installed in this environment)"
+  },
+  {
+   "name": "backports-zstd",
+   "version": "1.6.0",
+   "scope": "dev/build only",
+   "declared_license": "PSF-2.0",
+   "concern": null,
+   "license_evidence": {
+    "file": null,
+    "head": null,
+    "classifiers": null,
+    "license_field": null
+   },
+   "license_source": "PyPI metadata (package not installed in this environment)"
+  },
+  {
+   "name": "beartype",
+   "version": "0.22.9",
+   "scope": "runtime",
+   "declared_license": "MIT License",
+   "concern": null
+  },
+  {
+   "name": "cachetools",
+   "version": "7.1.6",
+   "scope": "runtime",
+   "declared_license": "MIT",
+   "concern": null
+  },
+  {
+   "name": "caio",
+   "version": "0.9.25",
+   "scope": "runtime",
+   "declared_license": "Apache-2.0",
+   "concern": null
+  },
+  {
+   "name": "certifi",
+   "version": "2026.7.22",
+   "scope": "runtime",
+   "declared_license": "MPL-2.0",
+   "concern": null
+  },
+  {
+   "name": "cffi",
+   "version": "2.1.0",
+   "scope": "runtime",
+   "declared_license": "MIT-0",
+   "concern": null
+  },
+  {
+   "name": "click",
+   "version": "8.4.2",
+   "scope": "runtime",
+   "declared_license": "BSD-3-Clause",
+   "concern": null
+  },
+  {
+   "name": "colorama",
+   "version": "0.4.6",
+   "scope": "runtime",
+   "declared_license": "BSD License",
+   "concern": null,
+   "license_evidence": {
+    "file": null,
+    "head": null,
+    "classifiers": null,
+    "license_field": null
+   },
+   "license_source": "PyPI metadata (package not installed in this environment)"
+  },
+  {
+   "name": "cryptography",
+   "version": "49.0.0",
+   "scope": "runtime",
+   "declared_license": "Apache-2.0 OR BSD-3-Clause",
+   "concern": null
+  },
+  {
+   "name": "cyclopts",
+   "version": "4.22.2",
+   "scope": "runtime",
+   "declared_license": "Apache-2.0",
+   "concern": null
+  },
+  {
+   "name": "distlib",
+   "version": "0.4.3",
+   "scope": "dev/build only",
+   "declared_license": "PSF-2.0",
+   "concern": null
+  },
+  {
+   "name": "distro",
+   "version": "1.9.0",
+   "scope": "dev/build only",
+   "declared_license": "Apache License, Version 2.0",
+   "concern": null
+  },
+  {
+   "name": "dnspython",
+   "version": "2.8.0",
+   "scope": "runtime",
+   "declared_license": "ISC",
+   "concern": null
+  },
+  {
+   "name": "docstring-parser",
+   "version": "0.18.0",
+   "scope": "runtime",
+   "declared_license": "MIT",
+   "concern": null
+  },
+  {
+   "name": "email-validator",
+   "version": "2.3.0",
+   "scope": "runtime",
+   "declared_license": "Unlicense",
+   "concern": null
+  },
+  {
+   "name": "exceptiongroup",
+   "version": "1.3.1",
+   "scope": "runtime",
+   "declared_license": "MIT License",
+   "concern": null
+  },
+  {
+   "name": "fastmcp",
+   "version": "3.4.5",
+   "scope": "runtime",
+   "declared_license": "Apache-2.0",
+   "concern": null
+  },
+  {
+   "name": "fastmcp-slim",
+   "version": "3.4.5",
+   "scope": "runtime",
+   "declared_license": "Apache-2.0",
+   "concern": null
+  },
+  {
+   "name": "filelock",
+   "version": "3.32.0",
+   "scope": "dev/build only",
+   "declared_license": "MIT",
+   "concern": null
+  },
+  {
+   "name": "griffelib",
+   "version": "2.1.0",
+   "scope": "runtime",
+   "declared_license": "ISC",
+   "concern": null
+  },
+  {
+   "name": "h11",
+   "version": "0.16.0",
+   "scope": "runtime",
+   "declared_license": "MIT",
+   "concern": null
+  },
+  {
+   "name": "hatch",
+   "version": "1.17.1",
+   "scope": "dev/build only",
+   "declared_license": "MIT",
+   "concern": null
+  },
+  {
+   "name": "hatchling",
+   "version": "1.31.0",
+   "scope": "dev/build only",
+   "declared_license": "MIT",
+   "concern": null
+  },
+  {
+   "name": "httpcore",
+   "version": "1.0.9",
+   "scope": "runtime",
+   "declared_license": "BSD-3-Clause",
+   "concern": null
+  },
+  {
+   "name": "httpcore2",
+   "version": "2.9.1",
+   "scope": "dev/build only",
+   "declared_license": "BSD-3-Clause",
+   "concern": null
+  },
+  {
+   "name": "httpx",
+   "version": "0.28.1",
+   "scope": "runtime",
+   "declared_license": "BSD-3-Clause",
+   "concern": null
+  },
+  {
+   "name": "httpx-sse",
+   "version": "0.4.3",
+   "scope": "runtime",
+   "declared_license": "MIT",
+   "concern": null
+  },
+  {
+   "name": "httpx2",
+   "version": "2.9.1",
+   "scope": "dev/build only",
+   "declared_license": "BSD-3-Clause",
+   "concern": null
+  },
+  {
+   "name": "hyperlink",
+   "version": "21.0.0",
+   "scope": "dev/build only",
+   "declared_license": "MIT",
+   "concern": null
+  },
+  {
+   "name": "idna",
+   "version": "3.18",
+   "scope": "runtime",
+   "declared_license": "BSD-3-Clause",
+   "concern": null
+  },
+  {
+   "name": "importlib-metadata",
+   "version": "9.0.0",
+   "scope": "runtime",
+   "declared_license": "Apache-2.0",
+   "concern": null,
+   "license_evidence": {
+    "file": null,
+    "head": null,
+    "classifiers": null,
+    "license_field": null
+   },
+   "license_source": "PyPI metadata (package not installed in this environment)"
+  },
+  {
+   "name": "iniconfig",
+   "version": "2.3.0",
+   "scope": "dev/build only",
+   "declared_license": "MIT",
+   "concern": null
+  },
+  {
+   "name": "jaraco-classes",
+   "version": "3.4.0",
+   "scope": "runtime",
+   "declared_license": "MIT License",
+   "concern": null,
+   "license_evidence": {
+    "file": null,
+    "head": null,
+    "classifiers": null,
+    "license_field": null
+   },
+   "license_source": "PyPI metadata (package not installed in this environment)"
+  },
+  {
+   "name": "jaraco-context",
+   "version": "6.1.2",
+   "scope": "runtime",
+   "declared_license": "MIT",
+   "concern": null,
+   "license_evidence": {
+    "file": null,
+    "head": null,
+    "classifiers": null,
+    "license_field": null
+   },
+   "license_source": "PyPI metadata (package not installed in this environment)"
+  },
+  {
+   "name": "jaraco-functools",
+   "version": "4.6.0",
+   "scope": "runtime",
+   "declared_license": "MIT",
+   "concern": null,
+   "license_evidence": {
+    "file": null,
+    "head": null,
+    "classifiers": null,
+    "license_field": null
+   },
+   "license_source": "PyPI metadata (package not installed in this environment)"
+  },
+  {
+   "name": "jeepney",
+   "version": "0.9.0",
+   "scope": "runtime",
+   "declared_license": "MIT",
+   "concern": null
+  },
+  {
+   "name": "joserfc",
+   "version": "1.7.4",
+   "scope": "runtime",
+   "declared_license": "BSD-3-Clause",
+   "concern": null
+  },
+  {
+   "name": "jsonref",
+   "version": "1.1.0",
+   "scope": "runtime",
+   "declared_license": "MIT",
+   "concern": null
+  },
+  {
+   "name": "jsonschema",
+   "version": "4.26.0",
+   "scope": "runtime",
+   "declared_license": "MIT",
+   "concern": null
+  },
+  {
+   "name": "jsonschema-path",
+   "version": "0.5.0",
+   "scope": "runtime",
+   "declared_license": "Apache-2.0",
+   "concern": null
+  },
+  {
+   "name": "jsonschema-specifications",
+   "version": "2025.9.1",
+   "scope": "runtime",
+   "declared_license": "MIT",
+   "concern": null
+  },
+  {
+   "name": "keyring",
+   "version": "25.7.0",
+   "scope": "runtime",
+   "declared_license": "MIT",
+   "concern": null
+  },
+  {
+   "name": "markdown-it-py",
+   "version": "4.2.0",
+   "scope": "runtime",
+   "declared_license": "MIT License",
+   "concern": null
+  },
+  {
+   "name": "mcp",
+   "version": "1.28.1",
+   "scope": "runtime",
+   "declared_license": "MIT",
+   "concern": null
+  },
+  {
+   "name": "mdurl",
+   "version": "0.1.2",
+   "scope": "runtime",
+   "declared_license": "MIT License",
+   "concern": null
+  },
+  {
+   "name": "more-itertools",
+   "version": "11.1.0",
+   "scope": "runtime",
+   "declared_license": "MIT",
+   "concern": null
+  },
+  {
+   "name": "openapi-pydantic",
+   "version": "0.5.1",
+   "scope": "runtime",
+   "declared_license": "MIT",
+   "concern": null
+  },
+  {
+   "name": "opentelemetry-api",
+   "version": "1.44.0",
+   "scope": "runtime",
+   "declared_license": "Apache-2.0",
+   "concern": null
+  },
+  {
+   "name": "packaging",
+   "version": "26.2",
+   "scope": "runtime",
+   "declared_license": "Apache-2.0 OR BSD-2-Clause",
+   "concern": null
+  },
+  {
+   "name": "pathable",
+   "version": "0.6.0",
+   "scope": "runtime",
+   "declared_license": "Apache-2.0",
+   "concern": null
+  },
+  {
+   "name": "pathspec",
+   "version": "1.1.1",
+   "scope": "dev/build only",
+   "declared_license": "Mozilla Public License 2.0 (MPL 2.0)",
+   "concern": null,
+   "license_evidence": {
+    "license_field": "",
+    "classifiers": [
+     "Mozilla Public License 2.0 (MPL 2.0)"
+    ],
+    "license_file": [
+     "pathspec-1.1.1.dist-info/licenses/LICENSE"
+    ],
+    "file_head": ""
+   },
+   "note": "identified from licence text as MPL-2.0; MPL-2.0 is file-level copyleft, compatible with AGPLv3 and fine as an unmodified dependency"
+  },
+  {
+   "name": "pexpect",
+   "version": "4.9.0",
+   "scope": "dev/build only",
+   "declared_license": "ISC license",
+   "concern": null
+  },
+  {
+   "name": "platformdirs",
+   "version": "4.11.0",
+   "scope": "runtime",
+   "declared_license": "MIT",
+   "concern": null
+  },
+  {
+   "name": "pluggy",
+   "version": "1.6.0",
+   "scope": "dev/build only",
+   "declared_license": "MIT",
+   "concern": null
+  },
+  {
+   "name": "ptyprocess",
+   "version": "0.7.0",
+   "scope": "dev/build only",
+   "declared_license": "UNKNOWN",
+   "concern": null,
+   "license_evidence": {
+    "license_field": "UNKNOWN",
+    "classifiers": [
+     "ISC License (ISCL)"
+    ],
+    "license_file": [
+     "ptyprocess-0.7.0.dist-info/LICENSE"
+    ],
+    "file_head": ""
+   },
+   "note": "identified from licence text as ISC"
+  },
+  {
+   "name": "py-key-value-aio",
+   "version": "0.4.5",
+   "scope": "runtime",
+   "declared_license": "Apache-2.0",
+   "concern": null
+  },
+  {
+   "name": "pycparser",
+   "version": "3.0",
+   "scope": "runtime",
+   "declared_license": "BSD-3-Clause",
+   "concern": null
+  },
+  {
+   "name": "pydantic",
+   "version": "2.13.4",
+   "scope": "runtime",
+   "declared_license": "MIT",
+   "concern": null
+  },
+  {
+   "name": "pydantic-core",
+   "version": "2.46.4",
+   "scope": "runtime",
+   "declared_license": "MIT",
+   "concern": null
+  },
+  {
+   "name": "pydantic-settings",
+   "version": "2.14.2",
+   "scope": "runtime",
+   "declared_license": "MIT",
+   "concern": null
+  },
+  {
+   "name": "pygments",
+   "version": "2.20.0",
+   "scope": "runtime",
+   "declared_license": "BSD-2-Clause",
+   "concern": null
+  },
+  {
+   "name": "pyjwt",
+   "version": "2.13.0",
+   "scope": "runtime",
+   "declared_license": "MIT",
+   "concern": null
+  },
+  {
+   "name": "pyperclip",
+   "version": "1.11.0",
+   "scope": "runtime",
+   "declared_license": "BSD",
+   "concern": null
+  },
+  {
+   "name": "pyproject-hooks",
+   "version": "1.2.0",
+   "scope": "dev/build only",
+   "declared_license": "MIT License",
+   "concern": null
+  },
+  {
+   "name": "pytest",
+   "version": "9.1.1",
+   "scope": "dev/build only",
+   "declared_license": "MIT",
+   "concern": null
+  },
+  {
+   "name": "pytest-asyncio",
+   "version": "1.4.0",
+   "scope": "dev/build only",
+   "declared_license": "Apache-2.0",
+   "concern": null
+  },
+  {
+   "name": "python-discovery",
+   "version": "1.5.0",
+   "scope": "dev/build only",
+   "declared_license": "MIT License",
+   "concern": null
+  },
+  {
+   "name": "python-dotenv",
+   "version": "1.2.2",
+   "scope": "runtime",
+   "declared_license": "BSD-3-Clause",
+   "concern": null
+  },
+  {
+   "name": "python-multipart",
+   "version": "0.0.32",
+   "scope": "runtime",
+   "declared_license": "Apache-2.0",
+   "concern": null
+  },
+  {
+   "name": "pywin32",
+   "version": "312",
+   "scope": "runtime",
+   "declared_license": "PSF",
+   "concern": null,
+   "license_evidence": {
+    "file": null,
+    "head": null,
+    "classifiers": null,
+    "license_field": null
+   },
+   "license_source": "PyPI metadata (package not installed in this environment)"
+  },
+  {
+   "name": "pywin32-ctypes",
+   "version": "0.2.3",
+   "scope": "runtime",
+   "declared_license": "BSD-3-Clause",
+   "concern": null,
+   "license_evidence": {
+    "file": null,
+    "head": null,
+    "classifiers": null,
+    "license_field": null
+   },
+   "license_source": "PyPI metadata (package not installed in this environment)"
+  },
+  {
+   "name": "pyyaml",
+   "version": "6.0.3",
+   "scope": "runtime",
+   "declared_license": "MIT",
+   "concern": null
+  },
+  {
+   "name": "referencing",
+   "version": "0.37.0",
+   "scope": "runtime",
+   "declared_license": "MIT",
+   "concern": null
+  },
+  {
+   "name": "respx",
+   "version": "0.23.1",
+   "scope": "dev/build only",
+   "declared_license": "BSD-3-Clause",
+   "concern": null
+  },
+  {
+   "name": "rich",
+   "version": "15.0.0",
+   "scope": "runtime",
+   "declared_license": "MIT",
+   "concern": null
+  },
+  {
+   "name": "rich-rst",
+   "version": "2.1.0",
+   "scope": "runtime",
+   "declared_license": "MIT",
+   "concern": null
+  },
+  {
+   "name": "rpds-py",
+   "version": "2026.6.3",
+   "scope": "runtime",
+   "declared_license": "MIT",
+   "concern": null
+  },
+  {
+   "name": "ruff",
+   "version": "0.16.0",
+   "scope": "dev/build only",
+   "declared_license": "MIT",
+   "concern": null
+  },
+  {
+   "name": "secretstorage",
+   "version": "3.5.0",
+   "scope": "runtime",
+   "declared_license": "BSD-3-Clause",
+   "concern": null
+  },
+  {
+   "name": "shellingham",
+   "version": "1.5.4",
+   "scope": "dev/build only",
+   "declared_license": "ISC License",
+   "concern": null
+  },
+  {
+   "name": "sse-starlette",
+   "version": "3.4.6",
+   "scope": "runtime",
+   "declared_license": "BSD-3-Clause",
+   "concern": null
+  },
+  {
+   "name": "starlette",
+   "version": "1.3.1",
+   "scope": "runtime",
+   "declared_license": "BSD-3-Clause",
+   "concern": null
+  },
+  {
+   "name": "tomli",
+   "version": "2.4.1",
+   "scope": "runtime",
+   "declared_license": "MIT",
+   "concern": null,
+   "license_evidence": {
+    "file": null,
+    "head": null,
+    "classifiers": null,
+    "license_field": null
+   },
+   "license_source": "PyPI metadata (package not installed in this environment)"
+  },
+  {
+   "name": "tomli-w",
+   "version": "1.2.0",
+   "scope": "dev/build only",
+   "declared_license": "MIT License",
+   "concern": null
+  },
+  {
+   "name": "tomlkit",
+   "version": "0.15.1",
+   "scope": "dev/build only",
+   "declared_license": "MIT",
+   "concern": null
+  },
+  {
+   "name": "trove-classifiers",
+   "version": "2026.6.1.19",
+   "scope": "dev/build only",
+   "declared_license": "Apache Software License",
+   "concern": null
+  },
+  {
+   "name": "truststore",
+   "version": "0.10.4",
+   "scope": "dev/build only",
+   "declared_license": "MIT",
+   "concern": null
+  },
+  {
+   "name": "typing-extensions",
+   "version": "4.16.0",
+   "scope": "runtime",
+   "declared_license": "PSF-2.0",
+   "concern": null
+  },
+  {
+   "name": "typing-inspection",
+   "version": "0.4.2",
+   "scope": "runtime",
+   "declared_license": "MIT",
+   "concern": null
+  },
+  {
+   "name": "uncalled-for",
+   "version": "0.3.2",
+   "scope": "runtime",
+   "declared_license": "MIT License",
+   "concern": null
+  },
+  {
+   "name": "userpath",
+   "version": "1.9.2",
+   "scope": "dev/build only",
+   "declared_license": "MIT",
+   "concern": null
+  },
+  {
+   "name": "uv",
+   "version": "0.12.0",
+   "scope": "dev/build only",
+   "declared_license": "MIT OR Apache-2.0",
+   "concern": null
+  },
+  {
+   "name": "uvicorn",
+   "version": "0.51.0",
+   "scope": "runtime",
+   "declared_license": "BSD-3-Clause",
+   "concern": null
+  },
+  {
+   "name": "virtualenv",
+   "version": "21.7.0",
+   "scope": "dev/build only",
+   "declared_license": "MIT",
+   "concern": null
+  },
+  {
+   "name": "watchfiles",
+   "version": "1.2.0",
+   "scope": "runtime",
+   "declared_license": "MIT",
+   "concern": null
+  },
+  {
+   "name": "websockets",
+   "version": "16.1.1",
+   "scope": "runtime",
+   "declared_license": "BSD-3-Clause",
+   "concern": null
+  },
+  {
+   "name": "zipp",
+   "version": "4.1.0",
+   "scope": "runtime",
+   "declared_license": "MIT",
+   "concern": null,
+   "license_evidence": {
+    "file": null,
+    "head": null,
+    "classifiers": null,
+    "license_field": null
+   },
+   "license_source": "PyPI metadata (package not installed in this environment)"
+  }
+ ],
+ "checks": {
+  "malva_and_similar_instance_references": [
+   "WT:specs/001-manager-readonly-mcp/research-v02-deposits.md:3:**Source**: vendored `api2.json`, `research-writes-banking.md` (Malva dev, 2026-07-28).",
+   "WT:specs/001-manager-readonly-mcp/research-v02-deposits.md:17:## 3. Receipt allocation payload (VERIFIED on Malva dev)",
+   "WT:specs/001-manager-readonly-mcp/research-writes-banking.md:3:**Instance**: Malva dev. Top-level + line keys verified live 2026-07-28",
+   "WT:specs/001-manager-readonly-mcp/research-writes-banking.md:29:| `Amount` | Base-currency amount (ZAR on Malva books) |",
+   "WT:specs/001-manager-readonly-mcp/research-writes-quotes.md:3:**Instance**: Malva dev (TEST/dev books). Probed 2026-07-28 via live `/api2`.",
+   "WT:specs/001-manager-readonly-mcp/research-writes-scopes.md:3:**Instance**: Malva dev (TEST/dev books). OpenAPI path probe 2026-07-28.",
+   "WT:src/manager_mcp/writable.py:162:# Paths confirmed via live OpenAPI (Malva dev, 2026-07-28)."
+  ],
+  "malva_lines_also_in_upstream_tag": [
+   "specs/001-manager-readonly-mcp/research-v02-deposits.md:17:## 3. Receipt allocat",
+   "specs/001-manager-readonly-mcp/research-v02-deposits.md:3:**Source**: vendored `",
+   "specs/001-manager-readonly-mcp/research-writes-banking.md:29:| `Amount` | Base-c",
+   "specs/001-manager-readonly-mcp/research-writes-banking.md:3:**Instance**: Malva ",
+   "specs/001-manager-readonly-mcp/research-writes-quotes.md:3:**Instance**: Malva d",
+   "specs/001-manager-readonly-mcp/research-writes-scopes.md:3:**Instance**: Malva d",
+   "src/manager_mcp/writable.py:162:# Paths confirmed via live OpenAPI (Malva dev, 2"
+  ],
+  "mcpb_bundle": {
+   "on_disk": false,
+   "tracked_in_head": false,
+   "referenced_in_workflows": [],
+   "tracked_upstream_v0_2_6": true
+  },
+  "editor_config_files": {
+   ".cursor-plugin/plugin.json": {
+    "exists_on_disk": true,
+    "in_head": true,
+    "in_upstream_v0_2_6": true,
+    "linked_from": [
+     "README.md:164"
+    ]
+   },
+   ".cursor/mcp.json": {
+    "exists_on_disk": false,
+    "in_head": false,
+    "in_upstream_v0_2_6": false,
+    "linked_from": [
+     ".env.example:11",
+     "README.md:173"
+    ]
+   },
+   ".vscode/mcp.json": {
+    "exists_on_disk": false,
+    "in_head": false,
+    "in_upstream_v0_2_6": false,
+    "linked_from": [
+     "README.md:313"
+    ]
+   }
+  },
+  "licence_notice_lines_in_head": [
+   "WT:LICENSE:1:MIT License",
+   "WT:LICENSE:3:Copyright (c) 2026 manager-mcp contributors",
+   "WT:LICENSE:4:Copyright (c) 2026 onexurOSS",
+   "WT:LICENSE:6:Permission is hereby granted, free of charge, to any person obtaining a copy"
+  ],
+  "licence_file_comparison": {
+   "head_LICENSE_lines": [
+    "MIT License",
+    "",
+    "Copyright (c) 2026 manager-mcp contributors",
+    "Copyright (c) 2026 onexurOSS",
+    ""
+   ],
+   "upstream_LICENSE_lines": [
+    "MIT License",
+    "",
+    "Copyright (c) 2026 manager-mcp contributors",
+    "",
+    "Permission is hereby granted, free of charge, to any person obtaining a copy"
+   ],
+   "same_body_apart_from_copyright_lines": [
+    "Copyright (c) 2026 onexurOSS"
+   ]
+  }
+ }
+}
