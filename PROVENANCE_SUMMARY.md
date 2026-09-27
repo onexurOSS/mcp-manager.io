@@ -1,6 +1,6 @@
 # Provenance summary (Gate 1A, analysis only)
 
-Nothing was decided legally here. This is evidence for solicitor review. Committed tree at HEAD ff5a394d352a; working tree clean apart from PROVENANCE.json and PROVENANCE_SUMMARY.md.
+Nothing was decided legally here. This is evidence for solicitor review. Committed tree at HEAD 4b6a2aefb5d6; working tree clean apart from PROVENANCE.json and PROVENANCE_SUMMARY.md.
 
 ## History rewrite
 
