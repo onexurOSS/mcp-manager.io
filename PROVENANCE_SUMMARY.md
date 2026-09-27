@@ -1,6 +1,6 @@
 # Provenance summary (Gate 1A, analysis only)
 
-Nothing was decided legally here. This is evidence for solicitor review. Committed tree at HEAD 7dd3e31942ff; commit author identity rewritten to Onexur <github@xalterra.com>; working tree clean apart from PROVENANCE.json and PROVENANCE_SUMMARY.md.
+Nothing was decided legally here. This is evidence for solicitor review. Committed tree at HEAD 969041a69911; working tree clean apart from PROVENANCE.json and PROVENANCE_SUMMARY.md.
 
 ## History rewrite
 
@@ -31,12 +31,12 @@ What remains new in `server.py`, and why it still trips the 60-added-line heuris
 |---|---|---|
 | upstream/unmodified | 50 | 53 |
 | upstream/modified | 19 | 16 |
-| Onexur/original | 45 | 27 |
+| Onexur/original | 42 | 27 |
 | third-party | 1 | 7 |
 | generated/artifact | 3 | 3 |
-| **Total** | **118** | **106** |
+| **Total** | **115** | **106** |
 
-The total is +12 net against the first manifest: 7 third-party logo and API description files, the generated capability matrix and `spec/README.md` were removed, and `.cursor-plugin/plugin.json`, `tests/test_report_semantics.py`, `docs/upstream-history.md` and `NOTICE` were added. `upstream/modified` splits into 3 substantial-rewrite candidates and 16 minor modifications (after the manual classifications below).
+The total is +9 net against the first manifest: 7 third-party logo and API description files, the generated capability matrix and `spec/README.md` were removed, and `.cursor-plugin/plugin.json`, `tests/test_report_semantics.py`, `docs/upstream-history.md` and `NOTICE` were added. `upstream/modified` splits into 3 substantial-rewrite candidates and 16 minor modifications (after the manual classifications below).
 
 ## Test split: `test_server_tools.py`
 
@@ -117,7 +117,7 @@ The upstream MIT licence and copyright notice **are present** in `LICENSE-MIT`: 
 
 ## Per-file licence headers
 
-32 of 71 Python files carry the two line AGPL-3.0-or-later header (`SPDX-License-Identifier: AGPL-3.0-or-later` and `Copyright (c) 2026 Xalterra Ltd, trading as Onexur`). They are exactly the files classified `Onexur/original`: twelve modules under `src/manager_mcp`, two scripts and eighteen test files, plus docs/gateway-design.md. The header pass added two lines to each file and changed nothing else (unchanged ASTs, identical tool snapshot, tests passing).
+32 of 71 Python files carry the two line AGPL-3.0-or-later header (`SPDX-License-Identifier: AGPL-3.0-or-later` and `Copyright (c) 2026 Xalterra Ltd, trading as Onexur`). They are exactly the files classified `Onexur/original`: twelve modules under `src/manager_mcp`, two scripts and eighteen test files. The header pass added two lines to each file and changed nothing else (unchanged ASTs, identical tool snapshot, tests passing).
 
 Deliberately without headers: every `upstream/unmodified` file, every `upstream/modified` Python file including the mixed files `src/manager_mcp/server.py` and `tests/test_server_tools.py` (per the second solicitor opinion: mixed, no further splitting or headers), and non-Python files.
 

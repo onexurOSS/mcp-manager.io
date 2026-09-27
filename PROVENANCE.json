@@ -1,7 +1,7 @@
 {
  "generated_by": "Gate 1A provenance audit",
- "repo_head": "7dd3e31942ffba6fa05e0bb5d4de103ddc60d1bb",
- "repo_basis": "committed tree at HEAD 7dd3e31942ff; commit author identity rewritten to Onexur <github@xalterra.com>; working tree clean apart from PROVENANCE.json and PROVENANCE_SUMMARY.md",
+ "repo_head": "969041a69911c6f8279fbc32787c289300c6815a",
+ "repo_basis": "committed tree at HEAD 969041a69911; working tree clean apart from PROVENANCE.json and PROVENANCE_SUMMARY.md",
  "upstream_reference": {
   "source": "github.com/flumpiey/manager-mcp tag v0.2.6",
   "commit": "c50c4d71f2aff962a8c9dbb1cce2ef14f602a51b",
@@ -202,30 +202,6 @@
   },
   {
    "path": "docs/adoption-log.md",
-   "category": "Onexur/original",
-   "similarity_pct": null,
-   "upstream_source_path": null,
-   "notes": "no upstream counterpart in v0.2.6",
-   "flagged_for_review": false
-  },
-  {
-   "path": "docs/gateway-design.md",
-   "category": "Onexur/original",
-   "similarity_pct": null,
-   "upstream_source_path": null,
-   "notes": "no upstream counterpart in v0.2.6",
-   "flagged_for_review": false
-  },
-  {
-   "path": "docs/hosting-and-data-residency.md",
-   "category": "Onexur/original",
-   "similarity_pct": null,
-   "upstream_source_path": null,
-   "notes": "no upstream counterpart in v0.2.6",
-   "flagged_for_review": false
-  },
-  {
-   "path": "docs/publishing-review.md",
    "category": "Onexur/original",
    "similarity_pct": null,
    "upstream_source_path": null,
