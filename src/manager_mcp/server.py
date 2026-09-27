@@ -151,7 +151,7 @@ async def _fetch_report(name: str, **period: Any) -> dict[str, Any]:
 
 @mcp.tool(
     description=(
-        "List curated Manager.io capabilities. Default is read-only (10 tools). "
+        "List curated Manager.io capabilities. Default is read-only (29 tools). "
         "Task tools register when write scopes match; CRUD tools are deprecated "
         "unless raw scope is set."
     )
