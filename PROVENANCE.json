@@ -1,7 +1,7 @@
 {
  "generated_by": "Gate 1A provenance audit",
- "repo_head": "10588e08e7c0a921aea7fadd1de0176a5aa40716",
- "repo_basis": "committed tree at HEAD 10588e08e7c0; working tree clean apart from PROVENANCE.json and PROVENANCE_SUMMARY.md",
+ "repo_head": "3a3fcb9718b0f4b5a477357d884973ab2571d4d0",
+ "repo_basis": "committed tree at HEAD 3a3fcb9718b0; working tree clean apart from PROVENANCE.json and PROVENANCE_SUMMARY.md",
  "upstream_reference": {
   "source": "github.com/flumpiey/manager-mcp tag v0.2.6",
   "commit": "c50c4d71f2aff962a8c9dbb1cce2ef14f602a51b",
@@ -95,37 +95,25 @@
    }
   },
   {
-   "path": "LICENSE",
+   "path": "LICENSE-AGPL",
+   "category": "third-party",
+   "similarity_pct": null,
+   "upstream_source_path": null,
+   "notes": "Free Software Foundation licence text, copy from gnu.org (661 lines, 34523 bytes) preceded by one added copyright line naming Xalterra Ltd, trading as Onexur. Copying the licence text verbatim is permitted; the licence text is not onexurOSS or upstream authored material.",
+   "flagged_for_review": false
+  },
+  {
+   "path": "LICENSE-MIT",
    "category": "upstream/modified",
    "similarity_pct": 97.7,
    "upstream_source_path": "LICENSE",
-   "notes": "0.0% of upstream lines changed, 4.5% of current file is new; configuration/metadata edits",
+   "notes": "0.0% of upstream lines changed, 4.5% of current file is new; configuration/metadata edits; renamed from LICENSE",
    "flagged_for_review": false,
    "changed_from_upstream_pct": 0.0,
    "new_in_current_pct": 4.5,
    "upstream_lines": 21,
    "current_lines": 22,
    "review_flag": "minor modification - likely remains upstream-derived"
-  },
-  {
-   "path": "LICENSE-AGPL",
-   "category": "third-party",
-   "similarity_pct": null,
-   "upstream_source_path": null,
-   "notes": "Free Software Foundation licence text, unmodified copy from gnu.org (661 lines, 34523 bytes). Copying the licence text verbatim is permitted; it is not onexurOSS or upstream authored material.",
-   "flagged_for_review": false
-  },
-  {
-   "path": "LICENSE-MIT",
-   "category": "upstream/unmodified",
-   "similarity_pct": 100.0,
-   "upstream_source_path": "LICENSE",
-   "notes": "byte-identical; renamed from LICENSE",
-   "flagged_for_review": false,
-   "changed_from_upstream_pct": 0.0,
-   "new_in_current_pct": 0.0,
-   "upstream_lines": 21,
-   "current_lines": 21
   },
   {
    "path": "NOTICE",
@@ -251,14 +239,14 @@
   {
    "path": "pyproject.toml",
    "category": "upstream/modified",
-   "similarity_pct": 90.9,
+   "similarity_pct": 88.6,
    "upstream_source_path": "pyproject.toml",
-   "notes": "9.6% of upstream lines changed, 8.5% of current file is new; configuration/metadata edits",
+   "notes": "10.8% of upstream lines changed, 11.9% of current file is new; configuration/metadata edits",
    "flagged_for_review": false,
-   "changed_from_upstream_pct": 9.6,
-   "new_in_current_pct": 8.5,
+   "changed_from_upstream_pct": 10.8,
+   "new_in_current_pct": 11.9,
    "upstream_lines": 83,
-   "current_lines": 82,
+   "current_lines": 84,
    "review_flag": "minor modification - likely remains upstream-derived"
   },
   {
@@ -2034,15 +2022,13 @@
    }
   },
   "licence_notice_lines_in_head": [
-   "WT:LICENSE:1:MIT License",
-   "WT:LICENSE:3:Copyright (c) 2026 manager-mcp contributors",
-   "WT:LICENSE:4:Copyright (c) 2026 onexurOSS",
-   "WT:LICENSE:6:Permission is hereby granted, free of charge, to any person obtaining a copy",
-   "WT:LICENSE-AGPL:4: Copyright (C) 2007 Free Software Foundation, Inc. <https://fsf.org/>",
-   "WT:LICENSE-AGPL:633:    Copyright (C) <year>  <name of author>",
+   "WT:LICENSE-AGPL:1:Copyright (c) 2026 Xalterra Ltd, trading as Onexur",
+   "WT:LICENSE-AGPL:6: Copyright (C) 2007 Free Software Foundation, Inc. <https://fsf.org/>",
+   "WT:LICENSE-AGPL:635:    Copyright (C) <year>  <name of author>",
    "WT:LICENSE-MIT:1:MIT License",
    "WT:LICENSE-MIT:3:Copyright (c) 2026 manager-mcp contributors",
-   "WT:LICENSE-MIT:5:Permission is hereby granted, free of charge, to any person obtaining a copy",
+   "WT:LICENSE-MIT:4:Copyright (c) 2026 onexurOSS",
+   "WT:LICENSE-MIT:6:Permission is hereby granted, free of charge, to any person obtaining a copy",
    "WT:NOTICE:2:released under the MIT License.",
    "WT:NOTICE:4:Copyright (c) 2026 manager-mcp contributors.",
    "WT:NOTICE:9:Material added or authored for this project is copyright (c) 2026",
@@ -2052,10 +2038,10 @@
    "WT:README.md:131:This project incorporates material from [manager-mcp](https://github.com/flumpiey/manager-mcp) 0.2.6, released under the MIT License, copyright (c) 2026 manager-mcp contributors.",
    "WT:README.md:135:The complete MIT License text is reproduced in `LICENSE-MIT`. See `NOTICE` for the full attribution statement.",
    "WT:README.md:145:See `CONTRIBUTING.md` and `CLA.md`. Contributions to files identified in `PROVENANCE.json` as upstream-derived remain subject to the upstream MIT license; contributions to onexurOSS-original files are covered by the project's Contributor License Agreement.",
-   "WT:docs/upstream-history.md:6:Copyright (c) 2026 manager-mcp contributors (see [LICENSE](../LICENSE))."
+   "WT:docs/upstream-history.md:6:Copyright (c) 2026 manager-mcp contributors (see [LICENSE-MIT](../LICENSE-MIT))."
   ],
   "licence_file_comparison": {
-   "head_LICENSE_lines": [
+   "head_LICENSE_MIT_lines": [
     "MIT License",
     "",
     "Copyright (c) 2026 manager-mcp contributors",
