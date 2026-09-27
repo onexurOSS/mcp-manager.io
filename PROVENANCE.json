@@ -1,7 +1,7 @@
 {
  "generated_by": "Gate 1A provenance audit",
- "repo_head": "2cf9c2a7be0fad25cc505848c9f7e878b97185ad",
- "repo_basis": "committed tree at HEAD 2cf9c2a7be0f; working tree clean apart from PROVENANCE.json and PROVENANCE_SUMMARY.md",
+ "repo_head": "ff5a394d352ac82bedc77d783afe490871ddd634",
+ "repo_basis": "committed tree at HEAD ff5a394d352a; working tree clean apart from PROVENANCE.json and PROVENANCE_SUMMARY.md",
  "upstream_reference": {
   "source": "github.com/flumpiey/manager-mcp tag v0.2.6",
   "commit": "c50c4d71f2aff962a8c9dbb1cce2ef14f602a51b",
@@ -734,12 +734,12 @@
   {
    "path": "src/manager_mcp/server.py",
    "category": "upstream/modified",
-   "similarity_pct": 87.7,
+   "similarity_pct": 87.6,
    "upstream_source_path": "src/manager_mcp/server.py",
-   "notes": "6.3% of upstream lines changed, 17.6% of current file is new; edits to existing logic/strings; removes server_icons",
+   "notes": "6.5% of upstream lines changed, 17.7% of current file is new; edits to existing logic/strings; removes server_icons",
    "flagged_for_review": true,
-   "changed_from_upstream_pct": 6.3,
-   "new_in_current_pct": 17.6,
+   "changed_from_upstream_pct": 6.5,
+   "new_in_current_pct": 17.7,
    "upstream_lines": 697,
    "current_lines": 792,
    "review_flag": "substantial rewrite - candidate for onexurOSS/original",

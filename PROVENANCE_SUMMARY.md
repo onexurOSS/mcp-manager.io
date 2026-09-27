@@ -1,6 +1,6 @@
 # Provenance summary (Gate 1A, analysis only)
 
-Nothing was decided legally here. This is evidence for solicitor review. Committed tree at HEAD 2cf9c2a7be0f; working tree clean apart from PROVENANCE.json and PROVENANCE_SUMMARY.md.
+Nothing was decided legally here. This is evidence for solicitor review. Committed tree at HEAD ff5a394d352a; working tree clean apart from PROVENANCE.json and PROVENANCE_SUMMARY.md.
 
 ## History rewrite
 
@@ -15,13 +15,13 @@ This regeneration follows a history rewrite, which is why every commit hash diff
 
 | Measure | Before the split (first manifest) | Now (committed) |
 |---|---|---|
-| Similarity to upstream v0.2.6 | 71.5% | **87.7%** |
-| Share of the file that is new | 43.4% | **17.6%** |
-| Upstream lines changed | 2.9% | 6.3% |
+| Similarity to upstream v0.2.6 | 71.5% | **87.6%** |
+| Share of the file that is new | 43.4% | **17.7%** |
+| Upstream lines changed | 2.9% | 6.5% |
 | Lines in the file | 1197 | 792 |
-| Approximate lines added | 519 | 139 |
+| Approximate lines added | 519 | 140 |
 
-The new-content share fell from 43.4% to 17.6% (25.8 percentage points, a 59% relative reduction). The onexurOSS tool wrappers that were in `server.py` now live in `diagnostics.py`, `reconciliation.py`, `corrections.py`, `fixed_assets.py` and `server_info.py` (all `onexurOSS/original`). Tool names, schemas, order and behaviour are unchanged (snapshot-verified). The embedded-icon code was also removed.
+The new-content share fell from 43.4% to 17.7% (25.7 percentage points, a 59% relative reduction). The onexurOSS tool wrappers that were in `server.py` now live in `diagnostics.py`, `reconciliation.py`, `corrections.py`, `fixed_assets.py` and `server_info.py` (all `onexurOSS/original`). Tool names, schemas, order and behaviour are unchanged (snapshot-verified). The embedded-icon code was also removed.
 
 What remains new in `server.py`, and why it still trips the 60-added-line heuristic: the thin `register_*` wiring calls, the date-rejection and `semantics` block in `_fetch_report` (a modified upstream function), reworded descriptions on the upstream report tools, and the dev-supervisor branch in `main()`. Whether these residual additions are separable from the upstream-derived remainder is a question for review.
 
@@ -54,7 +54,7 @@ Five onexurOSS tests (three profit and loss pagination tests, two `aged_receivab
 |---|---|---|---|---|
 | `CHANGELOG.md` | 20.0% | 80.0% | 80.0% | documentation rewritten/extended |
 | `README.md` | 19.4% | 87.5% | 56.2% | documentation rewritten/extended |
-| `src/manager_mcp/server.py` | 87.7% | 6.3% | 17.6% | edits to existing logic/strings; removes server_icons |
+| `src/manager_mcp/server.py` | 87.6% | 6.5% | 17.7% | edits to existing logic/strings; removes server_icons |
 
 ### Manual classification of four files
 
