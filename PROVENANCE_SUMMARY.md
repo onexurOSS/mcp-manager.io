@@ -1,6 +1,6 @@
 # Provenance summary (Gate 1A, analysis only)
 
-Nothing was decided legally here. This is evidence for solicitor review. Committed tree at HEAD d29dcd5be755; commit author identity rewritten to Onexur <github@xalterra.com>; working tree clean apart from PROVENANCE.json and PROVENANCE_SUMMARY.md.
+Nothing was decided legally here. This is evidence for solicitor review. Committed tree at HEAD 9f3de1c29578; commit author identity rewritten to Onexur <github@xalterra.com>; working tree clean apart from PROVENANCE.json and PROVENANCE_SUMMARY.md.
 
 ## History rewrite
 
@@ -15,13 +15,13 @@ This regeneration follows a history rewrite, which is why every commit hash diff
 
 | Measure | Before the split (first manifest) | Now (committed) |
 |---|---|---|
-| Similarity to upstream v0.2.6 | 71.5% | **86.7%** |
-| Share of the file that is new | 43.4% | **18.7%** |
+| Similarity to upstream v0.2.6 | 71.5% | **86.6%** |
+| Share of the file that is new | 43.4% | **19.0%** |
 | Upstream lines changed | 2.9% | 7.0% |
-| Lines in the file | 1197 | 797 |
-| Approximate lines added | 519 | 149 |
+| Lines in the file | 1197 | 800 |
+| Approximate lines added | 519 | 152 |
 
-The new-content share fell from 43.4% to 18.7% (24.7 percentage points, a 57% relative reduction). The Onexur tool wrappers that were in `server.py` now live in `diagnostics.py`, `reconciliation.py`, `corrections.py`, `fixed_assets.py` and `server_info.py` (all `Onexur/original`). Tool names, schemas, order and behaviour are unchanged (snapshot-verified). The embedded-icon code was also removed.
+The new-content share fell from 43.4% to 19.0% (24.4 percentage points, a 56% relative reduction). The Onexur tool wrappers that were in `server.py` now live in `diagnostics.py`, `reconciliation.py`, `corrections.py`, `fixed_assets.py` and `server_info.py` (all `Onexur/original`). Tool names, schemas, order and behaviour are unchanged (snapshot-verified). The embedded-icon code was also removed.
 
 What remains new in `server.py`, and why it still trips the 60-added-line heuristic: the thin `register_*` wiring calls, the date-rejection and `semantics` block in `_fetch_report` (a modified upstream function), reworded descriptions on the upstream report tools, and the dev-supervisor branch in `main()`. Whether these residual additions are separable from the upstream-derived remainder is a question for review.
 
@@ -53,8 +53,8 @@ Five Onexur tests (three profit and loss pagination tests, two `aged_receivables
 | File | Similarity | Upstream lines changed | Share of file that is new | What changed |
 |---|---|---|---|---|
 | `CHANGELOG.md` | 20.0% | 80.0% | 80.0% | documentation rewritten/extended |
-| `README.md` | 19.4% | 87.5% | 56.2% | documentation rewritten/extended |
-| `src/manager_mcp/server.py` | 86.7% | 7.0% | 18.7% | edits to existing logic/strings; removes server_icons |
+| `README.md` | 19.4% | 87.5% | 56.5% | documentation rewritten/extended |
+| `src/manager_mcp/server.py` | 86.6% | 7.0% | 19.0% | edits to existing logic/strings; removes server_icons |
 
 ### Manual classification of five files
 
@@ -63,7 +63,7 @@ These five changed after the first manifest was written and were read directly a
 - **`tests/test_server_icons.py`:** minor modification - likely remains upstream-derived (manual override of the automatic flag). 12-line upstream test whose icon assertions were inverted. The module skeleton and two assertion lines (mcp.name and website_url) are verbatim upstream. The automatic substantial flag is a small-file percentage artefact. Automatic figures: similarity 38.9%, 70.8% of upstream lines changed, 41.7% of the file new.
 - **`.cursor-plugin/plugin.json`:** minor modification - likely remains upstream-derived (manual override of the automatic flag). Upstream plugin manifest restored from the v0.2.6 tag and adapted: author, repository URLs, version, and the license field (now AGPL-3.0-or-later to describe the distributed package). The file is a small JSON document (about 20 lines), so a handful of changed lines crosses the automatic 30 percent new-content threshold. Structure and most keys are upstream's. Automatic figures: similarity 74.7%, 19.0% of upstream lines changed, 30.6% of the file new.
 - **`CHANGELOG.md`:** substantial rewrite - candidate for Onexur/original. Since the changelog split the file holds only the Onexur 1.0.0 entry. The only upstream text retained is the two line title and introduction. The upstream release entries moved verbatim to docs/upstream-history.md. The path match to upstream CHANGELOG.md is a comparison artefact. Automatic figures: similarity 20.0%, 80.0% of upstream lines changed, 80.0% of the file new.
-- **`README.md`:** substantial rewrite - candidate for Onexur/original. Rewritten from scratch in the solicitor's structure and checked against the code. Similarity to the upstream README is 19.4%. Of 199 non-trivial upstream lines, only one repeated line survives (the example MANAGER_API_URL value, Manager's default local address, a configuration fact). No upstream prose is retained. Automatic figures: similarity 19.4%, 87.5% of upstream lines changed, 56.2% of the file new.
+- **`README.md`:** substantial rewrite - candidate for Onexur/original. Rewritten from scratch in the solicitor's structure and checked against the code. Similarity to the upstream README is 19.4%. Of 199 non-trivial upstream lines, only one repeated line survives (the example MANAGER_API_URL value, Manager's default local address, a configuration fact). No upstream prose is retained. Automatic figures: similarity 19.4%, 87.5% of upstream lines changed, 56.5% of the file new.
 - **`docs/upstream-history.md`:** upstream-derived, reproduced verbatim (minor modification). Byte for byte copy of the upstream v0.2.6 changelog entries for 0.1.0 to 0.2.6, with an added attribution and MIT notice paragraph. The tool matched it to upstream CHANGELOG.md by rename detection. Automatic figures: similarity 93.0%, 2.7% of upstream lines changed, 11.0% of the file new.
 
 ### Minor modifications (likely remain upstream-derived)
@@ -113,7 +113,7 @@ One: `LICENSE-AGPL`, the Free Software Foundation text of the GNU Affero General
 
 ## Upstream MIT notices
 
-The upstream MIT licence and copyright notice **are present** in `LICENSE-MIT`: the MIT text with `Copyright (c) 2026 manager-mcp contributors` (as in upstream's `LICENSE`) and one added line `Copyright (c) 2026 Xalterra Ltd, trading as Onexur`. The former single `LICENSE` file was deleted. `LICENSE-AGPL` holds the unaltered FSF AGPL-3.0 text preceded by the same Xalterra copyright line. `NOTICE` repeats the upstream copyright line and source URL and names the same holder for material added for this project. **Resolved:** all three licence documents now name one holder, Xalterra Ltd, trading as Onexur (an earlier mismatch with `onexurOSS`, the GitHub namespace, was fixed). Prefacing the AGPL text with a project copyright line is standard practice and is not an edit to the licence text, so it is not flagged. `pyproject.toml` now declares `AGPL-3.0-or-later`; built artifacts carry `License-Expression: AGPL-3.0-or-later` and `License-File` entries for `LICENSE-AGPL`, `LICENSE-MIT` and `NOTICE`. Author metadata (`authors` in `pyproject.toml`, and the author fields in `mcpb/manifest.json` and `.cursor-plugin/plugin.json`) now names Xalterra Ltd, trading as Onexur, and `pyproject.toml` also keeps the upstream author, Dru Connold. `.cursor-plugin/plugin.json` now declares `AGPL-3.0-or-later`, matching `pyproject.toml` (it declared `MIT` before; the file itself remains upstream-derived). Other attribution: `README.md:5:This project began as a fork of [manager-mcp](https://github.com/flu`; `README.md:131:This project incorporates material from [manager-mcp](https://gith`; `pyproject.toml:12:authors = [{ name = "Xalterra Ltd, trading as Onexur" }, { nam`. `THIRD-PARTY-NOTICES` (dependency licence texts) is now present and is packaged in the sdist and wheel. Per-file headers: see the next section. `CLA.md` (version 1.0, company number recorded) is committed. The CLA bot workflow `.github/workflows/cla.yml` is active and was confirmed on a test pull request (signature recorded at `signatures/v1.0/cla.json` on the `cla-signatures` branch).
+The upstream MIT licence and copyright notice **are present** in `LICENSE-MIT`: the MIT text with `Copyright (c) 2026 manager-mcp contributors` (as in upstream's `LICENSE`) and one added line `Copyright (c) 2026 Xalterra Ltd, trading as Onexur`. The former single `LICENSE` file was deleted. `LICENSE-AGPL` holds the unaltered FSF AGPL-3.0 text preceded by the same Xalterra copyright line. `NOTICE` repeats the upstream copyright line and source URL and names the same holder for material added for this project. **Resolved:** all three licence documents now name one holder, Xalterra Ltd, trading as Onexur (an earlier mismatch with `onexurOSS`, the GitHub namespace, was fixed). Prefacing the AGPL text with a project copyright line is standard practice and is not an edit to the licence text, so it is not flagged. `pyproject.toml` now declares `AGPL-3.0-or-later`; built artifacts carry `License-Expression: AGPL-3.0-or-later` and `License-File` entries for `LICENSE-AGPL`, `LICENSE-MIT` and `NOTICE`. Author metadata (`authors` in `pyproject.toml`, and the author fields in `mcpb/manifest.json` and `.cursor-plugin/plugin.json`) now names Xalterra Ltd, trading as Onexur, and `pyproject.toml` also keeps the upstream author, Dru Connold. `.cursor-plugin/plugin.json` now declares `AGPL-3.0-or-later`, matching `pyproject.toml` (it declared `MIT` before; the file itself remains upstream-derived). Other attribution: `README.md:5:This project began as a fork of [manager-mcp](https://github.com/flu`; `README.md:132:This project incorporates material from [manager-mcp](https://gith`; `pyproject.toml:12:authors = [{ name = "Xalterra Ltd, trading as Onexur" }, { nam`. `THIRD-PARTY-NOTICES` (dependency licence texts) is now present and is packaged in the sdist and wheel. Per-file headers: see the next section. `CLA.md` (version 1.0, company number recorded) is committed. The CLA bot workflow `.github/workflows/cla.yml` is active and was confirmed on a test pull request (signature recorded at `signatures/v1.0/cla.json` on the `cla-signatures` branch).
 
 ## Per-file licence headers
 
