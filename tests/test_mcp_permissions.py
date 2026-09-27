@@ -98,10 +98,10 @@ def test_delete_scope_tools_appear_only_with_a_delete_scope() -> None:
     }
 
 
-def test_default_configuration_registers_only_the_29_read_tools() -> None:
+def test_default_configuration_registers_only_the_30_read_tools() -> None:
     result = _run()
     names = {t["name"] for t in result["tools"]}
-    assert len(names) == 29
+    assert len(names) == 30
     assert not [t for t in result["tools"] if t["destructive"]]
     assert not {"apply_correction", "propose_correction", "snapshot_and_void"} & names
 
@@ -146,12 +146,12 @@ def test_read_tools_are_marked_read_only_and_no_other_tool_is() -> None:
     default = _run()
     everything = _run(write=DOMAIN, delete=DOMAIN)
     default_names = {t["name"] for t in default["tools"]}
-    assert len(default_names) == 29
+    assert len(default_names) == 30
     assert all(t["read_only"] and not t["destructive"] for t in default["tools"])
     read_only_names = {t["name"] for t in everything["tools"] if t["read_only"]}
     assert read_only_names == default_names
     writers = [t for t in everything["tools"] if t["name"] not in default_names]
-    assert len(writers) == 125 - 29
+    assert len(writers) == 126 - 30
     assert not any(t["read_only"] for t in writers)
 
 

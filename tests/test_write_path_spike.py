@@ -31,6 +31,7 @@ from manager_mcp.corrections import (
     _proposal_token,
     _reconstruction_token,
     apply_sales_invoice_reconstruction,
+    list_incomplete_reconstructions,
     propose_sales_invoice_reconstruction,
     reallocate_receipt_line,
     snapshot_and_void,
@@ -274,18 +275,26 @@ async def test_happy_path_call_sequence_is_one_post_then_one_put_per_receipt(
     # Total HTTP calls inside apply for two receipts (writes plus reads plus verification).
     assert [f"{m} {p}" for m, p in fake.log] == EXPECTED_HAPPY_PATH_CALLS
     assert result["verification"]["fully_paid"] is True
-    # Fix 3: create, then one "reallocate" (committed before the read) plus a "verify"
-    # (committed after the read, sharing the same correlation_id) per receipt.
+    # Step 1 (pending record): a "reconstruct"/"pending" entry opens the operation and
+    # a "reconstruct"/"complete" entry closes it, both under the reconstruction token
+    # as correlation_id. In between, create, then one "reallocate" (committed before
+    # the read) plus a "verify" (after the read) per receipt -- all sharing that same
+    # correlation_id, not a fresh random one each.
     events = read_events(_audit_isolation)
     assert [e["operation"] for e in events] == [
+        "reconstruct",
         "create",
         "reallocate",
         "verify",
         "reallocate",
         "verify",
+        "reconstruct",
     ]
-    ids = [e["correlation_id"] for e in events]
-    assert ids[1] == ids[2] and ids[3] == ids[4] and len({ids[0], ids[1], ids[3]}) == 3
+    assert events[0]["status"] == "pending"
+    assert events[-1]["status"] == "complete"
+    assert events[-1]["after"] == result
+    ids = {e["correlation_id"] for e in events}
+    assert ids == {proposal["proposal_token"]}
 
 
 @pytest.mark.asyncio
@@ -417,17 +426,21 @@ async def test_failure_on_first_receipt_update_leaves_an_orphan_invoice(
     assert list(fake.invoices) == ["new-inv-1"]
     assert fake.references("new-inv-1") == []
     assert fake.references(MISSING) == ["rc-a", "rc-b"]
-    # Fix 2: the caller is told the created invoice's key and told not to retry, instead
-    # of being given no key and advice that (before the fix) led straight to a duplicate.
+    # Fix 2, revised by Step 2: the caller is told the created invoice's key and told
+    # this operation is resumable, not given no key and advice that (before Fix 2) led
+    # straight to a duplicate. The original client.py wording ("retry once"/"and
+    # retry") is preserved only via exception chaining, not repeated here.
     message = str(excinfo.value)
     assert "new-inv-1" in message
-    assert "do not retry" in message.casefold()
+    assert "resumable" in message.casefold()
     assert "retry once" not in message.casefold() and "and retry" not in message.casefold()
     assert "snapshot_and_void" in message
-    # The only trace is one audit event for the create, which records the new key.
+    assert "list_incomplete_reconstructions" in message
+    # The trail so far: the pending record opened at the start, and the create.
     events = read_events(_audit_isolation)
     assert [(e["operation"], e["key"], e["status"]) for e in events] == [
-        ("create", "new-inv-1", "ok")
+        ("reconstruct", None, "pending"),
+        ("create", "new-inv-1", "ok"),
     ]
     await client.aclose()
 
@@ -477,29 +490,96 @@ async def test_orphan_is_detectable_by_verification_but_nothing_links_it_to_the_
 
 
 @pytest.mark.asyncio
-async def test_a_plain_retry_after_a_partial_failure_creates_a_duplicate_invoice(
-    # Still true after Fixes 1 to 3. Fix 2 removed the advice to retry and now names
-    # this exact risk in the error message, but a caller who retries anyway is not
-    # stopped: nothing here is idempotent yet. That is item 3 of the Gate 4 minimum
-    # fix list (docs/write-path-spike.md) and is a separate, tracked follow-up.
-    fake: FakeManager,
+async def test_apply_resumes_after_a_partial_failure_instead_of_duplicating(
+    fake: FakeManager, _audit_isolation: Path
 ) -> None:
+    """Step 2 (the actual fix for the duplicate-invoice problem, not just removing
+    the advice to retry): before this, calling apply again after this exact partial
+    failure -- invoice created, first reallocate never applied -- created a second
+    invoice for the same debt (new-inv-1 orphaned, new-inv-2 properly linked). Now
+    the second call resumes the same operation: no second invoice, no re-attempt of
+    anything already recorded, and the same reconstruction token used throughout.
+    """
     client = _client()
     proposal = await _propose(client)
     fake.fail.append((_rule("PUT", r"/receipt-form/rc-a"), httpx.Response(500, text="x")))
     with pytest.raises(ManagerApiError):
         await _apply(client, proposal, ["rc-a", "rc-b"])
     fake.fail.clear()
+    fake.log.clear()
 
     retry_proposal = await _propose(client)  # the original key is still missing, so this proposes
     assert retry_proposal["proposal_token"] == proposal["proposal_token"]
     result = await _apply(client, retry_proposal, ["rc-a", "rc-b"])
+    await client.aclose()
 
     assert result["status"] == "ok"
-    assert sorted(fake.invoices) == ["new-inv-1", "new-inv-2"]  # two invoices for one debt
-    assert fake.references("new-inv-1") == []
-    assert fake.references("new-inv-2") == ["rc-a", "rc-b"]
+    assert sorted(fake.invoices) == ["new-inv-1"]  # exactly one invoice, not two
+    assert fake.references("new-inv-1") == ["rc-a", "rc-b"]
+    calls = [f"{m} {p}" for m, p in fake.log]
+    assert "POST /sales-invoice-form" not in calls  # the invoice is not recreated
+    events = read_events(_audit_isolation)
+    assert [e["operation"] for e in events] == [
+        "reconstruct",
+        "create",
+        "reallocate",
+        "verify",
+        "reallocate",
+        "verify",
+        "reconstruct",
+    ]
+    assert events[-1]["status"] == "complete"
+
+
+@pytest.mark.asyncio
+async def test_apply_resumes_and_completes_only_the_remaining_transaction(
+    fake: FakeManager, _audit_isolation: Path
+) -> None:
+    """Step 2, required proof: invoice created, one of two transactions already
+    repointed, then a second call to apply completes only the remaining one -- it
+    does not re-attempt rc-a, and does not create a second invoice."""
+    client = _client()
+    proposal = await _propose(client)
+    fake.fail.append((_rule("PUT", r"/receipt-form/rc-b"), httpx.ConnectError("refused")))
+    with pytest.raises(ManagerUnavailableError):
+        await _apply(client, proposal, ["rc-a", "rc-b"])
+    fake.fail.clear()
+    fake.log.clear()
+
+    result = await _apply(client, proposal, ["rc-a", "rc-b"])
     await client.aclose()
+
+    assert result["status"] == "ok"
+    assert sorted(fake.invoices) == ["new-inv-1"]
+    assert fake.references("new-inv-1") == ["rc-a", "rc-b"]
+    calls = [f"{m} {p}" for m, p in fake.log]
+    assert "POST /sales-invoice-form" not in calls  # invoice not recreated
+    assert calls.count("PUT /receipt-form/rc-a") == 0  # already done; not repeated
+    assert calls.count("PUT /receipt-form/rc-b") == 1  # only the remaining one is written
+    by_key = {r["key"]: r for r in result["reallocations"]}
+    assert by_key["rc-a"]["detail"]["resumed_from_audit_log"] is True
+    assert "resumed_from_audit_log" not in by_key["rc-b"]["detail"]
+
+
+@pytest.mark.asyncio
+async def test_apply_is_idempotent_after_full_success_and_makes_no_new_calls(
+    fake: FakeManager,
+) -> None:
+    """Step 2, required proof: calling apply twice with the same token after a full
+    success makes zero additional API calls the second time and returns the exact
+    result recorded at completion."""
+    client = _client()
+    proposal = await _propose(client)
+    first_result = await _apply(client, proposal, ["rc-a", "rc-b"])
+    assert first_result["status"] == "ok"
+    fake.log.clear()
+
+    second_result = await _apply(client, proposal, ["rc-a", "rc-b"])
+    await client.aclose()
+
+    assert second_result == first_result
+    assert fake.log == []
+    assert sorted(fake.invoices) == ["new-inv-1"]
 
 
 @pytest.mark.asyncio
@@ -519,13 +599,15 @@ async def test_failure_on_second_receipt_leaves_a_mixed_state(
     # so a human reading it knows exactly which invoice and which receipt to look at.
     message = str(excinfo.value)
     assert "new-inv-1" in message
-    assert "do not retry" in message.casefold()
+    assert "resumable" in message.casefold()
     events = read_events(_audit_isolation)
     assert [(e["operation"], e["key"]) for e in events] == [
+        ("reconstruct", None),
         ("create", "new-inv-1"),
         ("reallocate", "rc-a"),
         ("verify", "rc-a"),  # Fix 3: rc-a's successful reallocation was also verified
     ]
+    assert events[0]["status"] == "pending"
     await client.aclose()
 
 
@@ -583,7 +665,13 @@ async def test_create_response_that_is_not_json_raises_after_the_invoice_was_cre
         await _apply(client, proposal, ["rc-a", "rc-b"])
 
     assert list(fake.invoices) == ["new-inv-1"]
-    assert read_events(_audit_isolation) == []  # not even the create is audited
+    # The pending record (written before the create was attempted) survives; the create
+    # itself is not audited, since the exception happens before apply_correction gets to
+    # record it -- this is exactly the state list_incomplete_reconstructions must be able
+    # to show, and the state a resumed apply call must create the invoice again FOR,
+    # since no "create" entry exists yet to resume from.
+    events = read_events(_audit_isolation)
+    assert [(e["operation"], e["status"]) for e in events] == [("reconstruct", "pending")]
     await client.aclose()
 
 
@@ -616,10 +704,11 @@ async def test_a_failing_verification_read_does_not_prevent_the_write_from_being
     # The reallocate write is audited despite its own verification read failing; there
     # is no "verify" entry for rc-a, since that read never completed.
     assert [(e["operation"], e["key"]) for e in events] == [
+        ("reconstruct", None),
         ("create", "new-inv-1"),
         ("reallocate", "rc-a"),
     ]
-    reallocate_entry = events[1]
+    reallocate_entry = events[2]
     assert reallocate_entry["status"] == "ok"
     assert reallocate_entry["after"] is None  # committed before the read; no read result yet
     await client.aclose()
@@ -724,3 +813,93 @@ async def test_a_mixed_state_cannot_be_rolled_back_with_the_existing_tools(
     assert out["status"] == "blocked"
     assert out["blocking_keys"] == ["rc-a"]
     await client.aclose()
+
+
+# ---------------------------------------------------------------------------------------
+# Step 3: list_incomplete_reconstructions
+# ---------------------------------------------------------------------------------------
+
+
+@pytest.mark.asyncio
+async def test_list_incomplete_reconstructions_is_empty_before_anything_starts() -> None:
+    assert list_incomplete_reconstructions() == {"incomplete_reconstructions": [], "count": 0}
+
+
+@pytest.mark.asyncio
+async def test_list_incomplete_reconstructions_shows_an_orphan_with_its_created_key(
+    fake: FakeManager, _audit_isolation: Path
+) -> None:
+    client = _client()
+    proposal = await _propose(client)
+    fake.fail.append((_rule("PUT", r"/receipt-form/rc-a"), httpx.Response(500, text="x")))
+    with pytest.raises(ManagerApiError):
+        await _apply(client, proposal, ["rc-a", "rc-b"])
+    await client.aclose()
+
+    out = list_incomplete_reconstructions()
+
+    assert out["count"] == 1
+    row = out["incomplete_reconstructions"][0]
+    assert row["proposal_token"] == proposal["proposal_token"]
+    assert row["resource"] == "sales_invoices"
+    assert row["cited_transaction_keys"] == ["rc-a", "rc-b"]
+    assert row["created_invoice_key"] == "new-inv-1"  # exactly what a human would need
+    assert row["transactions_done"] == []
+    assert row["transactions_pending"] == ["rc-a", "rc-b"]
+    assert row["age_seconds"] >= 0
+    assert isinstance(row["started_at"], float)
+
+
+@pytest.mark.asyncio
+async def test_list_incomplete_reconstructions_shows_a_mixed_state(
+    fake: FakeManager, _audit_isolation: Path
+) -> None:
+    client = _client()
+    proposal = await _propose(client)
+    fake.fail.append((_rule("PUT", r"/receipt-form/rc-b"), httpx.ConnectError("refused")))
+    with pytest.raises(ManagerUnavailableError):
+        await _apply(client, proposal, ["rc-a", "rc-b"])
+    await client.aclose()
+
+    row = list_incomplete_reconstructions()["incomplete_reconstructions"][0]
+    assert row["created_invoice_key"] == "new-inv-1"
+    assert row["transactions_done"] == ["rc-a"]
+    assert row["transactions_pending"] == ["rc-b"]
+
+
+@pytest.mark.asyncio
+async def test_list_incomplete_reconstructions_excludes_completed_ones(
+    fake: FakeManager, _audit_isolation: Path
+) -> None:
+    client = _client()
+    proposal = await _propose(client)
+    result = await _apply(client, proposal, ["rc-a", "rc-b"])
+    await client.aclose()
+
+    assert result["status"] == "ok"
+    assert list_incomplete_reconstructions() == {"incomplete_reconstructions": [], "count": 0}
+
+
+@pytest.mark.asyncio
+async def test_list_incomplete_reconstructions_ignores_ordinary_corrections(
+    fake: FakeManager, _audit_isolation: Path
+) -> None:
+    """A plain propose_correction/apply_correction call (not a reconstruction) writes
+    "create"/"update" audit entries too, each with its own random correlation_id --
+    those must never be mistaken for an incomplete reconstruction."""
+    from manager_mcp.corrections import apply_correction, propose_correction
+
+    client = _client()
+    proposal = await propose_correction(
+        client, client.policy, "sales_invoices", {"Customer": CUSTOMER, "Lines": LINES}
+    )
+    await apply_correction(
+        client,
+        client.policy,
+        proposal["proposal_token"],
+        "sales_invoices",
+        proposal["proposed_fields"],
+    )
+    await client.aclose()
+
+    assert list_incomplete_reconstructions() == {"incomplete_reconstructions": [], "count": 0}

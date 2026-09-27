@@ -8,31 +8,84 @@ that keeps real state and can inject a failure at any request).
 
 ## Fixes applied since this spike
 
-Three of the findings below have since been fixed (see the commit that added
-`tests/test_write_path_spike.py`'s Fix 1/2/3 tests, and the follow-up commit that applied them
-to `corrections.py`): the proposal token is now bound to the citing transaction keys and
-apply verifies, per transaction, that its current allocation still points at a genuinely
-missing invoice before repointing it (finding 6); the 500 and connection-error paths inside
-this workflow no longer suggest retrying, and instead name the created invoice and the two
-working recovery paths (finding 3, partially; the underlying error's own text is preserved
-only via exception chaining, not in the top-level message); and the audit-log entry for a
-write in this workflow is now committed before its own follow-up verification read, so a
-failing read can no longer leave a write unaudited (finding 4, partially: a create with no
-`known_keys` on the resource, as sales and purchase invoices have, never did a follow-up read
-in the first place, so it always had exactly one entry either way).
+Six of the seven findings below have since been fixed, across two rounds. The first round
+(Fix 1/2/3): the proposal token is bound to the citing transaction keys and apply verifies,
+per transaction, that its current allocation still points at a genuinely missing invoice
+before repointing it (finding 6); a 500 or connection error inside this workflow no longer
+suggested retrying (finding 3, at that point only the advice, not the underlying risk); and
+the audit-log entry for a write in this workflow is committed before its own follow-up
+verification read (finding 4; a create with no `known_keys` on the resource, as sales and
+purchase invoices have, never did a follow-up read in the first place, so it always had
+exactly one entry either way). A follow-up fix then closed the orphan case the first round's
+Fix 1 left open: if every cited transaction turns out already fixed, apply now refuses the
+whole operation before creating anything, rather than creating an invoice with nothing left
+to attach to it.
 
-Findings 1, 2, 5 and 7 are unchanged and still open: there is no atomicity, a plain retry
-still creates a duplicate invoice (nothing here is idempotent), a fully successful run whose
-final `verify_invoice_balance` call fails is still reported as an error, and no MCP tool
-reads the audit log. Sections 3 and 4 below describe the pre-fix behaviour as investigated;
-they are not fully accurate any more for the three fixed findings, and are kept as the
-historical record of what this spike found.
+The second round (the three items on the minimum-fix list below) closes the rest:
+
+- **Item 1 (pending record):** `_apply_invoice_reconstruction` writes a `"reconstruct"`/
+  `"pending"` audit entry, carrying the reconstruction token, the invoice fields, the cited
+  transaction keys and the eligibility plan, before making its first API call. Every
+  subsequent entry for this operation -- the existing `"create"`, `"reallocate"` and
+  `"verify"` entries -- now shares that same `correlation_id` instead of each getting an
+  unrelated random one, so the trail for one operation is a single, filterable sequence. A
+  final `"reconstruct"`/`"complete"` entry, holding the full result, closes it. No second
+  storage system: this is the same JSONL audit log every other corrective write already uses.
+- **Item 2 (idempotent apply) -- the actual fix for finding 2, not just the advice about it:**
+  before doing anything, apply looks up this trail by token. A `"complete"` entry means the
+  operation already finished; its recorded result is returned directly, with no new API call
+  at all. An incomplete trail means resuming: the invoice is not recreated if a `"create"`
+  entry already exists, and only transactions with no `"reallocate"` entry yet are acted on.
+  `tests/test_write_path_spike.py` proves both: a second call after full success makes zero
+  further HTTP requests and returns the identical result; a second call after one of two
+  transactions succeeded finishes only the other one.
+- **Item 3 (`list_incomplete_reconstructions`):** a new, always-registered, scope-free read
+  tool that scans the audit log for a `"pending"` entry with no matching `"complete"` one, and
+  reports the token, the resource, the cited transaction keys, the created invoice's key if
+  one exists, which transactions are done and which are still pending, and how long it has
+  been in that state. This is what replaces reading the local audit file on the server host by
+  hand to find an orphan's key.
+
+Finding 7 (no MCP tool reads the audit log) is now closed by item 3 above, at least for
+reconstruction attempts specifically; nothing yet reads the audit log for other operations.
+Finding 5 (a fully successful run whose own final `verify_invoice_balance` call fails is still
+reported as an error) is unchanged and still open: that call is a read made after every write
+in the operation has already succeeded and been recorded, so it carries no risk of a duplicate
+or an unaudited write, but the tool's return value still doesn't distinguish "everything
+worked, the last sanity check failed to run" from a real failure.
+
+**One narrow residual gap, found while implementing the pending record:** if the invoice
+create call reaches Manager and actually creates the invoice, but the response cannot be
+parsed as JSON (`test_create_response_that_is_not_json_raises_after_the_invoice_was_created`),
+no `"create"` entry is written, because `apply_correction` only records it once it has parsed
+the key out of the response. A resumed attempt in that specific state has no way to know the
+invoice was already created and will create a second one. This is a narrower version of
+finding 2, for a response-shape failure rather than a 5xx or connection failure; it is not
+fixed here. `list_incomplete_reconstructions` will still show the pending record with no
+created key, which is at least visible, but resuming from it is not yet safe. Fixing it would
+mean recording an "attempted" entry before the create call, with no key, and resuming from
+that state would need a way to check Manager for an invoice this operation may or may not have
+created -- there is no such lookup available (the invoice carries no field this operation
+could search on later). Flagged for a future pass, not addressed now.
+
+Sections 3 and 4 below describe the original, pre-fix behaviour as investigated in the first
+pass. They are no longer an accurate description of the current code for six of the seven
+findings; they are kept as the historical record of what this spike found and are not
+rewritten to match the fixes.
 
 ## Conclusion
 
-**Safe multi-step write operations are not achievable as designed** for this workflow.
+**Safe multi-step write operations are achievable as designed for this workflow, with one
+narrow exception.** Every failure mode this spike identified and reproduced -- an orphan
+invoice, a mixed state, a duplicate on retry, a write left unaudited by its own follow-up
+read, and no way to find an orphan's key without reading a file on the server -- is now
+handled: the operation records its own progress, is safe to call again after any of those
+failures, and a tool exists to find one that is stuck. The one gap that remains is the
+narrow, low-probability case above (a successful create whose response cannot be parsed);
+resuming after that specific failure is not yet safe, and is the next thing to close if this
+workflow is extended further.
 
-The workflow makes one create call and then one update call per receipt, with nothing tying
+The workflow still makes one create call and then one update call per receipt, with nothing tying
 them together. When a call in the middle fails, Manager is left half changed, the caller is
 told only about the failing call, and the tool's own error text tells the caller to retry,
 which creates a duplicate invoice. Recovery is possible in some states but depends on a key

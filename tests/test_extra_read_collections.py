@@ -132,11 +132,12 @@ async def test_total_tool_count_includes_explicit_fixed_asset_update() -> None:
     # no tools. The read-only reporting layer adds 7 GET-only tools
     # (manager_report_catalogue, get_report_definition, ledger_transactions,
     # reconstructed_trial_balance, reconstructed_profit_and_loss,
-    # reconstructed_aged_receivables, reconstructed_aged_payables).
+    # reconstructed_aged_receivables, reconstructed_aged_payables), and
+    # list_incomplete_reconstructions adds one more (local audit log only).
     register_write_tools()
     register_task_tools()
     tools = await mcp.list_tools()
-    assert len(tools) == 29
+    assert len(tools) == 30
 
 
 @pytest.mark.asyncio

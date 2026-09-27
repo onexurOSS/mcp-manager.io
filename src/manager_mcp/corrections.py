@@ -24,11 +24,18 @@ from __future__ import annotations
 import hashlib
 import json
 import sys as _sys
+import time
 from typing import Any
 
 import httpx
 
-from manager_mcp.audit_log import AuditEntry, audit_log_path, new_correlation_id, record_event
+from manager_mcp.audit_log import (
+    AuditEntry,
+    audit_log_path,
+    new_correlation_id,
+    read_events,
+    record_event,
+)
 from manager_mcp.client import ManagerApiError, ManagerClient, ManagerUnavailableError
 from manager_mcp.diagnostics import (
     _first,
@@ -102,27 +109,24 @@ async def _invoice_exists(client: ManagerClient, invoice_resource: str, key: str
 
 def _partial_reconstruction_message(new_key: str | None, original: Exception) -> str:
     """Message for a failure that happens after at least one write in this workflow
-    has already reached Manager, replacing any suggestion to simply retry -- a retry
-    would re-run propose/apply from the top and create a second invoice for the same
-    debt, since nothing here is idempotent yet (see docs/write-path-spike.md, item 3
-    of the minimum fix list, which this change does not implement).
+    has already reached Manager. This operation is resumable (see the pending/resume
+    logic in _apply_invoice_reconstruction), so unlike an ordinary single-step write,
+    the recommended action here is to call apply again with the same arguments, not
+    to avoid it.
     """
     if new_key is None:
         where = "Creating the invoice for this reconstruction"
-        recovery = f"Check the audit log ({audit_log_path()}) for what, if anything, completed."
     else:
         where = f"Reallocating a citing transaction onto invoice {new_key!r} (already created)"
-        recovery = (
-            f"Check the audit log ({audit_log_path()}) for what completed, then either finish "
-            "the remaining transactions individually with reallocate_payment_line / "
-            f"reallocate_receipt_line, or void {new_key!r} with snapshot_and_void if nothing "
-            "was reallocated onto it."
-        )
     return (
         f"{where} failed partway through this multi-step operation ({type(original).__name__}). "
-        f"Do not retry this operation, with the same or a new request: a retry would attempt to "
-        f"create another invoice for the same debt. {recovery} Raise this for manual review if "
-        f"you are unsure. See the chained cause of this exception for the underlying detail."
+        "This operation is resumable: call apply again with the exact same proposal_token, "
+        "fields and transaction keys, and it will continue from what already completed rather "
+        "than starting over or creating a duplicate invoice. Use "
+        "list_incomplete_reconstructions to see what has been recorded so far, or check the "
+        f"audit log ({audit_log_path()}) directly, or void the created invoice with "
+        "snapshot_and_void if you want to abandon this reconstruction instead of resuming it. "
+        "See the chained cause of this exception for the underlying detail."
     )
 
 
@@ -187,6 +191,7 @@ async def apply_correction(
     fields: dict[str, Any],
     *,
     key: str | None = None,
+    correlation_id: str | None = None,
 ) -> dict[str, Any]:
     """Commit a create/update previously staged by propose_correction.
 
@@ -226,7 +231,7 @@ async def apply_correction(
     # carries the richer, persistence-checked after/warnings under the same
     # correlation_id; this first entry's after/warnings reflect only the raw write
     # response.
-    correlation_id = new_correlation_id()
+    correlation_id = correlation_id or new_correlation_id()
     record_event(
         AuditEntry(
             operation="update" if key is not None else "create",
@@ -285,6 +290,8 @@ async def _reallocate(
     key: str,
     line_index: int,
     new_invoice_key: str,
+    *,
+    correlation_id: str | None = None,
 ) -> dict[str, Any]:
     invoice_resource, write_field, read_aliases = _ALLOCATION[resource]
     w = WRITABLE[resource]
@@ -334,7 +341,7 @@ async def _reallocate(
         "line_index": line_index,
         write_field: {"from": old_value, "to": new_invoice_key},
     }
-    correlation_id = new_correlation_id()
+    correlation_id = correlation_id or new_correlation_id()
     record_event(
         AuditEntry(
             operation="reallocate",
@@ -593,35 +600,17 @@ async def propose_sales_invoice_reconstruction(
     )
 
 
-async def _apply_invoice_reconstruction(
+async def _plan_reconstruction(
     client: ManagerClient,
-    policy: WritePolicy,
     invoice_resource: str,
-    proposal_token: str,
-    fields: dict[str, Any],
+    txn_resource: str,
+    invoice_aliases: tuple[str, ...],
     txn_keys: list[str],
-) -> dict[str, Any]:
-    txn_resource = "payments" if invoice_resource == "purchase_invoices" else "receipts"
-    _, _, invoice_aliases = _ALLOCATION[txn_resource]
-
-    # Fix 1: the token must match exactly what was proposed, including which
-    # transactions it was proposed against -- nothing here has been written yet, so
-    # a mismatch just means "propose again", not a partial-failure state.
-    expected_token = _reconstruction_token(invoice_resource, fields, txn_keys)
-    if proposal_token != expected_token:
-        raise ValueError(
-            "proposal_token does not match (resource, fields, payment/receipt keys). "
-            "Call propose_purchase_invoice_reconstruction / "
-            "propose_sales_invoice_reconstruction again with the exact fields and "
-            "transaction keys you intend to apply."
-        )
-    # Determine, before creating anything, whether each cited transaction still needs
-    # this invoice -- one fetch per transaction, its outcome stored for reuse below so
-    # nothing is fetched twice. A transaction whose allocation has since been fixed (or
-    # a validly-computed token for one that never needed it, per Fix 1) is marked
-    # "refused" here rather than repointed. If NONE of them still need it, there is
-    # nothing to reconstruct: refuse the whole operation instead of creating an invoice
-    # that nothing will ever reference.
+) -> list[dict[str, Any]]:
+    """One eligibility decision per cited transaction, decided up front and reused for
+    the rest of the operation (including on resume) so nothing is fetched twice and a
+    resumed attempt never re-derives a different plan than the one it started with.
+    """
     plans: list[dict[str, Any]] = []
     for txn_key in txn_keys:
         path = form_path(txn_resource, txn_key)
@@ -655,32 +644,136 @@ async def _apply_invoice_reconstruction(
             )
             continue
         plans.append({"key": txn_key, "status": "pending", "line_index": line_index})
+    return plans
 
-    if not any(plan["status"] == "pending" for plan in plans):
-        return {
-            "status": "refused",
-            "reason": (
-                "None of the cited transactions still reference a missing invoice; "
-                "there is nothing left to reconstruct. No invoice was created and "
-                "nothing was changed."
-            ),
-            "reallocations": plans,
-        }
 
-    plain_token = _proposal_token(invoice_resource, None, fields)
-    try:
-        created = await apply_correction(
-            client, policy, plain_token, invoice_resource, fields, key=None
+def _reconstruction_trail(events: list[dict[str, Any]], token: str) -> list[dict[str, Any]]:
+    return [e for e in events if e.get("correlation_id") == token]
+
+
+async def _apply_invoice_reconstruction(
+    client: ManagerClient,
+    policy: WritePolicy,
+    invoice_resource: str,
+    proposal_token: str,
+    fields: dict[str, Any],
+    txn_keys: list[str],
+) -> dict[str, Any]:
+    """Idempotent and resumable: state is a sequence of audit-log entries sharing
+    correlation_id == proposal_token, not a separate storage system. A "reconstruct"/
+    "pending" entry records the plan at the start of a fresh attempt; the existing
+    "create" entry (from apply_correction) marks the invoice as created; each
+    existing "reallocate" entry marks one transaction as done; a final
+    "reconstruct"/"complete" entry, holding the full result, marks the operation
+    finished and is what a repeat call with the same token returns directly.
+
+    See docs/write-path-spike.md for why this exists: without it, a retry after a
+    partial failure created a second invoice for the same debt, and the only record
+    of an orphaned invoice's key was a line in the audit log nothing ever read back.
+    """
+    txn_resource = "payments" if invoice_resource == "purchase_invoices" else "receipts"
+    _, _, invoice_aliases = _ALLOCATION[txn_resource]
+
+    # Fix 1: the token must match exactly what was proposed, including which
+    # transactions it was proposed against -- nothing here has been written yet, so
+    # a mismatch just means "propose again", not a partial-failure state.
+    expected_token = _reconstruction_token(invoice_resource, fields, txn_keys)
+    if proposal_token != expected_token:
+        raise ValueError(
+            "proposal_token does not match (resource, fields, payment/receipt keys). "
+            "Call propose_purchase_invoice_reconstruction / "
+            "propose_sales_invoice_reconstruction again with the exact fields and "
+            "transaction keys you intend to apply."
         )
-    except (ManagerApiError, ManagerUnavailableError) as exc:
-        raise type(exc)(_partial_reconstruction_message(None, exc)) from exc
-    new_key = created["key"]
-    if not new_key:
-        return {
-            "status": "partial",
-            "reason": "Invoice create returned no Key.",
-            "created": created,
+
+    trail = _reconstruction_trail(read_events(), proposal_token)
+    complete_entry = next(
+        (e for e in trail if e["operation"] == "reconstruct" and e["status"] == "complete"), None
+    )
+    if complete_entry is not None:
+        # Idempotent replay: this exact operation already finished. Return the result
+        # recorded at the time, with no new API calls -- this is the actual fix for a
+        # retry creating a duplicate invoice, not just advice not to retry.
+        return complete_entry["after"]
+
+    pending_entry = next(
+        (e for e in trail if e["operation"] == "reconstruct" and e["status"] == "pending"), None
+    )
+    if pending_entry is None:
+        # A fresh attempt. Decide the plan now and record it before making any API
+        # call that writes anything, so a crash right after this point still leaves
+        # enough to resume from (though nothing to resume yet, since nothing was
+        # written).
+        plans = await _plan_reconstruction(
+            client, invoice_resource, txn_resource, invoice_aliases, txn_keys
+        )
+        if not any(plan["status"] == "pending" for plan in plans):
+            return {
+                "status": "refused",
+                "reason": (
+                    "None of the cited transactions still reference a missing invoice; "
+                    "there is nothing left to reconstruct. No invoice was created and "
+                    "nothing was changed."
+                ),
+                "reallocations": plans,
+            }
+        record_event(
+            AuditEntry(
+                operation="reconstruct",
+                resource=invoice_resource,
+                key=None,
+                before=None,
+                submitted={"fields": fields, "txn_keys": sorted(txn_keys), "plans": plans},
+                after=None,
+                warnings=[],
+                correlation_id=proposal_token,
+                status="pending",
+            )
+        )
+    else:
+        # Resuming an incomplete attempt: trust the plan decided the first time
+        # rather than re-deriving it. Re-checking eligibility now would be wrong for
+        # a transaction this same operation already repointed in an earlier partial
+        # attempt -- its line now points at the invoice this operation itself
+        # created, which very much exists, and a fresh eligibility check would
+        # wrongly read that as "already fixed by someone else" and refuse it.
+        plans = pending_entry["submitted"]["plans"]
+
+    created_entry = next((e for e in trail if e["operation"] == "create"), None)
+    if created_entry is not None:
+        new_key = created_entry["key"]
+        created = {
+            "status": "ok",
+            "correlation_id": proposal_token,
+            "resource": invoice_resource,
+            "key": new_key,
+            "before": created_entry["before"],
+            "after": created_entry["after"],
+            "warnings": created_entry["warnings"],
         }
+    else:
+        plain_token = _proposal_token(invoice_resource, None, fields)
+        try:
+            created = await apply_correction(
+                client,
+                policy,
+                plain_token,
+                invoice_resource,
+                fields,
+                key=None,
+                correlation_id=proposal_token,
+            )
+        except (ManagerApiError, ManagerUnavailableError) as exc:
+            raise type(exc)(_partial_reconstruction_message(None, exc)) from exc
+        new_key = created["key"]
+        if not new_key:
+            return {
+                "status": "partial",
+                "reason": "Invoice create returned no Key.",
+                "created": created,
+            }
+
+    done_keys = {e["key"] for e in trail if e["operation"] == "reallocate"}
 
     reallocations: list[dict[str, Any]] = []
     for plan in plans:
@@ -689,21 +782,52 @@ async def _apply_invoice_reconstruction(
                 {"key": plan["key"], "status": plan["status"], "reason": plan["reason"]}
             )
             continue
+        if plan["key"] in done_keys:
+            # Already repointed in an earlier attempt at this same operation.
+            reallocations.append(
+                {
+                    "key": plan["key"],
+                    "status": "ok",
+                    "detail": {"resumed_from_audit_log": True, "reallocated_to": new_key},
+                }
+            )
+            continue
         try:
             detail = await _reallocate(
-                client, policy, txn_resource, plan["key"], plan["line_index"], str(new_key)
+                client,
+                policy,
+                txn_resource,
+                plan["key"],
+                plan["line_index"],
+                str(new_key),
+                correlation_id=proposal_token,
             )
         except (ManagerApiError, ManagerUnavailableError) as exc:
             raise type(exc)(_partial_reconstruction_message(str(new_key), exc)) from exc
         reallocations.append({"key": plan["key"], "status": "ok", "detail": detail})
 
     verification = await verify_invoice_balance(client, invoice_resource, str(new_key))
-    return {
+    result = {
         "status": "ok" if all(r["status"] == "ok" for r in reallocations) else "partial",
         "invoice": created,
         "reallocations": reallocations,
         "verification": verification,
     }
+    if result["status"] == "ok":
+        record_event(
+            AuditEntry(
+                operation="reconstruct",
+                resource=invoice_resource,
+                key=new_key,
+                before=None,
+                submitted={"txn_keys": sorted(txn_keys)},
+                after=result,
+                warnings=[],
+                correlation_id=proposal_token,
+                status="complete",
+            )
+        )
+    return result
 
 
 async def apply_purchase_invoice_reconstruction(
@@ -738,6 +862,82 @@ async def apply_sales_invoice_reconstruction(
         fields,
         receipt_keys,
     )
+
+
+# --------------------------------------------------------------------------
+# Listing incomplete reconstructions (read-only; local audit log only)
+# --------------------------------------------------------------------------
+
+
+def list_incomplete_reconstructions() -> dict[str, Any]:
+    """Every invoice-reconstruction attempt with a "pending" audit entry and no
+    matching "complete" one, from the local audit log only -- no Manager API call.
+
+    This is the tool that replaces reading the audit log file on the server host by
+    hand to find an orphaned invoice's key after a partial failure (see
+    docs/write-path-spike.md). It reports the state _apply_invoice_reconstruction
+    itself would resume from if called again with the same proposal_token.
+    """
+    events = read_events()
+    by_token: dict[str, list[dict[str, Any]]] = {}
+    for event in events:
+        correlation_id = event.get("correlation_id")
+        if event.get("operation") == "reconstruct" and correlation_id:
+            by_token.setdefault(correlation_id, []).append(event)
+        elif event.get("operation") in ("create", "reallocate") and correlation_id:
+            by_token.setdefault(correlation_id, []).append(event)
+
+    now = time.time()
+    incomplete: list[dict[str, Any]] = []
+    for token, trail in by_token.items():
+        pending = next(
+            (e for e in trail if e["operation"] == "reconstruct" and e["status"] == "pending"),
+            None,
+        )
+        if pending is None:
+            continue  # a create/reallocate correlation_id that isn't a reconstruction at all
+        if any(e["operation"] == "reconstruct" and e["status"] == "complete" for e in trail):
+            continue
+        created = next((e for e in trail if e["operation"] == "create"), None)
+        done_keys = sorted({e["key"] for e in trail if e["operation"] == "reallocate"})
+        plans = pending["submitted"].get("plans", [])
+        pending_keys = sorted(
+            p["key"] for p in plans if p["status"] == "pending" and p["key"] not in done_keys
+        )
+        incomplete.append(
+            {
+                "proposal_token": token,
+                "resource": pending["resource"],
+                "cited_transaction_keys": sorted(pending["submitted"].get("txn_keys", [])),
+                "started_at": pending["timestamp"],
+                "age_seconds": round(now - pending["timestamp"], 1),
+                "created_invoice_key": created["key"] if created else None,
+                "transactions_done": done_keys,
+                "transactions_pending": pending_keys,
+            }
+        )
+    incomplete.sort(key=lambda row: row["started_at"])
+    return {"incomplete_reconstructions": incomplete, "count": len(incomplete)}
+
+
+def register_reconstruction_listing_tool(mcp: Any) -> None:
+    """Registered unconditionally, like the other read tools: it only reads the local
+    audit log and makes no Manager API call, so it needs no scope.
+    """
+    _corr = _sys.modules[__name__]
+
+    @mcp.tool(
+        description=(
+            "Invoice-reconstruction attempts (propose_*_invoice_reconstruction / "
+            "apply_*_invoice_reconstruction) that started but have not completed: "
+            "the created invoice's key if one exists, which cited transactions have "
+            "been repointed, and which remain. Calling apply again with the same "
+            "proposal_token resumes from exactly this state rather than starting "
+            "over. Reads only the local audit log; makes no Manager API call."
+        )
+    )
+    def list_incomplete_reconstructions() -> dict[str, Any]:
+        return _corr.list_incomplete_reconstructions()
 
 
 # --------------------------------------------------------------------------

@@ -156,7 +156,7 @@ async def _fetch_report(name: str, **period: Any) -> dict[str, Any]:
 
 @_local_read_tools.tool(
     description=(
-        "List curated Manager.io capabilities. Default is read-only (29 tools). "
+        "List curated Manager.io capabilities. Default is read-only (30 tools). "
         "Task tools register when write scopes match; CRUD tools are deprecated "
         "unless raw scope is set."
     )
@@ -377,6 +377,9 @@ _diag.register_diagnostic_tools(_read_tools, lambda: get_client())
 
 
 _recon.register_reconciliation_tools(_read_tools, lambda: get_client())
+
+
+_corr.register_reconstruction_listing_tool(_read_tools)
 
 
 async def _persist_and_verify(

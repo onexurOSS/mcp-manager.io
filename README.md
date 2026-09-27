@@ -82,19 +82,20 @@ Never commit your API key. Keep it in the environment of the MCP client or in a 
 
 Valid scopes are `quotes`, `orders`, `parties`, `items`, `sales`, `purchases`, `banking`, `payroll` and `ledger`, plus `raw`, an escape hatch that enables the full create and update (or delete) set for every domain. A recommended starting point for day-to-day bookkeeping is `banking,sales,parties`.
 
-With no scopes set, 29 read-only tools are registered. Enabling a scope registers only the tools for that domain. Scopes are additive and independent, and unknown scope names are refused at startup. With every write and delete scope enabled, up to 125 tools are registered.
+With no scopes set, 30 read-only tools are registered. Enabling a scope registers only the tools for that domain. Scopes are additive and independent, and unknown scope names are refused at startup. With every write and delete scope enabled, up to 126 tools are registered.
 
 Every request that would change Manager passes a policy check first. Requests to paths such as access tokens, the chart of accounts, tax codes, exchange rates, starting balances, bank reconciliation, custom fields, email settings and the customer portal are permanently denied, whatever scopes are enabled.
 
 ## 4. Tool descriptions
 
-**Read tools (registered by default, 29 in total)**
+**Read tools (registered by default, 30 in total)**
 
 - Discovery and raw access: `list_resources`, `list_records`, `get_record`, `get_fixed_asset` and `get_server_info` (server identity, process, git state, registered tools and active scopes).
 - Legacy report shortcuts: `aged_receivables`, `aged_payables`, `bank_balances`, `trial_balance`, `profit_and_loss`, `balance_sheet` and `tax_summary`. These return Manager's current state or raw feeds and are not finished reports (see [Reporting limitations](https://github.com/onexurOSS/mcp-manager.io#5-reporting-limitations)).
 - Reporting layer (`reporting.py`): `manager_report_catalogue`, `get_report_definition`, `ledger_transactions`, `reconstructed_trial_balance`, `reconstructed_profit_and_loss`, `reconstructed_aged_receivables` and `reconstructed_aged_payables`.
 - Diagnostics (`diagnostics.py`): `find_records`, `find_broken_invoice_references`, `find_unallocated_transactions`, `find_duplicate_transactions`, `verify_invoice_balance`, `account_ledger`, `bank_activity`, `find_suspense_candidate_accounts` and `general_ledger_summary`.
 - Reconciliation (`reconciliation.py`): `reconcile_period`.
+- `list_incomplete_reconstructions` (`corrections.py`): invoice-reconstruction attempts that started but have not completed, from the local audit log only.
 
 **Write tools (registered only when the matching scope is enabled)**
 
