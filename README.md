@@ -1,747 +1,153 @@
 # onexurOSS Manager MCP
 
-First release under the onexurOSS identity (v1.0.0), based on the upstream [manager-mcp](https://github.com/flumpiey/manager-mcp) project (MIT). The PyPI package is `mcp-manager.io`; the module and commands remain `manager_mcp` / `manager-mcp`.
+An MCP (Model Context Protocol) server that connects AI assistants such as Claude and ChatGPT to a [Manager](https://www.manager.io) accounting instance. It exposes Manager's data and operations as a set of scoped tools. The default is read-only, with reporting, diagnostic and reconciliation tools available out of the box and every write capability behind explicit configuration.
 
-<!-- mcp-name: io.github.onexurOSS/manager-mcp -->
+This project began as a fork of [manager-mcp](https://github.com/flumpiey/manager-mcp) 0.2.6. See [Attribution](#7-attribution) below.
 
-**MCP server for self-hosted [Manager.io](https://www.manager.io/): ask your AI about invoices, balances, and books.**
+## 1. Project description
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-[![Python](https://img.shields.io/badge/python-%3E%3D3.10-blue.svg)](https://www.python.org/)
-[![MCP](https://img.shields.io/badge/MCP-stdio-green.svg)](https://modelcontextprotocol.io/)
-[![CI](https://github.com/onexurOSS/mcp-manager.io/actions/workflows/ci.yml/badge.svg)](https://github.com/onexurOSS/mcp-manager.io/actions/workflows/ci.yml)
+onexurOSS Manager MCP lets an AI assistant read and, where explicitly permitted, act on a Manager accounting instance through a structured tool interface rather than free-form API calls. The server enforces a tiered permission model so that read access and write access are each opted into separately, and delete access is opted into separately again.
 
-## Project status
+Typical uses:
 
-- Version **1.0.0**, the first onexurOSS release. It is based on upstream manager-mcp 0.2.6 and adds the features listed under [What is new](#what-is-new-since-upstream-026).
-- **Not yet published.** At the time of writing this repository has no GitHub Release, no PyPI package (`mcp-manager.io`) and no prebuilt `.mcpb` bundle. The install commands in this README use `mcp-manager.io` and will work once it is published. Until then, install from GitHub:
+- Ask an assistant to explain a balance, find unpaid invoices, or summarise account activity.
+- Run reconciliation and diagnostic checks (duplicate transactions, unallocated payments, broken invoice references, suspense account candidates) without writing a script.
+- Rebuild a trial balance, profit and loss or aged balances as at a past date from Manager's ledger, clearly labelled as a reconstruction and not an official report.
+- Propose and, after review, apply corrections to specific transaction types, always through an explicit propose then apply pattern rather than a direct write.
 
-  ```bash
-  uvx --from git+https://github.com/onexurOSS/mcp-manager.io manager-mcp
-  ```
+Nothing that changes Manager is registered by default. Every write request is also checked against a permanent denylist before any scope is consulted (see [Configuration](#3-configuration)).
 
-  In a client config, replace the args `["--from", "mcp-manager.io", "manager-mcp"]` with `["--from", "git+https://github.com/onexurOSS/mcp-manager.io", "manager-mcp"]`.
-- The releases 0.1.x to 0.2.6 in [docs/upstream-history.md](docs/upstream-history.md) belong to the upstream project. They and their artifacts exist upstream, not in this repository.
+## 2. Installation
 
-### What is new since upstream 0.2.6
+The package is named `mcp-manager.io`, the Python module is `manager_mcp`, and the commands are `manager-mcp` and `manager-mcp-dev`. It requires Python 3.10 or later and [uv](https://docs.astral.sh/uv/).
 
-- **Read-only reporting layer:** report catalogue, report definitions (settings only), account-level historical ledger access, and clearly labelled reconstructed trial balance, profit and loss, and aged receivables/payables. See [Reporting and authority](#reporting-and-authority) and [docs/reporting.md](docs/reporting.md).
-- **Honest date handling:** tools that only return current data now reject `from_date`/`to_date` instead of returning today's data, and legacy report tools carry a `semantics` block that says what they really are.
-- **Reconciliation and diagnostics:** ten read-only tools (see [Reconciliation & corrections](#reconciliation--corrections)).
-- **Corrective tools with an audit log:** dry-run then apply, payment/receipt reallocation, missing-invoice reconstruction, audited void.
-- **Fixed assets:** read collections `fixed_assets` and `tax_codes`, `get_fixed_asset`, plus `create_fixed_asset` and `update_fixed_asset` under the `ledger` scope.
-- **`get_server_info`:** process id, start time, git state and registered tools, to prove which process you are talking to.
-- **Dev supervisor (opt-in):** automatic restart on source changes, see [Development](#development).
-- **Capability matrix generator:** `scripts/build_capability_matrix.py` builds a per-endpoint matrix from an API description fetched from your own instance. No matrix or Manager API description is shipped.
-
-## What is Manager.io?
-
-[Manager.io](https://www.manager.io/) is free, self-hosted accounting software for Windows, macOS, and Linux (also available as [Cloud Edition](https://www.manager.io/cloud-edition)). It covers sales, purchases, banking, payroll, and the full ledger, with an HTTP API (`/api2`) for automation.
-
-This project wires that API into the [Model Context Protocol](https://modelcontextprotocol.io/) so Cursor, Claude, VS Code Copilot, and other MCP hosts can query your live books in natural language.
-
-Useful Manager.io links:
-
-- [Download](https://www.manager.io/download)
-- [Guides](https://www.manager.io/guides)
-- [Forum](https://forum.manager.io)
-- [Releases](https://www.manager.io/releases)
-
-## What this server does
-
-Default is **read-only**. With no write scopes it registers **29 read tools**:
-
-- **Discovery and records (5):** `list_resources`, `list_records`, `get_record`, `get_fixed_asset`, `get_server_info`. `list_records`/`get_record` cover 27 collections.
-- **Current-state and raw-feed shortcuts (7):** `aged_receivables` and `aged_payables` (current balances only, not aged, no dates), `bank_balances` (current), `trial_balance`, `profit_and_loss`, `balance_sheet` (raw transaction rows, not reports), `tax_summary` (raw rows, no dates).
-- **Diagnostics (10):** duplicate detection, missing-invoice detection, invoice-balance verification, per-account ledger, bank activity and a period reconciliation report.
-- **Reporting layer (7):** `manager_report_catalogue`, `get_report_definition`, `ledger_transactions`, `reconstructed_trial_balance`, `reconstructed_profit_and_loss`, `reconstructed_aged_receivables`, `reconstructed_aged_payables`. Reconstructions are always `authoritative: false`.
-
-Opt-in, by write scope:
-
-- **Task tools:** intent-shaped writes such as `record_customer_payment`, `issue_sales_invoice`, `record_customer_deposit`.
-- **Corrective tools:** `propose_correction`/`apply_correction` (dry run before write), `reallocate_payment_line`/`reallocate_receipt_line`, and the missing-invoice reconstruction workflow. See [Reconciliation & corrections](#reconciliation--corrections).
-- **Fixed-asset tools:** `create_fixed_asset` and `update_fixed_asset` (`ledger` scope).
-- **Deprecated CRUD tools:** per-resource `create_*` / `update_*` / `delete_*` still register under scopes in 1.0.0. Upstream planned to remove them in its 0.3.0; that removal has not been done here. Prefer task tools.
-- **`raw`:** restores the full CRUD set for advanced use. It does not lift the denylist.
-- **Hard denylist:** access tokens, chart of accounts forms, tax/currency, email templates and similar high-risk paths are blocked for every write and delete, including under `raw`. Every non-GET request is checked against the denylist before any scope check.
-
-Tool counts depend on scopes. No scopes: 29. `parties,sales,purchases,banking,ledger`: 78. All nine domain scopes as write and delete scopes: 125 (counted from the registered tools).
-
-Transport is **stdio**. No HTTP server. No global install is required if you use [`uv`](https://docs.astral.sh/uv/) / `uvx`.
-
-## Branding / icons
-
-This project ships no Manager.io logos or icons and the server advertises no `serverInfo.icons`, so hosts show their default icon. Manager.io is a trademark of its owner; this project is independent and not affiliated with or endorsed by Manager.io.
-
-- **Claude Desktop Extension:** pack [`mcpb/`](mcpb/). See Installation → Claude Desktop below.
-- **Claude.ai remote connectors:** Claude.ai uses the **root-domain favicon** of the connector URL. If you host a remote MCP later, serve your own favicon at the registrable domain root.
-
-## Requirements
-
-- Python ≥ 3.10 (pulled in automatically by `uvx`)
-- [uv](https://docs.astral.sh/uv/) (provides `uvx`)
-- A reachable Manager.io API: `MANAGER_API_URL` + `MANAGER_API_KEY`
-
-### Access token
-
-1. In Manager, open **Settings → Access Tokens**.
-2. Create a token and copy the value into `MANAGER_API_KEY`.
-3. Set `MANAGER_API_URL` to your API base (desktop often `http://127.0.0.1:55667/api2`).
-
-`manager-mcp` sends the token as the `X-API-KEY` header. Full walkthrough: [Access Tokens](https://www.manager.io/guides/access-tokens).
-
-## How the connection works
-
-The MCP server connects directly to the Manager HTTP API. It does not connect to
-Manager's database and it does not expose an HTTP server of its own.
-
-```text
-MCP host (stdio)
-    -> manager-mcp
-    -> GET http(s)://<manager-host>/api2/...
-       X-API-KEY: <Manager access token>
-    -> Manager business data
-```
-
-Configure these environment variables in the MCP host configuration:
-
-- `MANAGER_API_URL`: the Manager API base URL, normally ending in `/api2`.
-- `MANAGER_API_KEY`: an Access Token created in Manager. The server sends it as
-  the `X-API-KEY` request header and never logs it.
-
-For a local Manager server, the URL may look like:
-
-```text
-http://127.0.0.1:55667/api2
-```
-
-For a remote or self-hosted Manager server, replace the host and port while
-keeping the `/api2` suffix when that server requires it. The MCP host starts
-`manager-mcp` as a stdio child process; the API URL and key are passed to that
-process through its `env` block. The MCP then makes authenticated API requests
-on demand when a tool is called.
-
-### Verify the connection without writing
-
-With the same variables available in your shell, use a read-only API request:
+Until the first release is published to PyPI, run it from a clone:
 
 ```bash
-curl -sS \
-  -H "X-API-KEY: $MANAGER_API_KEY" \
-  "$MANAGER_API_URL/chart-of-accounts?pageSize=1"
-```
-
-A successful response confirms that the URL is reachable, the token is valid,
-and the token can read the selected Manager business. Keep
-`MANAGER_MCP_WRITE_SCOPES` and `MANAGER_MCP_DELETE_SCOPES` unset for a
-read-only MCP connection.
-
-## Quick start
-
-Until the package is published (see [Project status](#project-status)), run it from GitHub with [`uvx`](https://docs.astral.sh/uv/guides/tools/):
-
-```bash
-uvx --from git+https://github.com/onexurOSS/mcp-manager.io manager-mcp
-```
-
-Once `mcp-manager.io` is on PyPI the same command becomes:
-
-```bash
-uvx --from mcp-manager.io manager-mcp
-```
-
-Paste a client config below, set `MANAGER_API_URL` / `MANAGER_API_KEY`, restart the host, then ask: *“Who owes me money?”* or *“Show bank balances.”*
-
-From a local clone (development): `uv run --directory /path/to/manager-mcp manager-mcp`.
-
-## Installation
-
-Configs below use the package name `mcp-manager.io`, which is **not yet published** to PyPI. Until it is, use the GitHub source in the args instead: `"--from", "git+https://github.com/onexurOSS/mcp-manager.io", "manager-mcp"`. The command they run is `manager-mcp`. Leave write-scope env vars unset for read-only.
-
-<details>
-<summary><strong>Cursor</strong></summary>
-
-**Plugin (Configure UI for URL, key, and scopes):** this repo is a Cursor plugin via [`.cursor-plugin/plugin.json`](.cursor-plugin/plugin.json) + root [`mcp.json`](mcp.json).
-
-1. Symlink or copy the clone to `~/.cursor/plugins/local/manager-mcp` (Windows: `%USERPROFILE%\.cursor\plugins\local\manager-mcp`).
-2. Reload the window.
-3. Open **Plugins → Configure** on `manager-mcp`. Set **Manager API URL** and **Manager API key**. Leave **Write scopes** / **Delete scopes** empty for read-only, or paste a CSV such as `quotes` or `quotes,orders`.
-4. Confirm the `manager` MCP server is enabled under Customize / MCP.
-
-Marketplace listing is a separate submit at [cursor.com/marketplace/publish](https://cursor.com/marketplace/publish).
-
-**Manual `mcp.json`:** project `.cursor/mcp.json` or user-wide `~/.cursor/mcp.json`.
-
-From PyPI:
-
-```json
-{
-  "mcpServers": {
-    "manager": {
-      "type": "stdio",
-      "command": "uvx",
-      "args": ["--from", "mcp-manager.io", "manager-mcp"],
-      "env": {
-        "MANAGER_API_URL": "http://127.0.0.1:55667/api2",
-        "MANAGER_API_KEY": "your-token"
-      }
-    }
-  }
-}
-```
-
-Local editable (dev):
-
-```json
-{
-  "mcpServers": {
-    "manager": {
-      "type": "stdio",
-      "command": "uv",
-      "args": ["run", "--directory", "/path/to/manager-mcp", "manager-mcp"],
-      "env": {
-        "MANAGER_API_URL": "http://127.0.0.1:55667/api2",
-        "MANAGER_API_KEY": "your-token"
-      }
-    }
-  }
-}
-```
-
-Optional scoped writes in the `env` block:
-
-```json
-"MANAGER_MCP_WRITE_SCOPES": "quotes",
-"MANAGER_MCP_DELETE_SCOPES": "quotes"
-```
-
-Restart Cursor after saving. Confirm `manager` under MCP settings.
-
-</details>
-
-<details>
-<summary><strong>Claude Desktop</strong></summary>
-
-**Desktop Extension (`.mcpb`):** not yet published. There is no GitHub Release or prebuilt `mcpb.mcpb` in this repository. Build it yourself as shown below; once a release exists the bundle will be attached to it.
-
-1. Open Claude Desktop → **Settings → Extensions**.
-2. Open **Advanced settings** → **Install Extension…**
-3. Select the `mcpb.mcpb` you built. Review permissions, enter **Manager API URL** and **Manager API key**, then click **Install**.
-4. Leave **Write scopes** and **Delete scopes** empty for read-only.
-5. Restart Claude Desktop if tools do not appear.
-
-Build your own bundle from a clone:
-
-```bash
-npx @anthropic-ai/mcpb pack mcpb
-```
-
-On Windows, double-click often does nothing and dragging the file into chat attaches it to the conversation instead of installing it. Use **Install Extension…** in Settings.
-
-**Manual `mcp.json` config:** edit the Claude Desktop config, then restart the app.
-
-| OS | Path |
-|----|------|
-| macOS | `~/Library/Application Support/Claude/claude_desktop_config.json` |
-| Windows | `%APPDATA%\Claude\claude_desktop_config.json` |
-
-```json
-{
-  "mcpServers": {
-    "manager": {
-      "command": "uvx",
-      "args": ["--from", "mcp-manager.io", "manager-mcp"],
-      "env": {
-        "MANAGER_API_URL": "http://127.0.0.1:55667/api2",
-        "MANAGER_API_KEY": "your-token"
-      }
-    }
-  }
-}
-```
-
-Local clone:
-
-```json
-{
-  "mcpServers": {
-    "manager": {
-      "command": "uv",
-      "args": ["run", "--directory", "/path/to/manager-mcp", "manager-mcp"],
-      "env": {
-        "MANAGER_API_URL": "http://127.0.0.1:55667/api2",
-        "MANAGER_API_KEY": "your-token"
-      }
-    }
-  }
-}
-```
-
-</details>
-
-<details>
-<summary><strong>Claude Code</strong></summary>
-
-Add via CLI:
-
-```bash
-claude mcp add manager --env MANAGER_API_URL=http://127.0.0.1:55667/api2 --env MANAGER_API_KEY=your-token -- uvx --from mcp-manager.io manager-mcp
-```
-
-Or edit `~/.claude.json` / project MCP config:
-
-```json
-{
-  "mcpServers": {
-    "manager": {
-      "command": "uvx",
-      "args": ["--from", "mcp-manager.io", "manager-mcp"],
-      "env": {
-        "MANAGER_API_URL": "http://127.0.0.1:55667/api2",
-        "MANAGER_API_KEY": "your-token"
-      }
-    }
-  }
-}
-```
-
-</details>
-
-<details>
-<summary><strong>VS Code / GitHub Copilot</strong></summary>
-
-Create `.vscode/mcp.json` in your project root:
-
-```json
-{
-  "servers": {
-    "manager": {
-      "type": "stdio",
-      "command": "uvx",
-      "args": ["--from", "mcp-manager.io", "manager-mcp"],
-      "env": {
-        "MANAGER_API_URL": "http://127.0.0.1:55667/api2",
-        "MANAGER_API_KEY": "your-token"
-      }
-    }
-  }
-}
-```
-
-Local editable:
-
-```json
-{
-  "servers": {
-    "manager": {
-      "type": "stdio",
-      "command": "uv",
-      "args": ["run", "--directory", "/path/to/manager-mcp", "manager-mcp"],
-      "env": {
-        "MANAGER_API_URL": "http://127.0.0.1:55667/api2",
-        "MANAGER_API_KEY": "your-token"
-      }
-    }
-  }
-}
-```
-
-Reload the window. Open Copilot Chat and confirm the `manager` tools are available.
-
-</details>
-
-<details>
-<summary><strong>Windsurf</strong></summary>
-
-Edit `~/.codeium/windsurf/mcp_config.json` (macOS/Linux) or the Windsurf MCP settings UI:
-
-```json
-{
-  "mcpServers": {
-    "manager": {
-      "command": "uvx",
-      "args": ["--from", "mcp-manager.io", "manager-mcp"],
-      "env": {
-        "MANAGER_API_URL": "http://127.0.0.1:55667/api2",
-        "MANAGER_API_KEY": "your-token"
-      }
-    }
-  }
-}
-```
-
-Restart Windsurf after saving.
-
-</details>
-
-<details>
-<summary><strong>Zed</strong></summary>
-
-Add under `context_servers` in Zed `settings.json` (Agent Panel → settings also works):
-
-```json
-{
-  "context_servers": {
-    "manager": {
-      "command": "uvx",
-      "args": ["--from", "mcp-manager.io", "manager-mcp"],
-      "env": {
-        "MANAGER_API_URL": "http://127.0.0.1:55667/api2",
-        "MANAGER_API_KEY": "your-token"
-      }
-    }
-  }
-}
-```
-
-</details>
-
-<details>
-<summary><strong>Cline</strong></summary>
-
-Edit the Cline MCP settings file (`cline_mcp_settings.json` via the Cline MCP UI):
-
-```json
-{
-  "mcpServers": {
-    "manager": {
-      "command": "uvx",
-      "args": ["--from", "mcp-manager.io", "manager-mcp"],
-      "env": {
-        "MANAGER_API_URL": "http://127.0.0.1:55667/api2",
-        "MANAGER_API_KEY": "your-token"
-      }
-    }
-  }
-}
-```
-
-</details>
-
-<details>
-<summary><strong>Continue</strong></summary>
-
-In `.continue/config.yaml`:
-
-```yaml
-mcpServers:
-  - name: manager
-    command: uvx
-    args:
-      - --from
-      - mcp-manager.io
-      - manager-mcp
-    env:
-      MANAGER_API_URL: http://127.0.0.1:55667/api2
-      MANAGER_API_KEY: your-token
-```
-
-</details>
-
-<details>
-<summary><strong>Generic / any stdio MCP host</strong></summary>
-
-Any host that can spawn a stdio MCP server:
-
-| Field | Value |
-|-------|-------|
-| Command | `uvx` |
-| Args | `--from mcp-manager.io manager-mcp` |
-| Env | `MANAGER_API_URL`, `MANAGER_API_KEY` (+ optional write scopes) |
-
-```bash
-uvx --from mcp-manager.io manager-mcp
-```
-
-Dev from a clone: `uv run --directory /path/to/manager-mcp manager-mcp`.
-
-`npx` only runs npm packages. This is a Python package; use `uvx`.
-
-</details>
-
-## Environment
-
-| Variable | Required | Notes |
-|----------|----------|-------|
-| `MANAGER_API_URL` | yes | Opaque base URL (include `/api2` when needed) |
-| `MANAGER_API_KEY` | yes | Sent as `X-API-KEY`; never logged |
-| `MANAGER_MCP_WRITE_SCOPES` | no | Comma-separated domains for create/update. Empty = no writes. |
-| `MANAGER_MCP_DELETE_SCOPES` | no | Comma-separated domains for delete only. Never implied by WRITE_SCOPES. |
-| `MANAGER_MCP_DEV_SUPERVISOR` | no | `1` runs the development supervisor (auto restart on source changes). Leave unset in production. |
-| `MANAGER_MCP_AUDIT_LOG_PATH` | no | Local JSONL audit trail for corrective tools (before/after state). Default `~/.manager_mcp/audit_log.jsonl`. |
-
-Valid scopes: `quotes`, `orders`, `parties`, `items`, `sales`, `purchases`, `banking`, `payroll`, `ledger`, `raw`. No wildcards (`*`, `all`).
-
-**Recommended** (covers most bookkeeping without registering 125 tools):
-
-```json
-"MANAGER_MCP_WRITE_SCOPES": "banking,sales,parties",
-"MANAGER_MCP_DELETE_SCOPES": "sales,banking"
-```
-
-Default with no scopes: **29 tools** (all read-only). `parties,sales,purchases,banking,ledger`: **78**. All nine domain scopes as write and delete scopes: **125**. Use `raw` only when you need the full CRUD escape hatch; the denylist still applies.
-
-Legacy `MANAGER_MCP_ALLOW_WRITES` / `ALLOW_WRITES` / `MANAGER_MCP_WRITES` hard-fail if set. Use the scoped vars instead.
-
-See [`.env.example`](.env.example). Prefer a secret manager for the API key in production configs.
-
-## Write scopes and task tools
-
-When a scope is listed in `MANAGER_MCP_WRITE_SCOPES`, the server registers **task tools** for that domain plus deprecated CRUD twins. `MANAGER_MCP_DELETE_SCOPES` enables `void_document` and `delete_*` per domain.
-
-### Task tools (preferred)
-
-| Tool | Scopes | Purpose |
-|------|--------|---------|
-| `create_customer`, `create_supplier` | parties | Single-resource party setup |
-| `issue_sales_invoice` | sales | Issue invoice with inline lines |
-| `issue_purchase_invoice` | purchases | Issue purchase invoice |
-| `issue_quote` | quotes | Issue sales or purchase quote |
-| `convert_quote_to_invoice` | quotes + sales | Convert quote to invoice |
-| `record_customer_payment` | banking | Receipt + invoice allocation |
-| `record_supplier_payment` | banking | Payment + invoice allocation |
-| `record_expense` | payroll and/or purchases | Expense claim or purchase invoice |
-| `transfer_between_accounts` | banking | Inter-account transfer |
-| `post_journal_entry` | ledger | Generic journal entry |
-| `void_document` | matching delete scope | Void by resource name + key |
-| `record_customer_deposit` | banking | Deposit before invoice exists |
-| `issue_deposit_invoice` | quotes | Deposit document (quote) |
-| `apply_deposit_to_invoice` | ledger | Apply deposit via journal |
-| `create_fixed_asset` | ledger | Create a fixed asset record (acquisition cost comes from purchase invoice lines tagged with the asset; cost and read-only fields are rejected) |
-| `update_fixed_asset` | ledger | Update fixed asset metadata only |
-
-Bodies for composite tools use Manager-native JSON where noted. Clone `get_record` templates; do not invent field names.
-
-### Deprecated CRUD (deprecated since 0.2.0, still present)
-
-Per-resource `create_*` / `update_*` / `delete_*` still register when their domain scope is enabled. Descriptions are prefixed `[DEPRECATED in 0.2.0; use task tools]` except `create_customer` / `create_supplier`. Set `raw` in `MANAGER_MCP_WRITE_SCOPES` to register CRUD without deprecation prefixes.
-
-| Scope | Resources (CRUD when enabled) |
-|-------|-------------------------------|
-| `quotes` | sales_quotes, purchase_quotes |
-| `orders` | sales_orders, purchase_orders |
-| `parties` | customers, suppliers |
-| `items` | inventory_items, non_inventory_items |
-| `sales` | sales_invoices, credit_notes, delivery_notes |
-| `purchases` | purchase_invoices, debit_notes, goods_receipts |
-| `banking` | receipts, payments, inter_account_transfers, bank_accounts |
-| `payroll` | employees, payslips, expense_claims |
-| `ledger` | journal_entries, depreciation_entries, amortization_entries |
-
-Example with recommended scopes only:
-
-```json
-"MANAGER_MCP_WRITE_SCOPES": "banking,sales,parties",
-"MANAGER_MCP_DELETE_SCOPES": "sales"
-```
-
-**Denylist (always blocked):** access-token forms, chart-of-accounts / `*-account-form` (except bank-or-cash), bank reconciliation, customer portal, starting balances, tax codes, exchange rates, currencies, custom fields/buttons, themes, email templates/settings.
-
-## Customer deposit workflow
-
-A **deposit is not revenue**. Money received before delivery must not be booked to an income account. Confirm tax/VAT treatment with your accountant.
-
-1. Ensure a **Customer deposits** bank/cash account exists in Manager (Settings → Bank and Cash Accounts).
-2. `record_customer_deposit` - posts cash to that account. If the account is missing, the tool returns `precondition_failed` with exact setup steps (Option A: guide only, no auto-create).
-3. `issue_deposit_invoice` (optional) - quote styled as a deposit document for the customer.
-4. `issue_sales_invoice` when the real invoice is raised.
-5. `apply_deposit_to_invoice` - journal entry moving deposit balance to the invoice (clone an existing journal via `get_record`).
-
-Required scopes: `banking`, `quotes` (deposit doc), `ledger` (apply), `sales` (final invoice via MCP).
-
-## Reconciliation & corrections
-
-**Manager is the sole source of truth.** Every tool below classifies and matches using Manager's own structured fields (transaction type, Manager Key, structured `Account`, structured invoice allocation, structured `Customer`/`Supplier`, date, amount, `Lines`), never free-text `Description`/payee text, and never amount-only or name-similarity matching. No external system is consulted by any of these tools.
-
-### Read-only diagnostics (always available; no scope required)
-
-| Tool | Purpose |
-|------|---------|
-| `find_records` | Exact-match structured filter over a collection (Manager's own query API has no field-value filter) |
-| `find_broken_invoice_references` | Payments/receipts whose AR/AP invoice-Key line reference doesn't resolve to any current invoice (the general "missing invoice" pattern) |
-| `find_unallocated_transactions` | Receipts/payments with no AR/AP invoice allocation on any line |
-| `find_duplicate_transactions` | Exact-match duplicate detector (party + Reference + Date + total + line signature must ALL match; partial matches are `unresolved`, never a duplicate) |
-| `verify_invoice_balance` | Self-computed invoice total vs. allocated receipts/payments, with contributing Keys |
-| `account_ledger` | Every structured line across all transaction types for one chart-of-accounts account (Manager has no native GL-by-account endpoint) |
-| `bank_activity` | Money-in/out for one bank/cash account, assembled from receipts/payments/transfers |
-| `find_suspense_candidate_accounts` | Chart-of-accounts rows whose structured `Name` matches placeholder-account naming (candidates for human confirmation only) |
-| `general_ledger_summary` | Single-pass debit/credit balance check grouped by account |
-| `reconcile_period` | Composes all of the above into one PERIOD reconciliation report; every exception carries exact Manager Keys. P&L/Balance Sheet/Tax Summary sections surface the raw Manager transactions feed with an explicit notice, since Manager API2 does not expose computed report totals in this version, never a fabricated total. |
-
-### Corrective tools (opt-in; reuse the write/delete scopes above)
-
-| Tool | Scopes | Purpose |
-|------|--------|---------|
-| `propose_correction` | any write scope | Dry run: validate and preview a create/update without writing; returns a `proposal_token` |
-| `apply_correction` | matching resource scope | Commit a proposal; refuses if `proposal_token` doesn't match the exact `(resource, key, fields)` |
-| `reallocate_payment_line` | banking | Repoint one payment line's `AccountsPayablePurchaseInvoice` to a different, verified-to-exist purchase invoice |
-| `reallocate_receipt_line` | banking | Repoint one receipt line's `AccountsReceivableSalesInvoice` to a different, verified-to-exist sales invoice |
-| `propose_purchase_invoice_reconstruction` / `apply_purchase_invoice_reconstruction` | purchases + banking | Missing-invoice workflow: investigate payments citing a non-existent purchase invoice, refuse to guess the per-line breakdown, create the invoice once you supply real line evidence, then reallocate the citing payments and verify the balance |
-| `propose_sales_invoice_reconstruction` / `apply_sales_invoice_reconstruction` | sales + banking | Same workflow for receipts citing a missing sales invoice |
-| `snapshot_and_void` | matching delete scope | Void a document only after logging its full before-state and confirming nothing else still references it; requires an explicit `confirmed_duplicate_of` justification, never deletes a merely "unexplained" record |
-
-Every corrective write appends a before/after entry to a local audit log (`MANAGER_MCP_AUDIT_LOG_PATH`, default `~/.manager_mcp/audit_log.jsonl`) with a `correlation_id` linking a propose/apply pair.
-
-**Missing-invoice workflow example** (the general missing-invoice payment pattern): two supplier payments both structurally reference the same non-existent Purchase Invoice Key. `propose_purchase_invoice_reconstruction` reports the shared supplier, the missing Key, and the total owed, but returns `unresolved` because the per-line breakdown of the invoice cannot be derived from payment totals alone. Once you supply the actual invoice lines (from the source document, not a guess), the proposal succeeds; `apply_purchase_invoice_reconstruction` creates the invoice, reallocates both payments onto it, and verifies the resulting balance is zero.
-
-## Upstream history and migration
-
-These milestones come from the upstream project's numbering. This repository restarts at 1.0.0.
-
-- **Upstream 0.2.0:** task tools added; CRUD tools deprecated but still present under scopes.
-- **Upstream 0.3.0 (planned, not done):** removal of the CRUD tools except `create_customer` / `create_supplier`. In 1.0.0 the CRUD tools are still registered. Use task tools or `raw` scope.
-- Update `MANAGER_MCP_WRITE_SCOPES` to the recommended narrow set above instead of enabling all domains.
-
-## Tools
-
-### Read tools
-
-| Tool | Returns | Data class | Dates |
-|------|---------|------------|-------|
-| `list_resources` | Discovery; read-only flag and live write/delete scopes | n/a | n/a |
-| `get_server_info` | Which process you are connected to (version, pid, start time, git state, registered tools) | n/a | n/a |
-| `list_records` / `get_record` / `get_fixed_asset` | Stored records as they are today | current state | none |
-| `aged_receivables` / `aged_payables` | Current customer or supplier balances. **Not an aged report.** | current state | rejected |
-| `bank_balances` | Current bank and cash balances | current state | rejected |
-| `trial_balance` / `profit_and_loss` / `balance_sheet` | Raw transaction feed rows. **Not Manager's reports.** | raw feed | `from_date`/`to_date` forwarded |
-| `tax_summary` | Raw tax feed rows. **Not a VAT return.** | raw feed | rejected |
-| `find_records` and the other diagnostics | See [Reconciliation & corrections](#reconciliation--corrections) | historical / derived | varies |
-| `manager_report_catalogue` | What each Manager report is and how it can be read | catalogue | n/a |
-| `get_report_definition` | Stored report settings for a known key (never calculated rows) | settings only | n/a |
-| `ledger_transactions` | Account-level ledger rows with client side date, account and party filters, paged | historical transaction data | `from_date`/`to_date` |
-| `reconstructed_trial_balance` / `reconstructed_profit_and_loss` | Calculated from the ledger, `authoritative: false` | reconstructed | `as_at` / period |
-| `reconstructed_aged_receivables` / `reconstructed_aged_payables` | Calculated from the ledger, `authoritative: false` | reconstructed | `as_at` |
-
-Tools that cannot honour a date reject it with an error. They never return current data for a past date.
-
-Collections for `list_records` / `get_record` (27): `customers`, `suppliers`, `sales_invoices`, `purchase_invoices`, `chart_of_accounts`, `bank_accounts`, `sales_quotes`, `purchase_quotes`, `sales_orders`, `purchase_orders`, `inventory_items`, `non_inventory_items`, `credit_notes`, `delivery_notes`, `debit_notes`, `goods_receipts`, `receipts`, `payments`, `inter_account_transfers`, `employees`, `payslips`, `expense_claims`, `journal_entries`, `depreciation_entries`, `amortization_entries`, `fixed_assets`, `tax_codes`. `fixed_assets` and `tax_codes` are read-only.
-
-`chart_of_accounts` is list/search only (no single-form GET). Chart of accounts changes cannot be made through this MCP because those endpoints are on the denylist.
-
-**Bank dual path (intentional):** `bank_balances` answers “what are my balances?”; `list_records` / `get_record` on `bank_accounts` answers “find account X and show detail.”
-
-### Write tools (deprecated)
-
-Registered only for resources in enabled scopes. Prefer task tools above.
-
-| Pattern | Requires | Notes |
-|---------|----------|-------|
-| `create_{stem}` | write scope | Deprecated in 0.2.0 |
-| `update_{stem}` | write scope | Deprecated in 0.2.0 |
-| `delete_{stem}` | delete scope | Deprecated in 0.2.0; use `void_document` |
-
-## Agent Skill
-
-Companion skill: [`skills/manager-accounting/SKILL.md`](skills/manager-accounting/SKILL.md).
-
-The Cursor plugin discovers this skill from `skills/`. Without the plugin, copy or symlink that folder into your agent skills path. It tells the model to call `list_resources` first, verify after writes, and which report tools to prefer.
-
-## Development
-
-```bash
-uv sync --extra dev
+git clone https://github.com/onexurOSS/mcp-manager.io.git
+cd mcp-manager.io
+uv sync
 uv run manager-mcp
 ```
 
-Offline tests only (respx). No live Manager required:
+After publication, no clone is needed:
 
 ```bash
-uv run ruff check src tests
-uv run pytest
+uvx --from mcp-manager.io manager-mcp
 ```
 
-GitHub Actions matrix: Python 3.10 and 3.12.
+The server speaks MCP over stdio. To use it from a client, configure the client to run one of the commands above with your Manager connection details as environment variables, for example:
 
-### Running from local source vs. the published package
-
-Your MCP host's `.mcp.json` (or equivalent) must point at **this checkout**,
-not the published PyPI package, or local edits will silently have no effect:
-
-```jsonc
+```json
 {
   "mcpServers": {
-    "manager-mcp": {
-      "type": "stdio",
-      "command": "uv",
-      "args": ["run", "--directory", "/absolute/path/to/manager-mcp", "manager-mcp"],
-      "env": { "...": "..." }
+    "manager": {
+      "command": "uvx",
+      "args": ["--from", "mcp-manager.io", "manager-mcp"],
+      "env": {
+        "MANAGER_API_URL": "http://127.0.0.1:55667/api2",
+        "MANAGER_API_KEY": "your-access-token"
+      }
     }
   }
 }
 ```
 
-**Do not use `"command": "uvx", "args": ["--from", "mcp-manager.io", "manager-mcp"]`** while developing:
-`uvx --from mcp-manager.io manager-mcp` resolves and runs the *published* package from PyPI,
-completely independent of this source tree. It will start, it will look
-correct, and every source edit you make will be silently ignored.
+Client integrations in this repository:
 
-### Hot reload during development (opt-in)
+- `mcpb/` holds the manifest for a Claude Desktop extension bundle. Built bundles are not committed. The manifest runs the published `mcp-manager.io` package through `uv`, so it works once the package is published.
+- `.cursor-plugin/plugin.json` is a Cursor plugin manifest.
+- For other clients, such as a `.cursor/mcp.json` or `.vscode/mcp.json` entry in your own project, use the pattern above.
 
-By default the lifecycle is manual: edit source, run tests, reconnect the MCP host, and a new process loads the new code.
+ChatGPT Apps need a hosted HTTP endpoint. This package is stdio only.
 
-To avoid the reconnect for code changes, set `MANAGER_MCP_DEV_SUPERVISOR=1` in the host's `env`, keeping the same launch command. The server then runs a small stdio proxy that starts the real server as a child process and watches `src/manager_mcp/**/*.py`. When a file changes it waits for in-flight requests to finish (so a write is not interrupted), restarts the child, and replays the MCP initialize handshake to it. It also respawns the child if it crashes. Supervisor logging goes to stderr only, never the MCP stream. A `manager-mcp-dev` command runs the supervisor directly. Leave the variable unset in production.
+## 3. Configuration
 
-Your host may still need a reconnect to see tools that were added or removed, because hosts can cache the tool list. `get_server_info` shows the new process id and start time either way.
+One process talks to one Manager instance, configured through environment variables:
 
-### Verifying which process you're actually connected to
+| Variable | Purpose |
+|---|---|
+| `MANAGER_API_URL` | Base URL of the Manager API, including `/api2` when required. Required. |
+| `MANAGER_API_KEY` | Access token created in Manager Settings, sent as `X-API-KEY`. Required. |
+| `MANAGER_MCP_WRITE_SCOPES` | Comma-separated write scopes. Empty by default. |
+| `MANAGER_MCP_DELETE_SCOPES` | Comma-separated delete scopes. Empty by default, and never implied by write scopes. |
+| `MANAGER_MCP_AUDIT_LOG_PATH` | Where corrective writes are logged as JSON lines (before and after state). Defaults to `~/.manager_mcp/audit_log.jsonl`. |
+| `MANAGER_MCP_DEV_SUPERVISOR` | Set to `1` to restart the server automatically when source files change. Development use only. |
 
-Call the `get_server_info` tool (works read-only against any running
-instance, no Manager API call is made). Before starting work, and again
-after any reconnect following a source edit:
+The older `MANAGER_MCP_ALLOW_WRITES`, `ALLOW_WRITES` and `MANAGER_MCP_WRITES` variables are rejected with an error that points to the two scope variables above.
 
-```text
-get_server_info
-```
+Never commit your API key. Keep it in the environment of the MCP client or in a private env file.
 
-Confirm the fields you expect:
+### Permission scopes
 
-- `version` matches the `version` in `pyproject.toml` (or whatever you just bumped it to)
-- `source_path` points at *this* checkout, not some other install
-- `git_sha` / `git_dirty` match `git rev-parse HEAD` / `git status --porcelain` here
-- `effective_write_scopes` / `effective_delete_scopes` match what you expect from `MANAGER_MCP_WRITE_SCOPES`/`MANAGER_MCP_DELETE_SCOPES`
-- `pid` and `process_started_at` change after a restart, and `registered_tool_count` / `registered_tools` list what this process actually exposes
+Valid scopes are `quotes`, `orders`, `parties`, `items`, `sales`, `purchases`, `banking`, `payroll` and `ledger`, plus `raw`, an escape hatch that enables the full create and update (or delete) set for every domain. A recommended starting point for day-to-day bookkeeping is `banking,sales,parties`.
 
-**Development checklist after modifying source:**
+With no scopes set, 29 read-only tools are registered. Enabling a scope registers only the tools for that domain. Scopes are additive and independent, and unknown scope names are refused at startup. With every write and delete scope enabled, up to 125 tools are registered.
 
-1. `uv run pytest`: tests must pass first.
-2. Reconnect/restart the MCP connection in your host (not needed for code-only changes when the dev supervisor is enabled).
-3. Call `get_server_info`.
-4. Confirm version/commit/source match what you just changed. If they
-   don't, the host is still talking to the old process (or the wrong
-   launch command), and nothing past this point should be trusted.
-5. Only once confirmed, run live read tests against Manager.
+Every request that would change Manager passes a policy check first. Requests to paths such as access tokens, the chart of accounts, tax codes, exchange rates, starting balances, bank reconciliation, custom fields, email settings and the customer portal are permanently denied, whatever scopes are enabled.
 
-This is the exact checklist that would have caught, immediately, the
-`uvx`-vs-local-source mismatch this project hit in practice: a server that
-looked connected and answered read requests, but was silently running
-weeks-old published code with no pagination fix and no `fixed_assets`
-support.
+## 4. Tool descriptions
 
-## Caveats
+**Read tools (registered by default, 29 in total)**
 
-- No response caching, anywhere, deliberately. Every read tool hits Manager
-  live on every call. For live accounting data, a stale cache is worse than
-  an extra HTTP round trip; this is a conscious choice, not an oversight.
-- One process ↔ one `MANAGER_API_URL`. Multi-instance routing is out of scope.
-- Multi-business disambiguation on a shared host is **unverified**. Do not claim multi-business support until validated against a live multi-business setup.
-- No Manager API description or generated matrix is shipped. Runtime always calls the live URL. To build a capability matrix, fetch the description from your own instance (`GET /api2`) and run `scripts/build_capability_matrix.py` against it.
-- Reconstructed reports are not Manager's official reports, and reconstructed ageing can differ from Manager's own ageing. See [docs/reporting.md](docs/reporting.md).
-- ChatGPT Apps need a hosted HTTP MCP endpoint. This package is stdio-only.
+- Discovery and raw access: `list_resources`, `list_records`, `get_record`, `get_fixed_asset` and `get_server_info` (server identity, process, git state, registered tools and active scopes).
+- Legacy report shortcuts: `aged_receivables`, `aged_payables`, `bank_balances`, `trial_balance`, `profit_and_loss`, `balance_sheet` and `tax_summary`. These return Manager's current state or raw feeds and are not finished reports (see [Reporting limitations](#5-reporting-limitations)).
+- Reporting layer (`reporting.py`): `manager_report_catalogue`, `get_report_definition`, `ledger_transactions`, `reconstructed_trial_balance`, `reconstructed_profit_and_loss`, `reconstructed_aged_receivables` and `reconstructed_aged_payables`.
+- Diagnostics (`diagnostics.py`): `find_records`, `find_broken_invoice_references`, `find_unallocated_transactions`, `find_duplicate_transactions`, `verify_invoice_balance`, `account_ledger`, `bank_activity`, `find_suspense_candidate_accounts` and `general_ledger_summary`.
+- Reconciliation (`reconciliation.py`): `reconcile_period`.
 
-## License
+**Write tools (registered only when the matching scope is enabled)**
 
-MIT. See [LICENSE](LICENSE).
+- Task tools (`task_tools.py`) shaped around an intent, for example `issue_sales_invoice`, `issue_purchase_invoice`, `record_customer_payment`, `record_supplier_payment`, `record_expense`, `transfer_between_accounts` and `post_journal_entry`. These are the recommended write path.
+- Per-resource `create_*` and `update_*` tools for each enabled scope, and `delete_*` tools for each enabled delete scope. `create_fixed_asset` and `update_fixed_asset` (`fixed_assets.py`) need the `ledger` scope.
+- Corrections (`corrections.py`): `propose_correction` and `apply_correction`, `propose_*_reconstruction` and `apply_*_reconstruction` for purchase and sales invoices, `reallocate_payment_line` and `reallocate_receipt_line`, and `snapshot_and_void`, which is preferred over the plain `void_document` tool. Nothing here writes without a separate apply step after a proposal, and each corrective write is recorded in the audit log.
 
-## Reporting and authority
+Descriptions and schemas for every registered tool are available from your MCP client, and `get_server_info` reports which are active.
 
-Manager's API returns no finished calculated reports. The finished report views exist only inside the Manager application and are not used by this MCP.
+## 5. Reporting limitations
 
-| Kind | Meaning | Tools |
-|------|---------|-------|
-| Current state | Balances as they are today, never historical | `aged_receivables`, `aged_payables`, `bank_balances`, `list_records`, `get_record` |
-| Raw feed | Rows from Manager's `*-transactions` feeds, not a report | `trial_balance`, `profit_and_loss`, `balance_sheet`, `tax_summary` |
-| Historical transaction data | Ledger rows with the account on every row | `ledger_transactions`, `account_ledger`, `bank_activity` |
-| Reconstructed | Calculated here, always `authoritative: false` | `reconstructed_*` |
-| Report settings | Stored definition only, no rows | `get_report_definition` |
+Manager's API does not return finished reports. The report view routes are application only and answer HTTP 401 to an API key, and this project neither calls nor imitates them. The reporting tools work from what the API does return, and label what they return. The full guide is [docs/reporting.md](docs/reporting.md).
 
-Reconstructed reports matched a live Manager instance's official receivables, payables and cash figures at a past date in a validation run, but that does not make them official. Full details, methods and limits: [docs/reporting.md](docs/reporting.md).
+- **Reconstructions are never authoritative.** `reconstructed_trial_balance`, `reconstructed_profit_and_loss`, `reconstructed_aged_receivables` and `reconstructed_aged_payables` are calculated by this server from Manager's account level ledger. Each result carries `authoritative: false` and `official_manager_report: false`, with its source, calculation method, as-at date and ledger completeness. A match with a figure in Manager does not make a reconstruction official.
+- **Reconstructed ageing can differ from Manager's.** Ageing here uses transaction dates and applies payments oldest first, whereas Manager uses due dates and actual allocations, so bucket splits can differ. Party totals are checked only against the control account total.
+- **Current state tools reject dates.** `aged_receivables`, `aged_payables`, `bank_balances` and `tax_summary` show balances as they are today. If you pass a date or period they refuse the request, and they never return today's figures for a past date.
+- **Dates on the ledger are filtered here.** Manager ignores date parameters on its `/transactions` ledger feed, so the server fetches the complete ledger and filters it itself. Results are never silently truncated. Paged results report totals and a next position, and feeds report whether they are complete.
+- **Not available from the API:** Manager's own group and subtotal layout, invoice due dates and allocations as at a past date, VAT returns, and finished report output.
+
+Do not treat any reporting tool as a substitute for Manager's own reports where precision matters, for example VAT or tax filings.
+
+## 6. Licensing
+
+onexurOSS Manager MCP is distributed under the GNU Affero General Public License v3.0 or later (AGPL-3.0-or-later).
+
+This project incorporates material from manager-mcp 0.2.6, which remains licensed under the MIT License. Incorporating that material under this project's distribution does not transfer or extinguish the existing MIT rights and copyright in the upstream-derived portions; those rights remain in effect for recipients. See `NOTICE` for the full attribution statement and `PROVENANCE.json` for a file-level breakdown of which parts of this repository are upstream-derived (MIT) and which are original to Xalterra Ltd, trading as Onexur (AGPL-3.0-or-later).
+
+A commercial license, covering use of Xalterra Ltd's Onexur-owned code without the obligations of the AGPL, is available. Contact licensing@xalterra.com for terms.
+
+The complete AGPL-3.0-or-later text is reproduced in `LICENSE-AGPL`, and the complete MIT License text is reproduced in `LICENSE-MIT`.
+
+## 7. Attribution
+
+This project incorporates material from [manager-mcp](https://github.com/flumpiey/manager-mcp) 0.2.6, released under the MIT License, copyright (c) 2026 manager-mcp contributors.
+
+A detailed, file-level breakdown of which parts of this repository are upstream-derived and which are original to onexurOSS is maintained in `PROVENANCE.json`, alongside a human-readable summary in `PROVENANCE_SUMMARY.md`. Historical upstream release notes (versions 0.1.0 through 0.2.6) are preserved unchanged in [docs/upstream-history.md](docs/upstream-history.md). Current release notes are in [CHANGELOG.md](CHANGELOG.md).
+
+The complete MIT License text is reproduced in `LICENSE-MIT`. See `NOTICE` for the full attribution statement.
+
+## 8. Trademark disclaimer
+
+"Manager" and any associated logos are trademarks of their respective owner. This project is an independent, third-party integration and is not affiliated with, endorsed by, or sponsored by Manager or its publisher. No Manager branding, logos, or proprietary API description material are distributed with this project.
+
+---
+
+## Contributing
+
+See `CONTRIBUTING.md` and `CLA.md`. Contributions to files identified in `PROVENANCE.json` as upstream-derived remain subject to the upstream MIT license; contributions to onexurOSS-original files are covered by the project's Contributor License Agreement.
+
+## Further reading
+
+- [docs/reporting.md](docs/reporting.md): reporting and authority guide
+- [CHANGELOG.md](CHANGELOG.md): current release notes
+- [docs/upstream-history.md](docs/upstream-history.md): historical upstream release notes
+- `PROVENANCE.json` and `PROVENANCE_SUMMARY.md`: file-level licensing provenance
+- `SECURITY.md`: vulnerability disclosure policy
