@@ -1,7 +1,7 @@
 {
  "generated_by": "Gate 1A provenance audit",
- "repo_head": "f92536b179c80ece5dc5dfc2bb9109cbdbb9d9b5",
- "repo_basis": "committed tree at HEAD f92536b179c8; working tree clean apart from PROVENANCE.json and PROVENANCE_SUMMARY.md",
+ "repo_head": "1d0ed2fd3df6f424c562fd5323b02842030eb531",
+ "repo_basis": "committed tree at HEAD 1d0ed2fd3df6; working tree clean apart from PROVENANCE.json and PROVENANCE_SUMMARY.md",
  "upstream_reference": {
   "source": "github.com/flumpiey/manager-mcp tag v0.2.6",
   "commit": "c50c4d71f2aff962a8c9dbb1cce2ef14f602a51b",
@@ -17,15 +17,19 @@
   {
    "path": ".cursor-plugin/plugin.json",
    "category": "upstream/modified",
-   "similarity_pct": 76.9,
+   "similarity_pct": 74.7,
    "upstream_source_path": ".cursor-plugin/plugin.json",
-   "notes": "16.7% of upstream lines changed, 28.6% of current file is new; configuration/metadata edits",
+   "notes": "19.0% of upstream lines changed, 30.6% of current file is new; configuration/metadata edits",
    "flagged_for_review": false,
-   "changed_from_upstream_pct": 16.7,
-   "new_in_current_pct": 28.6,
+   "changed_from_upstream_pct": 19.0,
+   "new_in_current_pct": 30.6,
    "upstream_lines": 42,
    "current_lines": 49,
-   "review_flag": "minor modification - likely remains upstream-derived"
+   "review_flag": "minor modification - likely remains upstream-derived (manual override of the automatic flag)",
+   "manual_review": {
+    "classification": "minor modification - likely remains upstream-derived (manual override of the automatic flag)",
+    "basis": "Upstream plugin manifest restored from the v0.2.6 tag and adapted: author, repository URLs, version, and the license field (now AGPL-3.0-or-later to describe the distributed package). The file is a small JSON document (about 20 lines), so a handful of changed lines crosses the automatic 30 percent new-content threshold. Structure and most keys are upstream's."
+   }
   },
   {
    "path": ".env.example",
