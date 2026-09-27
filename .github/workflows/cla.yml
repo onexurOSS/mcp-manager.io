@@ -8,8 +8,11 @@ name: cla
 #
 # Signatures are stored in the cla-signatures branch, in a file whose path carries
 # the CLA version. Each record holds the GitHub username and id, the pull request
-# number, the comment id, the timestamps and the comment text, which names the
-# version. When CLA.md is revised, change path-to-signatures (for example to
+# number, the comment id, the repository id and the timestamp of the comment. It
+# does not store the comment text, so the version is fixed by the file path and the
+# comment can be looked up by its id. The sign sentence is matched exactly after
+# trimming spaces and ignoring case, so any extra text or a trailing full stop
+# means it is not recognised. When CLA.md is revised, change path-to-signatures (for example to
 # signatures/v2.0/cla.json) and the sign sentence together, so that earlier
 # signatures never count for the new version and nothing is re-applied to merged
 # pull requests. Do not edit the version 1.0 file. Pull requests are locked after
@@ -57,7 +60,8 @@ jobs:
             maintained by Xalterra Ltd, trading as Onexur. Its full text is in
             [CLA.md](https://github.com/onexurOSS/mcp-manager.io/blob/main/CLA.md).
             Submitting a pull request does not by itself accept it. To agree, post
-            a comment on this pull request containing exactly the sentence below.
+            a comment on this pull request containing exactly the sentence below and
+            nothing else. Do not add a full stop or any other text.
           custom-allsigned-prcomment: All contributors on this pull request have agreed to the Onexur Contributor License Agreement, Version 1.0.
           signed-commit-message: "@$contributorName agreed to the Onexur CLA Version 1.0 in $owner/$repo"
           create-file-commit-message: Create the CLA signatures file for Version 1.0
