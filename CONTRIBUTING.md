@@ -1,4 +1,4 @@
-# Contributing to Onexur Manager MCP
+# Contributing to onexurOSS Manager MCP
 
 Thank you for considering a contribution. This project has a mixed licensing structure, please read the section below before opening a pull request, it affects what you're agreeing to when you contribute.
 
@@ -16,7 +16,7 @@ Before your first pull request can be merged, you must sign the project's Contri
 - If you contribute to an **onexurOSS-original file** (or add a new file), the CLA grants Xalterra Ltd, trading as Onexur, the rights needed to license your contribution under AGPL-3.0-or-later and, where applicable, under a commercial licence.
 - If you contribute to an **upstream-derived file**, your contribution remains subject to the upstream MIT licence. The CLA does not, and cannot, grant Xalterra Ltd ownership of upstream copyright, and your contribution to that file isn't relicensed by signing it.
 
-The CLA bot will prompt you to sign automatically on your first pull request.
+You will be asked to sign the CLA before your first pull request is merged.
 
 ## Development setup
 
