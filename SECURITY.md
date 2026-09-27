@@ -56,4 +56,9 @@ If you discover a way to escalate beyond an enabled scope, to bypass the policy 
 
 ## Dependencies
 
-Third-party dependency licences and versions are listed in `THIRD-PARTY-NOTICES`. GitHub Dependabot alerts are enabled on this repository and are reviewed by the maintainers. Automated dependency scanning inside this project's own CI is planned and is not running yet. If you find a dependency vulnerability with a demonstrable path to exploitation in this project's usage, please report it through the process above rather than opening a public issue.
+Third-party dependency licences and versions are tracked in
+THIRD-PARTY-NOTICES. Automated dependency vulnerability scanning runs
+in CI via the `dependency-audit` workflow (pip-audit), alongside
+GitHub's own Dependabot alerts. If you find a dependency vulnerability
+not yet caught by either, please report it through the process above
+rather than opening a public issue.
