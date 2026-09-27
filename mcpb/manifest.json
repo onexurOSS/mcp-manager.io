@@ -5,7 +5,7 @@
   "version": "1.0.0",
   "description": "MCP server for Manager.io bookkeeping: read-first with opt-in scoped task and write tools. Requires uv on PATH.",
   "author": {
-    "name": "onexurOSS",
+    "name": "Xalterra Ltd, trading as Onexur",
     "url": "https://github.com/onexurOSS/mcp-manager.io"
   },
   "homepage": "https://github.com/onexurOSS/mcp-manager.io",

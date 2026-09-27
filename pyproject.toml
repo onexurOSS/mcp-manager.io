@@ -9,7 +9,7 @@ description = "MCP server for Manager.io bookkeeping: read-first with opt-in sco
 readme = "README.md"
 license = "AGPL-3.0-or-later"
 license-files = ["LICENSE-MIT", "LICENSE-AGPL", "NOTICE", "THIRD-PARTY-NOTICES"]
-authors = [{ name = "Dru Connold" }, { name = "onexurOSS" }]
+authors = [{ name = "Xalterra Ltd, trading as Onexur" }, { name = "Dru Connold" }]
 requires-python = ">=3.10"
 keywords = [
   "mcp",
