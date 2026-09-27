@@ -19,6 +19,8 @@ from manager_mcp import task_tools as _tt
 from manager_mcp.client import ManagerClient
 from manager_mcp.resources import all_resources, extract_items, form_path, resolve
 from manager_mcp.scopes import DOMAIN_SCOPES, WritePolicy
+from manager_mcp.tool_annotations import LOCAL_READ_ONLY_ANNOTATIONS as _LOCAL_READ_ONLY_ANNOTATIONS
+from manager_mcp.tool_annotations import ReadOnlyTools as _ReadOnlyTools
 from manager_mcp.writable import WRITABLE, implemented_for_scope
 from manager_mcp.write_validate import diff_persisted, validate_write_body
 
@@ -40,6 +42,9 @@ _client: ManagerClient | None = None
 _policy: WritePolicy | None = None
 _write_tools_registered = False
 _task_tools_registered = False
+
+_read_tools = _ReadOnlyTools(mcp)
+_local_read_tools = _ReadOnlyTools(mcp, _LOCAL_READ_ONLY_ANNOTATIONS)
 
 _CRUD_EXEMPT_FROM_DEPRECATION = frozenset({"customer", "supplier"})
 
@@ -149,7 +154,7 @@ async def _fetch_report(name: str, **period: Any) -> dict[str, Any]:
     return result
 
 
-@mcp.tool(
+@_local_read_tools.tool(
     description=(
         "List curated Manager.io capabilities. Default is read-only (29 tools). "
         "Task tools register when write scopes match; CRUD tools are deprecated "
@@ -196,10 +201,10 @@ async def list_resources() -> dict[str, Any]:
     }
 
 
-_server_info.register_server_info_tool(mcp, lambda: get_policy(), _SOURCE_PATH)
+_server_info.register_server_info_tool(_local_read_tools, lambda: get_policy(), _SOURCE_PATH)
 
 
-@mcp.tool(
+@_read_tools.tool(
     description=(
         "Search/page a curated collection. Core: customers, suppliers, sales_invoices, "
         "purchase_invoices, chart_of_accounts, bank_accounts. Also writable domains "
@@ -249,7 +254,7 @@ async def list_records(
     }
 
 
-@mcp.tool(
+@_read_tools.tool(
     description=(
         "Fetch one collection record by GUID via Manager form endpoint "
         "(e.g. /customer-form/{key}). chart_of_accounts has no single form. "
@@ -272,10 +277,10 @@ async def get_record(resource: str, key: str) -> dict[str, Any]:
     return {"resource": resource, "key": key, "body": body}
 
 
-_fixed_assets.register_fixed_asset_read_tool(mcp, lambda: get_client())
+_fixed_assets.register_fixed_asset_read_tool(_read_tools, lambda: get_client())
 
 
-@mcp.tool(
+@_read_tools.tool(
     description=(
         "CURRENT customer balances only (read-only). Not an aged report and not as at any "
         "past date; rejects from_date/to_date. For a labelled as-at reconstruction use "
@@ -289,7 +294,7 @@ async def aged_receivables(
     return await _fetch_report("aged_receivables", from_date=from_date, to_date=to_date)
 
 
-@mcp.tool(
+@_read_tools.tool(
     description=(
         "CURRENT supplier balances only (read-only). Not an aged report and not as at any "
         "past date; rejects from_date/to_date. For a labelled as-at reconstruction use "
@@ -303,7 +308,7 @@ async def aged_payables(
     return await _fetch_report("aged_payables", from_date=from_date, to_date=to_date)
 
 
-@mcp.tool(
+@_read_tools.tool(
     description=(
         "CURRENT bank/cash balances only (read-only; rejects dates). "
         "For search/drill-in of individual accounts use list_records/get_record on bank_accounts."
@@ -316,7 +321,7 @@ async def bank_balances(
     return await _fetch_report("bank_balances", from_date=from_date, to_date=to_date)
 
 
-@mcp.tool(
+@_read_tools.tool(
     description=(
         "Raw /trial-balance-transactions rows (read-only). NOT Manager's Trial Balance "
         "report and no account per row; see reconstructed_trial_balance."
@@ -329,7 +334,7 @@ async def trial_balance(
     return await _fetch_report("trial_balance", from_date=from_date, to_date=to_date)
 
 
-@mcp.tool(
+@_read_tools.tool(
     description=(
         "Raw /profit-and-loss-statement-transactions rows (read-only). NOT Manager's "
         "Profit and Loss Statement; see reconstructed_profit_and_loss."
@@ -342,7 +347,7 @@ async def profit_and_loss(
     return await _fetch_report("profit_and_loss", from_date=from_date, to_date=to_date)
 
 
-@mcp.tool(
+@_read_tools.tool(
     description=(
         "Raw /balance-sheet-transactions rows (read-only). NOT Manager's Balance Sheet "
         "and no account per row; see reconstructed_trial_balance."
@@ -355,7 +360,7 @@ async def balance_sheet(
     return await _fetch_report("balance_sheet", from_date=from_date, to_date=to_date)
 
 
-@mcp.tool(
+@_read_tools.tool(
     description=(
         "Raw /tax-summary-transactions rows (read-only). No date support and not a VAT "
         "return; for dated tax rows use ledger_transactions with tax_only=true."
@@ -368,10 +373,10 @@ async def tax_summary(
     return await _fetch_report("tax_summary", from_date=from_date, to_date=to_date)
 
 
-_diag.register_diagnostic_tools(mcp, lambda: get_client())
+_diag.register_diagnostic_tools(_read_tools, lambda: get_client())
 
 
-_recon.register_reconciliation_tools(mcp, lambda: get_client())
+_recon.register_reconciliation_tools(_read_tools, lambda: get_client())
 
 
 async def _persist_and_verify(
@@ -774,7 +779,7 @@ def register_task_tools() -> None:
     _task_tools_registered = True
 
 
-_reporting.register_reporting_tools(mcp, get_client)
+_reporting.register_reporting_tools(_read_tools, get_client)
 
 
 def main() -> None:

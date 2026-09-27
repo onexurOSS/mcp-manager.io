@@ -140,3 +140,33 @@ def test_a_delete_only_configuration_cannot_write() -> None:
     assert message != "ok"
     assert "MANAGER_MCP_WRITE_SCOPES" in message
     assert "Manager.io is not reachable" not in message
+
+
+def test_read_tools_are_marked_read_only_and_no_other_tool_is() -> None:
+    default = _run()
+    everything = _run(write=DOMAIN, delete=DOMAIN)
+    default_names = {t["name"] for t in default["tools"]}
+    assert len(default_names) == 29
+    assert all(t["read_only"] and not t["destructive"] for t in default["tools"])
+    read_only_names = {t["name"] for t in everything["tools"] if t["read_only"]}
+    assert read_only_names == default_names
+    writers = [t for t in everything["tools"] if t["name"] not in default_names]
+    assert len(writers) == 125 - 29
+    assert not any(t["read_only"] for t in writers)
+
+
+def test_read_only_registrar_delegates_other_attributes() -> None:
+    from manager_mcp.tool_annotations import ReadOnlyTools
+
+    class Fake:
+        marker = "delegated"
+
+        def tool(self, *args: object, **kwargs: object) -> dict:
+            return kwargs
+
+    wrapped = ReadOnlyTools(Fake())
+    assert wrapped.marker == "delegated"
+    kwargs = wrapped.tool(description="x")
+    assert kwargs["annotations"]["readOnlyHint"] is True
+    explicit = wrapped.tool(description="x", annotations={"readOnlyHint": False})
+    assert explicit["annotations"] == {"readOnlyHint": False}
