@@ -1,7 +1,7 @@
 {
  "generated_by": "Gate 1A provenance audit",
- "repo_head": "1f31d537466e1cb0fcec3bb5a67b2ec35d76c0b1",
- "repo_basis": "committed tree at HEAD 1f31d537466e; history rewritten to exclude nine removed third-party and generated paths; working tree clean apart from PROVENANCE.json and PROVENANCE_SUMMARY.md",
+ "repo_head": "10588e08e7c0a921aea7fadd1de0176a5aa40716",
+ "repo_basis": "committed tree at HEAD 10588e08e7c0; working tree clean apart from PROVENANCE.json and PROVENANCE_SUMMARY.md",
  "upstream_reference": {
   "source": "github.com/flumpiey/manager-mcp tag v0.2.6",
   "commit": "c50c4d71f2aff962a8c9dbb1cce2ef14f602a51b",
@@ -106,6 +106,26 @@
    "upstream_lines": 21,
    "current_lines": 22,
    "review_flag": "minor modification - likely remains upstream-derived"
+  },
+  {
+   "path": "LICENSE-AGPL",
+   "category": "third-party",
+   "similarity_pct": null,
+   "upstream_source_path": null,
+   "notes": "Free Software Foundation licence text, unmodified copy from gnu.org (661 lines, 34523 bytes). Copying the licence text verbatim is permitted; it is not onexurOSS or upstream authored material.",
+   "flagged_for_review": false
+  },
+  {
+   "path": "LICENSE-MIT",
+   "category": "upstream/unmodified",
+   "similarity_pct": 100.0,
+   "upstream_source_path": "LICENSE",
+   "notes": "byte-identical; renamed from LICENSE",
+   "flagged_for_review": false,
+   "changed_from_upstream_pct": 0.0,
+   "new_in_current_pct": 0.0,
+   "upstream_lines": 21,
+   "current_lines": 21
   },
   {
    "path": "NOTICE",
@@ -2018,9 +2038,14 @@
    "WT:LICENSE:3:Copyright (c) 2026 manager-mcp contributors",
    "WT:LICENSE:4:Copyright (c) 2026 onexurOSS",
    "WT:LICENSE:6:Permission is hereby granted, free of charge, to any person obtaining a copy",
-   "WT:NOTICE:4:released under the MIT License.",
-   "WT:NOTICE:6:Copyright (c) 2026 manager-mcp contributors.",
-   "WT:NOTICE:11:Material added or authored by onexurOSS is copyright (c) 2026",
+   "WT:LICENSE-AGPL:4: Copyright (C) 2007 Free Software Foundation, Inc. <https://fsf.org/>",
+   "WT:LICENSE-AGPL:633:    Copyright (C) <year>  <name of author>",
+   "WT:LICENSE-MIT:1:MIT License",
+   "WT:LICENSE-MIT:3:Copyright (c) 2026 manager-mcp contributors",
+   "WT:LICENSE-MIT:5:Permission is hereby granted, free of charge, to any person obtaining a copy",
+   "WT:NOTICE:2:released under the MIT License.",
+   "WT:NOTICE:4:Copyright (c) 2026 manager-mcp contributors.",
+   "WT:NOTICE:9:Material added or authored for this project is copyright (c) 2026",
    "WT:NOTICE:17:The complete MIT License is reproduced in LICENSE-MIT. The complete",
    "WT:README.md:123:This project incorporates material from manager-mcp 0.2.6, which remains licensed under the MIT License. Incorporating that material under this project's distribution does not transfer or extinguish the existing MIT rights and copyright in the upstream-derived portions; those rights remain in effect for recipients. See `NOTICE` for the full attribution statement and `PROVENANCE.json` for a file-level breakdown of which parts of this repository are upstream-derived (MIT) and which are original to Xalterra Ltd, trading as Onexur (AGPL-3.0-or-later).",
    "WT:README.md:127:The complete AGPL-3.0-or-later text is reproduced in `LICENSE-AGPL`, and the complete MIT License text is reproduced in `LICENSE-MIT`.",

@@ -1,6 +1,6 @@
 # Provenance summary (Gate 1A, analysis only)
 
-Nothing was decided legally here. This is evidence for solicitor review. Committed tree at HEAD 1f31d537466e; history rewritten to exclude nine removed third-party and generated paths; working tree clean apart from PROVENANCE.json and PROVENANCE_SUMMARY.md.
+Nothing was decided legally here. This is evidence for solicitor review. Committed tree at HEAD 10588e08e7c0; working tree clean apart from PROVENANCE.json and PROVENANCE_SUMMARY.md.
 
 ## History rewrite
 
@@ -29,14 +29,14 @@ What remains new in `server.py`, and why it still trips the 60-added-line heuris
 
 | Category | Files now | First manifest |
 |---|---|---|
-| upstream/unmodified | 51 | 53 |
+| upstream/unmodified | 52 | 53 |
 | upstream/modified | 18 | 16 |
 | onexurOSS/original | 29 | 27 |
-| third-party | 0 | 7 |
+| third-party | 1 | 7 |
 | generated/artifact | 2 | 3 |
-| **Total** | **100** | **106** |
+| **Total** | **102** | **106** |
 
-The total is -6 net against the first manifest: 7 third-party logo and API description files, the generated capability matrix and `spec/README.md` were removed, and `.cursor-plugin/plugin.json`, `tests/test_report_semantics.py`, `docs/upstream-history.md` and `NOTICE` were added. `upstream/modified` splits into 3 substantial-rewrite candidates and 15 minor modifications (after the manual classifications below).
+The total is -4 net against the first manifest: 7 third-party logo and API description files, the generated capability matrix and `spec/README.md` were removed, and `.cursor-plugin/plugin.json`, `tests/test_report_semantics.py`, `docs/upstream-history.md` and `NOTICE` were added. `upstream/modified` splits into 3 substantial-rewrite candidates and 15 minor modifications (after the manual classifications below).
 
 ## Test split: `test_server_tools.py`
 
@@ -89,7 +89,7 @@ These four changed after the first manifest was written and were read directly a
 
 ### Files
 
-None remain. The 7 Manager.io logo and API description files flagged in the first manifest were removed (commit `995e8af`). The generated capability matrix (`src/manager_mcp/spec/api2.live-capabilities.json`, kept in the first pass) and `spec/README.md` were also removed; a matrix is now built by users from their own instance with `scripts/build_capability_matrix.py`. All nine files are also absent from history since the rewrite described above.
+One: `LICENSE-AGPL`, the unmodified Free Software Foundation text of the GNU Affero General Public License version 3, which may be copied verbatim but not altered. It is the licence itself, not third-party code. Apart from it, none remain. The 7 Manager.io logo and API description files flagged in the first manifest were removed (commit `995e8af`). The generated capability matrix (`src/manager_mcp/spec/api2.live-capabilities.json`, kept in the first pass) and `spec/README.md` were also removed; a matrix is now built by users from their own instance with `scripts/build_capability_matrix.py`. All nine files are also absent from history since the rewrite described above.
 
 ### Dependencies (104 distributions in `uv.lock`, 75 runtime, 29 dev/build only; unchanged since the first manifest)
 
@@ -110,7 +110,7 @@ None remain. The 7 Manager.io logo and API description files flagged in the firs
 
 ## Upstream MIT notices
 
-The upstream MIT licence and copyright notice **are present** in `LICENSE` (the MIT text, `Copyright (c) 2026 manager-mcp contributors`, identical to upstream's `LICENSE`, and one added line `Copyright (c) 2026 onexurOSS`) and in the new `NOTICE`, which repeats the upstream copyright line and source URL and names Xalterra Ltd, trading as Onexur, on the onexurOSS side. The onexurOSS copyright line in `LICENSE` and the NOTICE line are not yet aligned (`LICENSE` is deliberately untouched until the licence pass). Other attribution: `README.md:5:This project began as a fork of [manager-mcp](https://github.com/flu`; `README.md:131:This project incorporates material from [manager-mcp](https://gith`; `pyproject.toml:11:authors = [{ name = "Dru Connold" }, { name = "onexurOSS" }]`. **Not present yet:** `LICENSE-MIT` and `LICENSE-AGPL` (referenced by `NOTICE` and the README) and per-file headers (0 files). File-level provenance is in this manifest.
+The upstream MIT licence and copyright notice **are present** in `LICENSE` (the MIT text, `Copyright (c) 2026 manager-mcp contributors`, identical to upstream's `LICENSE`, and one added line `Copyright (c) 2026 onexurOSS`) and in the new `NOTICE`, which repeats the upstream copyright line and source URL and names Xalterra Ltd, trading as Onexur, on the onexurOSS side. The onexurOSS copyright line in `LICENSE` and the NOTICE line are not yet aligned (`LICENSE` is deliberately untouched until the licence pass). Other attribution: `README.md:5:This project began as a fork of [manager-mcp](https://github.com/flu`; `README.md:131:This project incorporates material from [manager-mcp](https://gith`; `pyproject.toml:11:authors = [{ name = "Dru Connold" }, { name = "onexurOSS" }]`. `LICENSE-MIT` (the upstream `LICENSE`, byte for byte) and `LICENSE-AGPL` (unmodified FSF text) now exist and resolve the references in `NOTICE` and the README. `LICENSE` itself still holds the MIT text with the extra onexurOSS line, and `pyproject.toml` still declares `MIT`; both are awaiting a decision in the licence pass. **Not present yet:** per-file headers (0 files). File-level provenance is in this manifest.
 
 ## Parallel checks (report only)
 
