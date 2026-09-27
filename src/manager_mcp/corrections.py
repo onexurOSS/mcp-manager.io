@@ -28,8 +28,8 @@ from typing import Any
 
 import httpx
 
-from manager_mcp.audit_log import AuditEntry, new_correlation_id, record_event
-from manager_mcp.client import ManagerClient
+from manager_mcp.audit_log import AuditEntry, audit_log_path, new_correlation_id, record_event
+from manager_mcp.client import ManagerApiError, ManagerClient, ManagerUnavailableError
 from manager_mcp.diagnostics import (
     _first,
     _key_of,
@@ -67,6 +67,63 @@ def _proposal_token(resource: str, key: str | None, fields: dict[str, Any]) -> s
         {"resource": resource, "key": key, "fields": fields}, sort_keys=True, default=str
     )
     return hashlib.sha256(payload.encode("utf-8")).hexdigest()[:16]
+
+
+def _reconstruction_token(
+    invoice_resource: str, fields: dict[str, Any], txn_keys: list[str]
+) -> str:
+    """Token for the invoice-reconstruction workflow, binding the invoice fields to
+    the exact citing payment/receipt keys. Unlike _proposal_token, this must be
+    recomputed and checked by _apply_invoice_reconstruction itself -- apply_correction
+    only ever sees a plain token over (resource, fields), with no knowledge of
+    txn_keys at all.
+    """
+    payload = json.dumps(
+        {"resource": invoice_resource, "fields": fields, "txn_keys": sorted(txn_keys)},
+        sort_keys=True,
+        default=str,
+    )
+    return hashlib.sha256(payload.encode("utf-8")).hexdigest()[:16]
+
+
+async def _invoice_exists(client: ManagerClient, invoice_resource: str, key: str) -> bool:
+    """True if invoice_resource/key resolves to a real, already-persisted invoice."""
+    path = form_path(invoice_resource, key)
+    if path is None:
+        return False
+    try:
+        await client.get(path)
+    except httpx.HTTPStatusError as exc:
+        if exc.response.status_code == 404:
+            return False
+        raise
+    return True
+
+
+def _partial_reconstruction_message(new_key: str | None, original: Exception) -> str:
+    """Message for a failure that happens after at least one write in this workflow
+    has already reached Manager, replacing any suggestion to simply retry -- a retry
+    would re-run propose/apply from the top and create a second invoice for the same
+    debt, since nothing here is idempotent yet (see docs/write-path-spike.md, item 3
+    of the minimum fix list, which this change does not implement).
+    """
+    if new_key is None:
+        where = "Creating the invoice for this reconstruction"
+        recovery = f"Check the audit log ({audit_log_path()}) for what, if anything, completed."
+    else:
+        where = f"Reallocating a citing transaction onto invoice {new_key!r} (already created)"
+        recovery = (
+            f"Check the audit log ({audit_log_path()}) for what completed, then either finish "
+            "the remaining transactions individually with reallocate_payment_line / "
+            f"reallocate_receipt_line, or void {new_key!r} with snapshot_and_void if nothing "
+            "was reallocated onto it."
+        )
+    return (
+        f"{where} failed partway through this multi-step operation ({type(original).__name__}). "
+        f"Do not retry this operation, with the same or a new request: a retry would attempt to "
+        f"create another invoice for the same debt. {recovery} Raise this for manual review if "
+        f"you are unsure. See the chained cause of this exception for the underlying detail."
+    )
 
 
 async def _get_or_404(client: ManagerClient, path: str, *, not_found_message: str) -> Any:
@@ -160,17 +217,15 @@ async def apply_correction(
     else:
         body = await client.post(w.form_path, json=fields)
 
-    after = body
-    warnings: list[str] = []
     result_key = key
     if isinstance(body, dict):
         result_key = body.get("Key") or body.get("key") or key
-        if w.known_keys and result_key:
-            verify_path = form_path(resource, str(result_key))
-            if verify_path:
-                after = await client.get(verify_path)
-                warnings = diff_persisted(w, fields, after if isinstance(after, dict) else None)
 
+    # Committed now, before the verification read below -- so a failing read can never
+    # leave this write unaudited. If the read succeeds, a second "verify" entry below
+    # carries the richer, persistence-checked after/warnings under the same
+    # correlation_id; this first entry's after/warnings reflect only the raw write
+    # response.
     correlation_id = new_correlation_id()
     record_event(
         AuditEntry(
@@ -179,12 +234,34 @@ async def apply_correction(
             key=str(result_key) if result_key else None,
             before=before,
             submitted=fields,
-            after=after,
-            warnings=warnings,
+            after=body,
+            warnings=[],
             correlation_id=correlation_id,
             status="ok",
         )
     )
+
+    after = body
+    warnings: list[str] = []
+    if isinstance(body, dict) and w.known_keys and result_key:
+        verify_path = form_path(resource, str(result_key))
+        if verify_path:
+            after = await client.get(verify_path)
+            warnings = diff_persisted(w, fields, after if isinstance(after, dict) else None)
+            record_event(
+                AuditEntry(
+                    operation="verify",
+                    resource=resource,
+                    key=str(result_key) if result_key else None,
+                    before=None,
+                    submitted=fields,
+                    after=after,
+                    warnings=warnings,
+                    correlation_id=correlation_id,
+                    status="ok",
+                )
+            )
+
     return {
         "status": "ok",
         "correlation_id": correlation_id,
@@ -251,9 +328,12 @@ async def _reallocate(
 
     validate_write_body(w, fields, creating=False)
     await client.put(path, json=fields)
-    after = await client.get(path)
-    warnings = diff_persisted(w, fields, after if isinstance(after, dict) else None)
 
+    # Committed now, before the verification read below -- see apply_correction for why.
+    submitted = {
+        "line_index": line_index,
+        write_field: {"from": old_value, "to": new_invoice_key},
+    }
     correlation_id = new_correlation_id()
     record_event(
         AuditEntry(
@@ -261,10 +341,23 @@ async def _reallocate(
             resource=resource,
             key=key,
             before=before,
-            submitted={
-                "line_index": line_index,
-                write_field: {"from": old_value, "to": new_invoice_key},
-            },
+            submitted=submitted,
+            after=None,
+            warnings=[],
+            correlation_id=correlation_id,
+            status="ok",
+        )
+    )
+
+    after = await client.get(path)
+    warnings = diff_persisted(w, fields, after if isinstance(after, dict) else None)
+    record_event(
+        AuditEntry(
+            operation="verify",
+            resource=resource,
+            key=key,
+            before=None,
+            submitted=submitted,
             after=after,
             warnings=warnings,
             correlation_id=correlation_id,
@@ -449,6 +542,11 @@ async def _propose_invoice_reconstruction(
         fields["Reference"] = reference
 
     proposal = await propose_correction(client, policy, invoice_resource, fields, key=None)
+    # Binds the token to the exact citing transaction keys, not just the invoice fields --
+    # apply_sales_invoice_reconstruction/apply_purchase_invoice_reconstruction verify this
+    # before doing anything, so applying against a different set of transactions than what
+    # was proposed is refused up front rather than silently accepted.
+    proposal["proposal_token"] = _reconstruction_token(invoice_resource, fields, txn_keys)
     proposal["missing_invoice_key"] = missing_key
     proposal["contributing_transactions"] = matched
     proposal["party"] = party
@@ -505,9 +603,26 @@ async def _apply_invoice_reconstruction(
 ) -> dict[str, Any]:
     txn_resource = "payments" if invoice_resource == "purchase_invoices" else "receipts"
     _, _, invoice_aliases = _ALLOCATION[txn_resource]
-    created = await apply_correction(
-        client, policy, proposal_token, invoice_resource, fields, key=None
-    )
+
+    # Fix 1: the token must match exactly what was proposed, including which
+    # transactions it was proposed against -- nothing here has been written yet, so
+    # a mismatch just means "propose again", not a partial-failure state.
+    expected_token = _reconstruction_token(invoice_resource, fields, txn_keys)
+    if proposal_token != expected_token:
+        raise ValueError(
+            "proposal_token does not match (resource, fields, payment/receipt keys). "
+            "Call propose_purchase_invoice_reconstruction / "
+            "propose_sales_invoice_reconstruction again with the exact fields and "
+            "transaction keys you intend to apply."
+        )
+    plain_token = _proposal_token(invoice_resource, None, fields)
+
+    try:
+        created = await apply_correction(
+            client, policy, plain_token, invoice_resource, fields, key=None
+        )
+    except (ManagerApiError, ManagerUnavailableError) as exc:
+        raise type(exc)(_partial_reconstruction_message(None, exc)) from exc
     new_key = created["key"]
     if not new_key:
         return {
@@ -521,17 +636,46 @@ async def _apply_invoice_reconstruction(
         path = form_path(txn_resource, txn_key)
         txn = await client.get(path) if path else None
         line_index = None
+        current_ref: str | None = None
         if isinstance(txn, dict):
             for idx, line in enumerate(_lines_of(txn)):
-                if _first(line, invoice_aliases):
+                ref = _first(line, invoice_aliases)
+                if ref:
                     line_index = idx
+                    current_ref = str(ref)
                     break
         if line_index is None:
             reallocations.append(
                 {"key": txn_key, "status": "skipped", "reason": "no matching line found"}
             )
             continue
-        detail = await _reallocate(client, policy, txn_resource, txn_key, line_index, str(new_key))
+
+        # Fix 1: only repoint a line that still references a genuinely missing invoice.
+        # If it already references one that exists -- because it was reallocated since
+        # this was proposed, or a validly-computed token was crafted for a transaction
+        # that was never missing an invoice in the first place -- refuse this line
+        # rather than repointing it away from a real invoice.
+        if current_ref is not None and await _invoice_exists(client, invoice_resource, current_ref):
+            reallocations.append(
+                {
+                    "key": txn_key,
+                    "status": "refused",
+                    "reason": (
+                        f"currently references {current_ref!r}, which already exists as "
+                        f"an invoice, not a missing one; refusing to repoint it. Use "
+                        "reallocate_payment_line/reallocate_receipt_line instead if this "
+                        "linkage needs to change."
+                    ),
+                }
+            )
+            continue
+
+        try:
+            detail = await _reallocate(
+                client, policy, txn_resource, txn_key, line_index, str(new_key)
+            )
+        except (ManagerApiError, ManagerUnavailableError) as exc:
+            raise type(exc)(_partial_reconstruction_message(str(new_key), exc)) from exc
         reallocations.append({"key": txn_key, "status": "ok", "detail": detail})
 
     verification = await verify_invoice_balance(client, invoice_resource, str(new_key))

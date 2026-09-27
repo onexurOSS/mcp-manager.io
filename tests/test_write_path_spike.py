@@ -29,6 +29,7 @@ from manager_mcp.audit_log import read_events
 from manager_mcp.client import ManagerApiError, ManagerClient, ManagerUnavailableError
 from manager_mcp.corrections import (
     _proposal_token,
+    _reconstruction_token,
     apply_sales_invoice_reconstruction,
     propose_sales_invoice_reconstruction,
     reallocate_receipt_line,
@@ -45,15 +46,20 @@ LINES = [
     {"Account": "sales-account", "Amount": 35.00},
 ]
 
-# The full request sequence apply makes for two receipts, as observed (16 calls, 3 writes).
+# The full request sequence apply makes for two receipts, as observed (18 calls, 3 writes).
+# One extra GET per receipt versus the pre-fix sequence: Fix 1 checks, before repointing,
+# that the receipt's current reference (missing-inv-key) does not already resolve to a
+# real, existing invoice.
 EXPECTED_HAPPY_PATH_CALLS: list[str] = [
     "POST /sales-invoice-form",
     "GET /receipt-form/rc-a",
+    "GET /sales-invoice-form/missing-inv-key",
     "GET /sales-invoice-form/new-inv-1",
     "GET /receipt-form/rc-a",
     "PUT /receipt-form/rc-a",
     "GET /receipt-form/rc-a",
     "GET /receipt-form/rc-b",
+    "GET /sales-invoice-form/missing-inv-key",
     "GET /sales-invoice-form/new-inv-1",
     "GET /receipt-form/rc-b",
     "PUT /receipt-form/rc-b",
@@ -268,15 +274,47 @@ async def test_happy_path_call_sequence_is_one_post_then_one_put_per_receipt(
     # Total HTTP calls inside apply for two receipts (writes plus reads plus verification).
     assert [f"{m} {p}" for m, p in fake.log] == EXPECTED_HAPPY_PATH_CALLS
     assert result["verification"]["fully_paid"] is True
+    # Fix 3: create, then one "reallocate" (committed before the read) plus a "verify"
+    # (committed after the read, sharing the same correlation_id) per receipt.
     events = read_events(_audit_isolation)
-    assert [e["operation"] for e in events] == ["create", "reallocate", "reallocate"]
+    assert [e["operation"] for e in events] == [
+        "create",
+        "reallocate",
+        "verify",
+        "reallocate",
+        "verify",
+    ]
+    ids = [e["correlation_id"] for e in events]
+    assert ids[1] == ids[2] and ids[3] == ids[4] and len({ids[0], ids[1], ids[3]}) == 3
 
 
 @pytest.mark.asyncio
-async def test_the_approval_token_is_not_stateful_and_does_not_bind_the_receipts(
+async def test_apply_refuses_a_token_that_was_not_computed_over_the_receipt_keys(
     fake: FakeManager,
 ) -> None:
-    """apply can run with no prior propose, and the token covers only the invoice fields."""
+    """Fix 1: a plain, pre-binding-style token (no receipt keys in its hash input) is
+    refused up front, before any write, rather than accepted the way it used to be."""
+    client = _client()
+    proposal = await _propose(client)
+    stale_token = _proposal_token("sales_invoices", None, proposal["proposed_fields"])
+
+    with pytest.raises(ValueError, match="does not match"):
+        await _apply(client, {**proposal, "proposal_token": stale_token}, ["rc-a", "rc-b"])
+
+    assert fake.writes() == []
+    await client.aclose()
+
+
+@pytest.mark.asyncio
+async def test_apply_refuses_to_repoint_a_receipt_that_already_references_a_real_invoice(
+    fake: FakeManager,
+) -> None:
+    """Fix 1: a correctly-computed token (bound to the right resource, fields and
+    receipt keys) is not enough on its own -- apply also checks, live, that the receipt
+    still references a genuinely missing invoice before repointing it. A receipt that
+    was never missing one (or was already fixed) is refused, not repointed, even though
+    the token passed is exactly the one the real proposal function would have produced.
+    """
     client = _client()
     fields = {
         "Customer": CUSTOMER,
@@ -284,20 +322,31 @@ async def test_the_approval_token_is_not_stateful_and_does_not_bind_the_receipts
         "IssueDate": "2025-02-10",
         "Reference": "INV-EXAMPLE-0001",
     }
-    token = _proposal_token("sales_invoices", None, fields)  # computed, never proposed
-    # A receipt that points at a perfectly good, different invoice.
+    # A receipt that points at a perfectly good, different, already-existing invoice.
     fake.invoices["inv-existing"] = {"Key": "inv-existing", "Lines": [{"Amount": 50.0}]}
     fake.receipts["rc-other"] = _receipt("rc-other", 50.0, invoice="inv-existing")
+    token = _reconstruction_token("sales_invoices", fields, ["rc-other"])  # validly computed
 
     result = await apply_sales_invoice_reconstruction(
         client, client.policy, token, fields, ["rc-other"]
     )
     await client.aclose()
 
-    assert result["status"] == "ok"
-    assert fake.references("inv-existing") == []  # was repointed away from a healthy invoice
-    assert fake.references("new-inv-1") == ["rc-other"]
-    assert fake.writes()[0] == "POST /sales-invoice-form"
+    assert result["status"] == "partial"
+    assert result["reallocations"] == [
+        {
+            "key": "rc-other",
+            "status": "refused",
+            "reason": (
+                "currently references 'inv-existing', which already exists as an "
+                "invoice, not a missing one; refusing to repoint it. Use "
+                "reallocate_payment_line/reallocate_receipt_line instead if this "
+                "linkage needs to change."
+            ),
+        }
+    ]
+    assert fake.references("inv-existing") == ["rc-other"]  # untouched
+    assert fake.references(result["invoice"]["key"]) == []  # the new invoice is an orphan
 
 
 # ---------------------------------------------------------------------------------------
@@ -306,7 +355,6 @@ async def test_the_approval_token_is_not_stateful_and_does_not_bind_the_receipts
 
 _FIRST_PUT_FAILURES = [
     ("http_500", httpx.Response(500, text="internal error"), ManagerApiError),
-    ("http_400", httpx.Response(400, json={"error": "bad"}), httpx.HTTPStatusError),
     ("connect_error", httpx.ConnectError("refused"), ManagerUnavailableError),
     ("timeout", httpx.ReadTimeout("slow"), ManagerUnavailableError),
 ]
@@ -332,15 +380,41 @@ async def test_failure_on_first_receipt_update_leaves_an_orphan_invoice(
     assert list(fake.invoices) == ["new-inv-1"]
     assert fake.references("new-inv-1") == []
     assert fake.references(MISSING) == ["rc-a", "rc-b"]
-    # What the caller is told: only the failing call. The created invoice is not named.
+    # Fix 2: the caller is told the created invoice's key and told not to retry, instead
+    # of being given no key and advice that (before the fix) led straight to a duplicate.
     message = str(excinfo.value)
-    assert "new-inv-1" not in message
-    assert "partial" not in message.casefold() and "created" not in message.casefold()
+    assert "new-inv-1" in message
+    assert "do not retry" in message.casefold()
+    assert "retry once" not in message.casefold() and "and retry" not in message.casefold()
+    assert "snapshot_and_void" in message
     # The only trace is one audit event for the create, which records the new key.
     events = read_events(_audit_isolation)
     assert [(e["operation"], e["key"], e["status"]) for e in events] == [
         ("create", "new-inv-1", "ok")
     ]
+    await client.aclose()
+
+
+@pytest.mark.asyncio
+async def test_a_4xx_on_the_first_receipt_update_is_left_unwrapped(
+    fake: FakeManager, _audit_isolation: Path
+) -> None:
+    """Fix 2 only touches the ambiguous cases (5xx, connection errors) where Manager's
+    response does not confirm whether the request was applied. A 4xx means the request
+    was rejected outright, so it is left as the plain, unwrapped httpx error it always
+    was; wrapping it would be a claim about API behaviour item 3 of the Gate 4 minimum
+    fix list doesn't ask this pass to make."""
+    client = _client()
+    proposal = await _propose(client)
+    fake.fail.append(
+        (_rule("PUT", r"/receipt-form/rc-a"), httpx.Response(400, json={"error": "bad"}))
+    )
+
+    with pytest.raises(httpx.HTTPStatusError) as excinfo:
+        await _apply(client, proposal, ["rc-a", "rc-b"])
+
+    assert "new-inv-1" not in str(excinfo.value)
+    assert list(fake.invoices) == ["new-inv-1"]
     await client.aclose()
 
 
@@ -367,6 +441,10 @@ async def test_orphan_is_detectable_by_verification_but_nothing_links_it_to_the_
 
 @pytest.mark.asyncio
 async def test_a_plain_retry_after_a_partial_failure_creates_a_duplicate_invoice(
+    # Still true after Fixes 1 to 3. Fix 2 removed the advice to retry and now names
+    # this exact risk in the error message, but a caller who retries anyway is not
+    # stopped: nothing here is idempotent yet. That is item 3 of the Gate 4 minimum
+    # fix list (docs/write-path-spike.md) and is a separate, tracked follow-up.
     fake: FakeManager,
 ) -> None:
     client = _client()
@@ -400,11 +478,16 @@ async def test_failure_on_second_receipt_leaves_a_mixed_state(
 
     assert fake.references("new-inv-1") == ["rc-a"]
     assert fake.references(MISSING) == ["rc-b"]
-    assert "new-inv-1" not in str(excinfo.value)
+    # Fix 2: rc-a's successful reallocation onto new-inv-1 is now named in the error,
+    # so a human reading it knows exactly which invoice and which receipt to look at.
+    message = str(excinfo.value)
+    assert "new-inv-1" in message
+    assert "do not retry" in message.casefold()
     events = read_events(_audit_isolation)
     assert [(e["operation"], e["key"]) for e in events] == [
         ("create", "new-inv-1"),
         ("reallocate", "rc-a"),
+        ("verify", "rc-a"),  # Fix 3: rc-a's successful reallocation was also verified
     ]
     await client.aclose()
 
@@ -468,9 +551,16 @@ async def test_create_response_that_is_not_json_raises_after_the_invoice_was_cre
 
 
 @pytest.mark.asyncio
-async def test_a_failing_read_after_a_successful_receipt_update_is_an_unaudited_write(
+async def test_a_failing_verification_read_does_not_prevent_the_write_from_being_audited(
     fake: FakeManager, _audit_isolation: Path
 ) -> None:
+    """Fix 3: the reallocate PUT for rc-a succeeds, and then its own follow-up
+    verification read fails. Before the fix, the audit entry for that PUT was only
+    written after the read succeeded, so this exact scenario left the write completely
+    unaudited (an audit log that no longer matches what actually happened in Manager).
+    After the fix, the write's audit entry is committed immediately after the PUT,
+    before the read is attempted, so it survives even when the read fails.
+    """
     client = _client()
     proposal = await _propose(client)
 
@@ -486,7 +576,15 @@ async def test_a_failing_read_after_a_successful_receipt_update_is_an_unaudited_
 
     assert fake.references("new-inv-1") == ["rc-a"]  # the PUT took effect
     events = read_events(_audit_isolation)
-    assert [(e["operation"], e["key"]) for e in events] == [("create", "new-inv-1")]  # no entry
+    # The reallocate write is audited despite its own verification read failing; there
+    # is no "verify" entry for rc-a, since that read never completed.
+    assert [(e["operation"], e["key"]) for e in events] == [
+        ("create", "new-inv-1"),
+        ("reallocate", "rc-a"),
+    ]
+    reallocate_entry = events[1]
+    assert reallocate_entry["status"] == "ok"
+    assert reallocate_entry["after"] is None  # committed before the read; no read result yet
     await client.aclose()
 
 

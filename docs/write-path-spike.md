@@ -6,6 +6,28 @@ investigation. No behaviour was changed. Evidence is in
 `tests/test_write_path_spike.py` (17 characterisation tests against an in-memory fake Manager
 that keeps real state and can inject a failure at any request).
 
+## Fixes applied since this spike
+
+Three of the findings below have since been fixed (see the commit that added
+`tests/test_write_path_spike.py`'s Fix 1/2/3 tests, and the follow-up commit that applied them
+to `corrections.py`): the proposal token is now bound to the citing transaction keys and
+apply verifies, per transaction, that its current allocation still points at a genuinely
+missing invoice before repointing it (finding 6); the 500 and connection-error paths inside
+this workflow no longer suggest retrying, and instead name the created invoice and the two
+working recovery paths (finding 3, partially; the underlying error's own text is preserved
+only via exception chaining, not in the top-level message); and the audit-log entry for a
+write in this workflow is now committed before its own follow-up verification read, so a
+failing read can no longer leave a write unaudited (finding 4, partially: a create with no
+`known_keys` on the resource, as sales and purchase invoices have, never did a follow-up read
+in the first place, so it always had exactly one entry either way).
+
+Findings 1, 2, 5 and 7 are unchanged and still open: there is no atomicity, a plain retry
+still creates a duplicate invoice (nothing here is idempotent), a fully successful run whose
+final `verify_invoice_balance` call fails is still reported as an error, and no MCP tool
+reads the audit log. Sections 3 and 4 below describe the pre-fix behaviour as investigated;
+they are not fully accurate any more for the three fixed findings, and are kept as the
+historical record of what this spike found.
+
 ## Conclusion
 
 **Safe multi-step write operations are not achievable as designed** for this workflow.
