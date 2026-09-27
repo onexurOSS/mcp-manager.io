@@ -1,6 +1,6 @@
 # Provenance summary (Gate 1A, analysis only)
 
-Nothing was decided legally here. This is evidence for solicitor review. Committed tree at HEAD d67c791e9429; commit author identity rewritten to Onexur <github@xalterra.com>; working tree clean apart from PROVENANCE.json and PROVENANCE_SUMMARY.md.
+Nothing was decided legally here. This is evidence for solicitor review. Committed tree at HEAD 9d3454e82687; commit author identity rewritten to Onexur <github@xalterra.com>; working tree clean apart from PROVENANCE.json and PROVENANCE_SUMMARY.md.
 
 ## History rewrite
 
@@ -31,12 +31,12 @@ What remains new in `server.py`, and why it still trips the 60-added-line heuris
 |---|---|---|
 | upstream/unmodified | 51 | 53 |
 | upstream/modified | 18 | 16 |
-| Onexur/original | 31 | 27 |
+| Onexur/original | 32 | 27 |
 | third-party | 1 | 7 |
 | generated/artifact | 3 | 3 |
-| **Total** | **104** | **106** |
+| **Total** | **105** | **106** |
 
-The total is -2 net against the first manifest: 7 third-party logo and API description files, the generated capability matrix and `spec/README.md` were removed, and `.cursor-plugin/plugin.json`, `tests/test_report_semantics.py`, `docs/upstream-history.md` and `NOTICE` were added. `upstream/modified` splits into 3 substantial-rewrite candidates and 15 minor modifications (after the manual classifications below).
+The total is -1 net against the first manifest: 7 third-party logo and API description files, the generated capability matrix and `spec/README.md` were removed, and `.cursor-plugin/plugin.json`, `tests/test_report_semantics.py`, `docs/upstream-history.md` and `NOTICE` were added. `upstream/modified` splits into 3 substantial-rewrite candidates and 15 minor modifications (after the manual classifications below).
 
 ## Test split: `test_server_tools.py`
 
@@ -112,7 +112,7 @@ One: `LICENSE-AGPL`, the Free Software Foundation text of the GNU Affero General
 
 ## Upstream MIT notices
 
-The upstream MIT licence and copyright notice **are present** in `LICENSE-MIT`: the MIT text with `Copyright (c) 2026 manager-mcp contributors` (as in upstream's `LICENSE`) and one added line `Copyright (c) 2026 Xalterra Ltd, trading as Onexur`. The former single `LICENSE` file was deleted. `LICENSE-AGPL` holds the unaltered FSF AGPL-3.0 text preceded by the same Xalterra copyright line. `NOTICE` repeats the upstream copyright line and source URL and names the same holder for material added for this project. **Resolved:** all three licence documents now name one holder, Xalterra Ltd, trading as Onexur (an earlier mismatch with `onexurOSS`, the GitHub namespace, was fixed). Prefacing the AGPL text with a project copyright line is standard practice and is not an edit to the licence text, so it is not flagged. `pyproject.toml` now declares `AGPL-3.0-or-later`; built artifacts carry `License-Expression: AGPL-3.0-or-later` and `License-File` entries for `LICENSE-AGPL`, `LICENSE-MIT` and `NOTICE`. Author metadata (`authors` in `pyproject.toml`, and the author fields in `mcpb/manifest.json` and `.cursor-plugin/plugin.json`) now names Xalterra Ltd, trading as Onexur, and `pyproject.toml` also keeps the upstream author, Dru Connold. `.cursor-plugin/plugin.json` now declares `AGPL-3.0-or-later`, matching `pyproject.toml` (it declared `MIT` before; the file itself remains upstream-derived). Other attribution: `README.md:5:This project began as a fork of [manager-mcp](https://github.com/flu`; `README.md:131:This project incorporates material from [manager-mcp](https://gith`; `pyproject.toml:12:authors = [{ name = "Xalterra Ltd, trading as Onexur" }, { nam`. `THIRD-PARTY-NOTICES` (dependency licence texts) is now present and is packaged in the sdist and wheel. Per-file headers: see the next section. **Not present yet:** `CLA.md` (draft, awaiting solicitor review; present in the working tree but deliberately uncommitted).
+The upstream MIT licence and copyright notice **are present** in `LICENSE-MIT`: the MIT text with `Copyright (c) 2026 manager-mcp contributors` (as in upstream's `LICENSE`) and one added line `Copyright (c) 2026 Xalterra Ltd, trading as Onexur`. The former single `LICENSE` file was deleted. `LICENSE-AGPL` holds the unaltered FSF AGPL-3.0 text preceded by the same Xalterra copyright line. `NOTICE` repeats the upstream copyright line and source URL and names the same holder for material added for this project. **Resolved:** all three licence documents now name one holder, Xalterra Ltd, trading as Onexur (an earlier mismatch with `onexurOSS`, the GitHub namespace, was fixed). Prefacing the AGPL text with a project copyright line is standard practice and is not an edit to the licence text, so it is not flagged. `pyproject.toml` now declares `AGPL-3.0-or-later`; built artifacts carry `License-Expression: AGPL-3.0-or-later` and `License-File` entries for `LICENSE-AGPL`, `LICENSE-MIT` and `NOTICE`. Author metadata (`authors` in `pyproject.toml`, and the author fields in `mcpb/manifest.json` and `.cursor-plugin/plugin.json`) now names Xalterra Ltd, trading as Onexur, and `pyproject.toml` also keeps the upstream author, Dru Connold. `.cursor-plugin/plugin.json` now declares `AGPL-3.0-or-later`, matching `pyproject.toml` (it declared `MIT` before; the file itself remains upstream-derived). Other attribution: `README.md:5:This project began as a fork of [manager-mcp](https://github.com/flu`; `README.md:131:This project incorporates material from [manager-mcp](https://gith`; `pyproject.toml:12:authors = [{ name = "Xalterra Ltd, trading as Onexur" }, { nam`. `THIRD-PARTY-NOTICES` (dependency licence texts) is now present and is packaged in the sdist and wheel. Per-file headers: see the next section. `CLA.md` (version 1.0, company number recorded) is committed. **Not configured:** the contribution bot that records acceptance of the CLA.
 
 ## Per-file licence headers
 
