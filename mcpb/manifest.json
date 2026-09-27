@@ -11,6 +11,7 @@
   "homepage": "https://github.com/onexurOSS/mcp-manager.io",
   "documentation": "https://github.com/onexurOSS/mcp-manager.io#readme",
   "support": "https://github.com/onexurOSS/mcp-manager.io/issues",
+  "license": "AGPL-3.0-or-later",
   "server": {
     "type": "uv",
     "entry_point": "server/main.py",
