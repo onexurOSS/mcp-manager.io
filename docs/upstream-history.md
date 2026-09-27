@@ -5,7 +5,7 @@ These are the changelog entries of the upstream project, manager-mcp
 unchanged from upstream tag v0.2.6, which is released under the MIT Licence,
 Copyright (c) 2026 manager-mcp contributors (see [LICENSE-MIT](../LICENSE-MIT)).
 
-This project, onexurOSS Manager MCP, was based on upstream 0.2.6. The releases below were
+This project, Onexur Manager MCP, was based on upstream 0.2.6. The releases below were
 made by the upstream authors, not by onexurOSS, and their artifacts exist upstream, not in
 this repository. Releases from 1.0.0 onward are recorded in [CHANGELOG.md](../CHANGELOG.md).
 

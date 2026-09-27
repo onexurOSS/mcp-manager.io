@@ -1,4 +1,4 @@
-# onexurOSS Manager MCP
+# Onexur Manager MCP
 
 An MCP (Model Context Protocol) server that connects AI assistants such as Claude and ChatGPT to a [Manager](https://www.manager.io) accounting instance. It exposes Manager's data and operations as a set of scoped tools. The default is read-only, with reporting, diagnostic and reconciliation tools available out of the box and every write capability behind explicit configuration.
 
@@ -6,7 +6,7 @@ This project began as a fork of [manager-mcp](https://github.com/flumpiey/manage
 
 ## 1. Project description
 
-onexurOSS Manager MCP lets an AI assistant read and, where explicitly permitted, act on a Manager accounting instance through a structured tool interface rather than free-form API calls. The server enforces a tiered permission model so that read access and write access are each opted into separately, and delete access is opted into separately again.
+Onexur Manager MCP lets an AI assistant read and, where explicitly permitted, act on a Manager accounting instance through a structured tool interface rather than free-form API calls. The server enforces a tiered permission model so that read access and write access are each opted into separately, and delete access is opted into separately again.
 
 Typical uses:
 
@@ -118,7 +118,7 @@ Do not treat any reporting tool as a substitute for Manager's own reports where 
 
 ## 6. Licensing
 
-onexurOSS Manager MCP is distributed under the GNU Affero General Public License v3.0 or later (AGPL-3.0-or-later).
+Onexur Manager MCP is distributed under the GNU Affero General Public License v3.0 or later (AGPL-3.0-or-later).
 
 This project incorporates material from manager-mcp 0.2.6, which remains licensed under the MIT License. Incorporating that material under this project's distribution does not transfer or extinguish the existing MIT rights and copyright in the upstream-derived portions; those rights remain in effect for recipients. See `NOTICE` for the full attribution statement and `PROVENANCE.json` for a file-level breakdown of which parts of this repository are upstream-derived (MIT) and which are original to Xalterra Ltd, trading as Onexur (AGPL-3.0-or-later).
 

@@ -1,6 +1,6 @@
 THIRD-PARTY NOTICES
 
-onexurOSS Manager MCP depends on the third-party software packages listed below.
+Onexur Manager MCP depends on the third-party software packages listed below.
 This file reproduces their licence notices. The packages are not vendored in this
 repository. They are installed from PyPI as dependencies of mcp-manager.io, and each
 remains under its own licence. Nothing in this file changes those licences.

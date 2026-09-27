@@ -4,8 +4,8 @@ All notable changes to this project are documented in this file.
 
 ## [1.0.0] - 2026-09-26
 
-**onexurOSS initial release.** This is the first release under the onexurOSS identity
-(onexurOSS Manager MCP), based on the upstream manager-mcp codebase at 0.2.6. The upstream
+**Onexur initial release.** This is the first release under the Onexur identity
+(Onexur Manager MCP), based on the upstream manager-mcp codebase at 0.2.6. The upstream
 release history (0.1.0 to 0.2.6) is kept unchanged in
 [docs/upstream-history.md](docs/upstream-history.md). The PyPI distribution is named
 `mcp-manager.io`; the module (`manager_mcp`) and commands (`manager-mcp`, `manager-mcp-dev`)
@@ -49,9 +49,9 @@ are unchanged for compatibility.
 - `aged_receivables`, `aged_payables`, `bank_balances` and `tax_summary` now reject date and as-at
   parameters instead of returning current data with a notice. Descriptions of these and of
   `trial_balance`, `profit_and_loss` and `balance_sheet` no longer imply official reports.
-- Branding, repository URLs and registry identity (`io.github.onexurOSS/manager-mcp`) now use onexurOSS.
+- Branding now uses Onexur. Repository URLs and registry identity (`io.github.onexurOSS/manager-mcp`) use the onexurOSS GitHub namespace.
   The PyPI distribution name is `mcp-manager.io`; install with `uvx --from mcp-manager.io manager-mcp`.
-  The original MIT copyright notice is retained; onexurOSS is added.
+  The original MIT copyright notice is retained; the copyright line for Xalterra Ltd, trading as Onexur, is added.
 
 ### Limitations
 

@@ -1,4 +1,4 @@
-# Contributing to onexurOSS Manager MCP
+# Contributing to Onexur Manager MCP
 
 Thank you for considering a contribution. This project has a mixed licensing structure, please read the section below before opening a pull request, it affects what you're agreeing to when you contribute.
 

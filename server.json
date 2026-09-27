@@ -1,7 +1,7 @@
 {
   "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
   "name": "io.github.onexurOSS/manager-mcp",
-  "title": "onexurOSS Manager MCP",
+  "title": "Onexur Manager MCP",
   "description": "MCP server for Manager.io bookkeeping: read-first with opt-in scoped task and write tools",
   "repository": {
     "url": "https://github.com/onexurOSS/mcp-manager.io",

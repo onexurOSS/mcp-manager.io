@@ -1,7 +1,7 @@
 {
   "manifest_version": "0.4",
   "name": "manager-mcp",
-  "display_name": "onexurOSS Manager MCP",
+  "display_name": "Onexur Manager MCP",
   "version": "1.0.0",
   "description": "MCP server for Manager.io bookkeeping: read-first with opt-in scoped task and write tools. Requires uv on PATH.",
   "author": {
