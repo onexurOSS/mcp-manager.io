@@ -1,7 +1,7 @@
 {
  "generated_by": "Gate 1A provenance audit",
- "repo_head": "e61ba087f0da246465e7f2bca790398038d13d6b",
- "repo_basis": "committed tree at HEAD e61ba087f0da; commit author identity rewritten to Onexur <github@xalterra.com>; working tree clean apart from PROVENANCE.json and PROVENANCE_SUMMARY.md",
+ "repo_head": "0999fec97ca74bcd614c483df0b47e7103926520",
+ "repo_basis": "committed tree at HEAD 0999fec97ca7; commit author identity rewritten to Onexur <github@xalterra.com>; working tree clean apart from PROVENANCE.json and PROVENANCE_SUMMARY.md",
  "upstream_reference": {
   "source": "github.com/flumpiey/manager-mcp tag v0.2.6",
   "commit": "c50c4d71f2aff962a8c9dbb1cce2ef14f602a51b",
@@ -100,14 +100,14 @@
   {
    "path": "CHANGELOG.md",
    "category": "upstream/modified",
-   "similarity_pct": 20.0,
+   "similarity_pct": 21.8,
    "upstream_source_path": "CHANGELOG.md",
-   "notes": "80.0% of upstream lines changed, 80.0% of current file is new; documentation rewritten/extended",
+   "notes": "77.3% of upstream lines changed, 79.0% of current file is new; documentation rewritten/extended",
    "flagged_for_review": true,
-   "changed_from_upstream_pct": 80.0,
-   "new_in_current_pct": 80.0,
+   "changed_from_upstream_pct": 77.3,
+   "new_in_current_pct": 79.0,
    "upstream_lines": 75,
-   "current_lines": 75,
+   "current_lines": 81,
    "review_flag": "substantial rewrite - candidate for Onexur/original",
    "manual_review": {
     "classification": "substantial rewrite - candidate for Onexur/original",
@@ -162,14 +162,14 @@
   {
    "path": "README.md",
    "category": "upstream/modified",
-   "similarity_pct": 19.4,
+   "similarity_pct": 19.7,
    "upstream_source_path": "README.md",
-   "notes": "87.5% of upstream lines changed, 56.5% of current file is new; documentation rewritten/extended",
+   "notes": "87.3% of upstream lines changed, 56.4% of current file is new; documentation rewritten/extended",
    "flagged_for_review": true,
-   "changed_from_upstream_pct": 87.5,
-   "new_in_current_pct": 56.5,
+   "changed_from_upstream_pct": 87.3,
+   "new_in_current_pct": 56.4,
    "upstream_lines": 536,
-   "current_lines": 154,
+   "current_lines": 156,
    "review_flag": "substantial rewrite - candidate for Onexur/original",
    "manual_review": {
     "classification": "substantial rewrite - candidate for Onexur/original",
@@ -2203,7 +2203,7 @@
     "in_head": true,
     "in_upstream_v0_2_6": true,
     "linked_from": [
-     "README.md:59"
+     "README.md:61"
     ]
    },
    ".cursor/mcp.json": {
@@ -2212,7 +2212,7 @@
     "in_upstream_v0_2_6": false,
     "linked_from": [
      ".env.example:11",
-     "README.md:60"
+     "README.md:62"
     ]
    },
    ".vscode/mcp.json": {
@@ -2220,7 +2220,7 @@
     "in_head": false,
     "in_upstream_v0_2_6": false,
     "linked_from": [
-     "README.md:60"
+     "README.md:62"
     ]
    }
   },
@@ -2236,11 +2236,11 @@
    "WT:NOTICE:4:Copyright (c) 2026 manager-mcp contributors.",
    "WT:NOTICE:9:Material added or authored for this project is copyright (c) 2026",
    "WT:NOTICE:17:The complete MIT License is reproduced in LICENSE-MIT. The complete",
-   "WT:README.md:124:This project incorporates material from manager-mcp 0.2.6, which remains licensed under the MIT License. Incorporating that material under this project's distribution does not transfer or extinguish the existing MIT rights and copyright in the upstream-derived portions; those rights remain in effect for recipients. See [`NOTICE`](https://github.com/onexurOSS/mcp-manager.io/blob/main/NOTICE) for the full attribution statement and [`PROVENANCE.json`](https://github.com/onexurOSS/mcp-manager.io/blob/main/PROVENANCE.json) for a file-level breakdown of which parts of this repository are upstream-derived (MIT) and which are original to Xalterra Ltd, trading as Onexur (AGPL-3.0-or-later).",
-   "WT:README.md:128:The complete AGPL-3.0-or-later text is reproduced in [`LICENSE-AGPL`](https://github.com/onexurOSS/mcp-manager.io/blob/main/LICENSE-AGPL), and the complete MIT License text is reproduced in [`LICENSE-MIT`](https://github.com/onexurOSS/mcp-manager.io/blob/main/LICENSE-MIT).",
-   "WT:README.md:132:This project incorporates material from [manager-mcp](https://github.com/flumpiey/manager-mcp) 0.2.6, released under the MIT License, copyright (c) 2026 manager-mcp contributors.",
-   "WT:README.md:136:The complete MIT License text is reproduced in [`LICENSE-MIT`](https://github.com/onexurOSS/mcp-manager.io/blob/main/LICENSE-MIT). See [`NOTICE`](https://github.com/onexurOSS/mcp-manager.io/blob/main/NOTICE) for the full attribution statement.",
-   "WT:README.md:146:See [`CONTRIBUTING.md`](https://github.com/onexurOSS/mcp-manager.io/blob/main/CONTRIBUTING.md) and [`CLA.md`](https://github.com/onexurOSS/mcp-manager.io/blob/main/CLA.md). Contributions to files identified in [`PROVENANCE.json`](https://github.com/onexurOSS/mcp-manager.io/blob/main/PROVENANCE.json) as upstream-derived remain subject to the upstream MIT license; contributions to Onexur-original files are covered by the project's Contributor License Agreement (version 1.0), which you accept by posting a comment on your pull request, as [`CONTRIBUTING.md`](https://github.com/onexurOSS/mcp-manager.io/blob/main/CONTRIBUTING.md) describes.",
+   "WT:README.md:126:This project incorporates material from manager-mcp 0.2.6, which remains licensed under the MIT License. Incorporating that material under this project's distribution does not transfer or extinguish the existing MIT rights and copyright in the upstream-derived portions; those rights remain in effect for recipients. See [`NOTICE`](https://github.com/onexurOSS/mcp-manager.io/blob/main/NOTICE) for the full attribution statement and [`PROVENANCE.json`](https://github.com/onexurOSS/mcp-manager.io/blob/main/PROVENANCE.json) for a file-level breakdown of which parts of this repository are upstream-derived (MIT) and which are original to Xalterra Ltd, trading as Onexur (AGPL-3.0-or-later).",
+   "WT:README.md:130:The complete AGPL-3.0-or-later text is reproduced in [`LICENSE-AGPL`](https://github.com/onexurOSS/mcp-manager.io/blob/main/LICENSE-AGPL), and the complete MIT License text is reproduced in [`LICENSE-MIT`](https://github.com/onexurOSS/mcp-manager.io/blob/main/LICENSE-MIT).",
+   "WT:README.md:134:This project incorporates material from [manager-mcp](https://github.com/flumpiey/manager-mcp) 0.2.6, released under the MIT License, copyright (c) 2026 manager-mcp contributors.",
+   "WT:README.md:138:The complete MIT License text is reproduced in [`LICENSE-MIT`](https://github.com/onexurOSS/mcp-manager.io/blob/main/LICENSE-MIT). See [`NOTICE`](https://github.com/onexurOSS/mcp-manager.io/blob/main/NOTICE) for the full attribution statement.",
+   "WT:README.md:148:See [`CONTRIBUTING.md`](https://github.com/onexurOSS/mcp-manager.io/blob/main/CONTRIBUTING.md) and [`CLA.md`](https://github.com/onexurOSS/mcp-manager.io/blob/main/CLA.md). Contributions to files identified in [`PROVENANCE.json`](https://github.com/onexurOSS/mcp-manager.io/blob/main/PROVENANCE.json) as upstream-derived remain subject to the upstream MIT license; contributions to Onexur-original files are covered by the project's Contributor License Agreement (version 1.0), which you accept by posting a comment on your pull request, as [`CONTRIBUTING.md`](https://github.com/onexurOSS/mcp-manager.io/blob/main/CONTRIBUTING.md) describes.",
    "WT:THIRD-PARTY-NOTICES:37:The MIT License (MIT)",
    "WT:THIRD-PARTY-NOTICES:39:Copyright (c) 2022 the contributors",
    "WT:THIRD-PARTY-NOTICES:41:Permission is hereby granted, free of charge, to any person obtaining a copy",
