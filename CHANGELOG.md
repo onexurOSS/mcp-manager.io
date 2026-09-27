@@ -23,10 +23,9 @@ are unchanged for compatibility.
 - Reporting semantics: legacy report tools return a `semantics` block (data class, historical,
   authoritative). Reconstructed reports always return `authoritative: false` and
   `official_manager_report: false`, with source, method, as-at date and ledger completeness.
-- Generated per-endpoint capability matrix under `src/manager_mcp/spec/` (built from Manager
-  26.8.4.3664; Manager's own API description is not redistributed).
 - `scripts/verify_reporting_controls.py` (live, GET-only validation) and
-  `scripts/build_capability_matrix.py`.
+  `scripts/build_capability_matrix.py`, which builds a per-endpoint capability matrix from an
+  API description fetched from your own instance. No matrix or Manager API description is shipped.
 - Read-only reconciliation/diagnostic tools: `find_records`, `find_broken_invoice_references`,
   `find_unallocated_transactions`, `find_duplicate_transactions`, `verify_invoice_balance`,
   `account_ledger`, `bank_activity`, `find_suspense_candidate_accounts`,

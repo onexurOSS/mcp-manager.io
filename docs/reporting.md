@@ -80,10 +80,10 @@ Reporting tools use `client.get` only. Write tools (`create_*`, `update_*`,
 by `MANAGER_MCP_WRITE_SCOPES`. `scripts/verify_reporting_controls.py` runs the
 tools live and fails if any request is not a GET.
 
-## Spec files
+## Capability matrix
 
-- `spec/api2.live-capabilities.json`: generated matrix per endpoint and method
-  (dates, fields, paging, sorting, filters, MCP tool), built from Manager 26.8.4.3664.
-  Manager's own API description and logos are not redistributed. Rebuild the matrix
-  with `scripts/build_capability_matrix.py` against a description fetched from your
-  own instance (`GET /api2`).
+No Manager API description or generated matrix is shipped with this project. To see, per
+endpoint and method, which dates, fields, paging, sorting and filters exist and which MCP tool
+covers it, fetch the description from your own instance (`GET /api2`) and run
+`scripts/build_capability_matrix.py` against it. Runtime never loads such a file: tools always
+call the live URL.

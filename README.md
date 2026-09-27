@@ -32,7 +32,7 @@ First release under the onexurOSS identity (v1.0.0), based on the upstream [mana
 - **Fixed assets:** read collections `fixed_assets` and `tax_codes`, `get_fixed_asset`, plus `create_fixed_asset` and `update_fixed_asset` under the `ledger` scope.
 - **`get_server_info`:** process id, start time, git state and registered tools, to prove which process you are talking to.
 - **Dev supervisor (opt-in):** automatic restart on source changes, see [Development](#development).
-- **Generated per-endpoint capability matrix** under `src/manager_mcp/spec/`. Manager's own API description and logos are not redistributed.
+- **Capability matrix generator:** `scripts/build_capability_matrix.py` builds a per-endpoint matrix from an API description fetched from your own instance. No matrix or Manager API description is shipped.
 
 ## What is Manager.io?
 
@@ -724,7 +724,7 @@ support.
   an extra HTTP round trip; this is a conscious choice, not an oversight.
 - One process ↔ one `MANAGER_API_URL`. Multi-instance routing is out of scope.
 - Multi-business disambiguation on a shared host is **unverified**. Do not claim multi-business support until validated against a live multi-business setup.
-- `src/manager_mcp/spec/` holds only the generated capability matrix, which is provenance only; runtime always hits the live URL. Manager's API description is not redistributed: fetch it from your own instance (`GET /api2`) if you want to rebuild the matrix.
+- No Manager API description or generated matrix is shipped. Runtime always calls the live URL. To build a capability matrix, fetch the description from your own instance (`GET /api2`) and run `scripts/build_capability_matrix.py` against it.
 - Reconstructed reports are not Manager's official reports, and reconstructed ageing can differ from Manager's own ageing. See [docs/reporting.md](docs/reporting.md).
 - ChatGPT Apps need a hosted HTTP MCP endpoint. This package is stdio-only.
 
