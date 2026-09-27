@@ -52,8 +52,6 @@ manager-mcp-dev = "manager_mcp.dev_supervisor:main"
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/manager_mcp"]
-# Assets under src/manager_mcp/assets ship with the package; do not
-# force-include them again (duplicate path breaks the wheel).
 
 [tool.hatch.build.targets.sdist]
 include = [

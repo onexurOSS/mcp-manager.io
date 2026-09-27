@@ -1,9 +1,3 @@
-<p align="center">
-  <a href="https://www.manager.io/">
-    <img src="docs/manager-icon.svg" alt="Manager.io" width="72" height="72">
-  </a>
-</p>
-
 # onexurOSS Manager MCP
 
 First release under the onexurOSS identity (v1.0.0), based on the upstream [manager-mcp](https://github.com/flumpiey/manager-mcp) project (MIT). The PyPI package is `mcp-manager.io`; the module and commands remain `manager_mcp` / `manager-mcp`.
@@ -38,7 +32,7 @@ First release under the onexurOSS identity (v1.0.0), based on the upstream [mana
 - **Fixed assets:** read collections `fixed_assets` and `tax_codes`, `get_fixed_asset`, plus `create_fixed_asset` and `update_fixed_asset` under the `ledger` scope.
 - **`get_server_info`:** process id, start time, git state and registered tools, to prove which process you are talking to.
 - **Dev supervisor (opt-in):** automatic restart on source changes, see [Development](#development).
-- **Live API specification archive** and a generated per-endpoint capability matrix under `src/manager_mcp/spec/`.
+- **Generated per-endpoint capability matrix** under `src/manager_mcp/spec/`. Manager's own API description and logos are not redistributed.
 
 ## What is Manager.io?
 
@@ -77,10 +71,10 @@ Transport is **stdio**. No HTTP server. No global install is required if you use
 
 ## Branding / icons
 
-- **stdio hosts (Cursor, Claude Desktop via `mcp.json`):** the server advertises Manager branding in MCP `serverInfo.icons` (embedded PNG data URI, plus a GitHub raw HTTPS fallback).
-- **Cursor plugin:** [`.cursor-plugin/plugin.json`](.cursor-plugin/plugin.json) uses [`docs/manager-icon.svg`](docs/manager-icon.svg).
-- **Claude Desktop Extension:** pack [`mcpb/`](mcpb/) (includes `icon.png`). See Installation → Claude Desktop below.
-- **Claude.ai remote connectors:** Claude.ai ignores `serverInfo.icons` and uses the **root-domain favicon** of the connector URL. If you host a remote MCP later, serve [`docs/favicon.ico`](docs/favicon.ico) at the registrable domain root (e.g. `https://acme.com/favicon.ico` for `https://mcp.acme.com/...`).
+This project ships no Manager.io logos or icons and the server advertises no `serverInfo.icons`, so hosts show their default icon. Manager.io is a trademark of its owner; this project is independent and not affiliated with or endorsed by Manager.io.
+
+- **Claude Desktop Extension:** pack [`mcpb/`](mcpb/). See Installation → Claude Desktop below.
+- **Claude.ai remote connectors:** Claude.ai uses the **root-domain favicon** of the connector URL. If you host a remote MCP later, serve your own favicon at the registrable domain root.
 
 ## Requirements
 
@@ -730,7 +724,7 @@ support.
   an extra HTTP round trip; this is a conscious choice, not an oversight.
 - One process ↔ one `MANAGER_API_URL`. Multi-instance routing is out of scope.
 - Multi-business disambiguation on a shared host is **unverified**. Do not claim multi-business support until validated against a live multi-business setup.
-- The specification files under `src/manager_mcp/spec/` (the curated `api2.json`, the archived live spec and the capability matrix) are provenance only; runtime always hits the live URL.
+- `src/manager_mcp/spec/` holds only the generated capability matrix, which is provenance only; runtime always hits the live URL. Manager's API description is not redistributed: fetch it from your own instance (`GET /api2`) if you want to rebuild the matrix.
 - Reconstructed reports are not Manager's official reports, and reconstructed ageing can differ from Manager's own ageing. See [docs/reporting.md](docs/reporting.md).
 - ChatGPT Apps need a hosted HTTP MCP endpoint. This package is stdio-only.
 

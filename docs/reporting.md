@@ -82,9 +82,8 @@ tools live and fails if any request is not a GET.
 
 ## Spec files
 
-- `spec/api2.json`: original curated 24-path subset (kept as the previous
-  version; every path still exists live).
-- `spec/api2.live-26.8.4.3664.json.gz`: full live description (653 paths).
 - `spec/api2.live-capabilities.json`: generated matrix per endpoint and method
-  (dates, fields, paging, sorting, filters, MCP tool). Rebuild with
-  `scripts/build_capability_matrix.py`.
+  (dates, fields, paging, sorting, filters, MCP tool), built from Manager 26.8.4.3664.
+  Manager's own API description and logos are not redistributed. Rebuild the matrix
+  with `scripts/build_capability_matrix.py` against a description fetched from your
+  own instance (`GET /api2`).

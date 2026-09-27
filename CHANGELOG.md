@@ -22,8 +22,8 @@ named `mcp-manager.io`; the module (`manager_mcp`) and commands (`manager-mcp`,
 - Reporting semantics: legacy report tools return a `semantics` block (data class, historical,
   authoritative). Reconstructed reports always return `authoritative: false` and
   `official_manager_report: false`, with source, method, as-at date and ledger completeness.
-- Live API specification archive (653 paths, Manager 26.8.4.3664) and a generated per-endpoint
-  capability matrix under `src/manager_mcp/spec/`. The original curated `api2.json` is kept.
+- Generated per-endpoint capability matrix under `src/manager_mcp/spec/` (built from Manager
+  26.8.4.3664; Manager's own API description is not redistributed).
 - `scripts/verify_reporting_controls.py` (live, GET-only validation) and
   `scripts/build_capability_matrix.py`.
 - Read-only reconciliation/diagnostic tools: `find_records`, `find_broken_invoice_references`,

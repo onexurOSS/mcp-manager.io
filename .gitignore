@@ -72,3 +72,6 @@ Thumbs.db
 *.swo
 *~
 context-mode
+
+# Built Claude Desktop bundle (build artifact; the copy shipped upstream is stale)
+mcpb.mcpb
