@@ -1,6 +1,6 @@
 # Provenance summary (Gate 1A, analysis only)
 
-Nothing was decided legally here. This is evidence for solicitor review. Committed tree at HEAD b8b87e2662e0; working tree clean apart from PROVENANCE.json and PROVENANCE_SUMMARY.md.
+Nothing was decided legally here. This is evidence for solicitor review. Committed tree at HEAD 062abbe6e645; working tree clean apart from PROVENANCE.json and PROVENANCE_SUMMARY.md.
 
 ## Basis
 
@@ -26,13 +26,13 @@ What remains new in `server.py`, and why it still trips the 60-added-line heuris
 | Category | Files now | First manifest |
 |---|---|---|
 | upstream/unmodified | 51 | 53 |
-| upstream/modified | 19 | 16 |
+| upstream/modified | 18 | 16 |
 | onexurOSS/original | 28 | 27 |
 | third-party | 0 | 7 |
-| generated/artifact | 3 | 3 |
-| **Total** | **101** | **106** |
+| generated/artifact | 2 | 3 |
+| **Total** | **99** | **106** |
 
-The total is -5 net against the first manifest: 7 third-party logo and API description files were removed, and `.cursor-plugin/plugin.json` and `tests/test_report_semantics.py` were added. `upstream/modified` splits into 4 substantial-rewrite candidates and 15 minor modifications (after the manual classifications below).
+The total is -7 net against the first manifest: 7 third-party logo and API description files, the generated capability matrix and `spec/README.md` were removed, and `.cursor-plugin/plugin.json`, `tests/test_report_semantics.py` and `docs/upstream-history.md` were added. `upstream/modified` splits into 3 substantial-rewrite candidates and 15 minor modifications (after the manual classifications below).
 
 ## Test split: `test_server_tools.py`
 
@@ -48,18 +48,16 @@ Five onexurOSS tests (three profit and loss pagination tests, two `aged_receivab
 
 | File | Similarity | Upstream lines changed | Share of file that is new | What changed |
 |---|---|---|---|---|
-| `CHANGELOG.md` | 19.9% | 80.0% | 80.3% | documentation rewritten/extended |
+| `CHANGELOG.md` | 20.0% | 80.0% | 80.0% | documentation rewritten/extended |
 | `README.md` | 74.4% | 11.0% | 36.1% | documentation rewritten/extended |
 | `src/manager_mcp/server.py` | 87.7% | 6.3% | 17.6% | edits to existing logic/strings; removes server_icons |
-| `src/manager_mcp/spec/README.md` | 12.5% | 90.0% | 83.3% | documentation rewritten/extended |
 
-### Manual classification of four files
+### Manual classification of three files
 
-These four changed after the first manifest was written and were read directly against upstream v0.2.6. The rewrites (`spec/README.md`, `CHANGELOG.md`) are flagged for the eventual solicitor follow-up.
+These three changed after the first manifest was written and were read directly against upstream v0.2.6. The rewrite (`CHANGELOG.md`) is flagged for the eventual solicitor follow-up.
 
-- **`src/manager_mcp/spec/README.md`:** substantial rewrite - candidate for onexurOSS/original. The upstream document (vendored OpenAPI provenance note and its live-validation notes) was replaced wholesale with new text describing the generated capability matrix. No upstream sentence is retained. Automatic figures: similarity 12.5%, 90.0% of upstream lines changed, 83.3% of the file new.
 - **`tests/test_server_icons.py`:** minor modification - likely remains upstream-derived (manual override of the automatic flag). 12-line upstream test whose icon assertions were inverted. The module skeleton and two assertion lines (mcp.name and website_url) are verbatim upstream. The automatic substantial flag is a small-file percentage artefact. Automatic figures: similarity 38.9%, 70.8% of upstream lines changed, 41.7% of the file new.
-- **`CHANGELOG.md`:** substantial rewrite - candidate for onexurOSS/original. Since the changelog split the file holds only the onexurOSS 1.0.0 entry. The only upstream text retained is the two line title and introduction. The upstream release entries moved verbatim to docs/upstream-history.md. The path match to upstream CHANGELOG.md is a comparison artefact. Automatic figures: similarity 19.9%, 80.0% of upstream lines changed, 80.3% of the file new.
+- **`CHANGELOG.md`:** substantial rewrite - candidate for onexurOSS/original. Since the changelog split the file holds only the onexurOSS 1.0.0 entry. The only upstream text retained is the two line title and introduction. The upstream release entries moved verbatim to docs/upstream-history.md. The path match to upstream CHANGELOG.md is a comparison artefact. Automatic figures: similarity 20.0%, 80.0% of upstream lines changed, 80.0% of the file new.
 - **`docs/upstream-history.md`:** upstream-derived, reproduced verbatim (minor modification). Byte for byte copy of the upstream v0.2.6 changelog entries for 0.1.0 to 0.2.6, with an added attribution and MIT notice paragraph. The tool matched it to upstream CHANGELOG.md by rename detection. Automatic figures: similarity 93.0%, 2.7% of upstream lines changed, 11.0% of the file new.
 
 ### Minor modifications (likely remain upstream-derived)
@@ -86,7 +84,7 @@ These four changed after the first manifest was written and were read directly a
 
 ### Files
 
-None remain. The 7 Manager.io logo and API description files flagged in the first manifest were removed (commit `26031ef`). The generated `src/manager_mcp/spec/api2.live-capabilities.json` is kept for now and is subject to the solicitor's view on whether it is factual interface data.
+None remain. The 7 Manager.io logo and API description files flagged in the first manifest were removed (commit `26031ef`). The generated capability matrix (`src/manager_mcp/spec/api2.live-capabilities.json`, kept in the first pass) and `spec/README.md` were also removed; a matrix is now built by users from their own instance with `scripts/build_capability_matrix.py`. The file remains in the initial commit 3e458b5, as do the seven earlier removals.
 
 ### Dependencies (104 distributions in `uv.lock`, 75 runtime, 29 dev/build only; unchanged since the first manifest)
 
