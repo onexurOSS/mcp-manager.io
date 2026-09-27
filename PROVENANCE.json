@@ -1,7 +1,7 @@
 {
  "generated_by": "Gate 1A provenance audit",
- "repo_head": "15e10d6353dcab938af5c213cd642f7355f3ffd0",
- "repo_basis": "committed tree at HEAD 15e10d6353dc; commit author identity rewritten to Onexur <github@xalterra.com>; working tree clean apart from PROVENANCE.json and PROVENANCE_SUMMARY.md",
+ "repo_head": "afe1c6819380308bfcc8188dab6cb7d3d922e5c4",
+ "repo_basis": "committed tree at HEAD afe1c6819380; commit author identity rewritten to Onexur <github@xalterra.com>; working tree clean apart from PROVENANCE.json and PROVENANCE_SUMMARY.md",
  "upstream_reference": {
   "source": "github.com/flumpiey/manager-mcp tag v0.2.6",
   "commit": "c50c4d71f2aff962a8c9dbb1cce2ef14f602a51b",
@@ -2146,7 +2146,7 @@
    "WT:README.md:127:The complete AGPL-3.0-or-later text is reproduced in `LICENSE-AGPL`, and the complete MIT License text is reproduced in `LICENSE-MIT`.",
    "WT:README.md:131:This project incorporates material from [manager-mcp](https://github.com/flumpiey/manager-mcp) 0.2.6, released under the MIT License, copyright (c) 2026 manager-mcp contributors.",
    "WT:README.md:135:The complete MIT License text is reproduced in `LICENSE-MIT`. See `NOTICE` for the full attribution statement.",
-   "WT:README.md:145:See `CONTRIBUTING.md` and `CLA.md`. Contributions to files identified in `PROVENANCE.json` as upstream-derived remain subject to the upstream MIT license; contributions to Onexur-original files are covered by the project's Contributor License Agreement.",
+   "WT:README.md:145:See `CONTRIBUTING.md` and `CLA.md`. Contributions to files identified in `PROVENANCE.json` as upstream-derived remain subject to the upstream MIT license; contributions to Onexur-original files are covered by the project's Contributor License Agreement (version 1.0), which you accept by posting a comment on your pull request, as `CONTRIBUTING.md` describes.",
    "WT:THIRD-PARTY-NOTICES:37:The MIT License (MIT)",
    "WT:THIRD-PARTY-NOTICES:39:Copyright (c) 2022 the contributors",
    "WT:THIRD-PARTY-NOTICES:41:Permission is hereby granted, free of charge, to any person obtaining a copy",
