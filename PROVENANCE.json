@@ -1,7 +1,7 @@
 {
  "generated_by": "Gate 1A provenance audit",
- "repo_head": "129043da8cc9d61196b187f7829fe240eaf621de",
- "repo_basis": "committed tree at HEAD 129043da8cc9; working tree clean apart from PROVENANCE.json and PROVENANCE_SUMMARY.md",
+ "repo_head": "cbc8e5ab0e11fc5af9961c51d20eb60944522155",
+ "repo_basis": "committed tree at HEAD cbc8e5ab0e11; working tree clean apart from PROVENANCE.json and PROVENANCE_SUMMARY.md",
  "upstream_reference": {
   "source": "github.com/flumpiey/manager-mcp tag v0.2.6",
   "commit": "c50c4d71f2aff962a8c9dbb1cce2ef14f602a51b",
@@ -93,6 +93,14 @@
     "classification": "substantial rewrite - candidate for onexurOSS/original",
     "basis": "Since the changelog split the file holds only the onexurOSS 1.0.0 entry. The only upstream text retained is the two line title and introduction. The upstream release entries moved verbatim to docs/upstream-history.md. The path match to upstream CHANGELOG.md is a comparison artefact."
    }
+  },
+  {
+   "path": "CONTRIBUTING.md",
+   "category": "onexurOSS/original",
+   "similarity_pct": null,
+   "upstream_source_path": null,
+   "notes": "no upstream counterpart in v0.2.6",
+   "flagged_for_review": false
   },
   {
    "path": "LICENSE-AGPL",
@@ -242,7 +250,8 @@
    "changed_from_upstream_pct": 0.0,
    "new_in_current_pct": 0.0,
    "upstream_lines": 6,
-   "current_lines": 6
+   "current_lines": 6,
+   "licence_header": "none"
   },
   {
    "path": "pyproject.toml",
@@ -267,7 +276,8 @@
    "changed_from_upstream_pct": 0.0,
    "new_in_current_pct": 0.0,
    "upstream_lines": 82,
-   "current_lines": 82
+   "current_lines": 82,
+   "licence_header": "none"
   },
   {
    "path": "scripts/_probe_quotes.py",
@@ -279,7 +289,8 @@
    "changed_from_upstream_pct": 0.0,
    "new_in_current_pct": 0.0,
    "upstream_lines": 91,
-   "current_lines": 91
+   "current_lines": 91,
+   "licence_header": "none"
   },
   {
    "path": "scripts/_probe_quotes_minimal.py",
@@ -291,7 +302,8 @@
    "changed_from_upstream_pct": 0.0,
    "new_in_current_pct": 0.0,
    "upstream_lines": 145,
-   "current_lines": 145
+   "current_lines": 145,
+   "licence_header": "none"
   },
   {
    "path": "scripts/_probe_quotes_write.py",
@@ -303,7 +315,8 @@
    "changed_from_upstream_pct": 0.0,
    "new_in_current_pct": 0.0,
    "upstream_lines": 308,
-   "current_lines": 308
+   "current_lines": 308,
+   "licence_header": "none"
   },
   {
    "path": "scripts/_probe_scope_paths.py",
@@ -315,7 +328,8 @@
    "changed_from_upstream_pct": 0.0,
    "new_in_current_pct": 0.0,
    "upstream_lines": 120,
-   "current_lines": 120
+   "current_lines": 120,
+   "licence_header": "none"
   },
   {
    "path": "scripts/_smoke_quotes_scopes.py",
@@ -327,7 +341,8 @@
    "changed_from_upstream_pct": 0.0,
    "new_in_current_pct": 0.0,
    "upstream_lines": 107,
-   "current_lines": 107
+   "current_lines": 107,
+   "licence_header": "none"
   },
   {
    "path": "scripts/_smoke_receipt_readback.py",
@@ -339,7 +354,8 @@
    "changed_from_upstream_pct": 0.0,
    "new_in_current_pct": 0.0,
    "upstream_lines": 91,
-   "current_lines": 91
+   "current_lines": 91,
+   "licence_header": "none"
   },
   {
    "path": "scripts/build_capability_matrix.py",
@@ -347,7 +363,8 @@
    "similarity_pct": null,
    "upstream_source_path": null,
    "notes": "no upstream counterpart in v0.2.6",
-   "flagged_for_review": false
+   "flagged_for_review": false,
+   "licence_header": "AGPL-3.0-or-later (SPDX, Xalterra Ltd trading as Onexur)"
   },
   {
    "path": "scripts/verify_reporting_controls.py",
@@ -355,7 +372,8 @@
    "similarity_pct": null,
    "upstream_source_path": null,
    "notes": "no upstream counterpart in v0.2.6",
-   "flagged_for_review": false
+   "flagged_for_review": false,
+   "licence_header": "AGPL-3.0-or-later (SPDX, Xalterra Ltd trading as Onexur)"
   },
   {
    "path": "server.json",
@@ -568,7 +586,8 @@
    "changed_from_upstream_pct": 0.0,
    "new_in_current_pct": 0.0,
    "upstream_lines": 3,
-   "current_lines": 3
+   "current_lines": 3,
+   "licence_header": "none"
   },
   {
    "path": "src/manager_mcp/audit_log.py",
@@ -576,7 +595,8 @@
    "similarity_pct": null,
    "upstream_source_path": null,
    "notes": "no upstream counterpart in v0.2.6",
-   "flagged_for_review": false
+   "flagged_for_review": false,
+   "licence_header": "AGPL-3.0-or-later (SPDX, Xalterra Ltd trading as Onexur)"
   },
   {
    "path": "src/manager_mcp/client.py",
@@ -588,7 +608,8 @@
    "changed_from_upstream_pct": 0.0,
    "new_in_current_pct": 0.0,
    "upstream_lines": 151,
-   "current_lines": 151
+   "current_lines": 151,
+   "licence_header": "none"
   },
   {
    "path": "src/manager_mcp/corrections.py",
@@ -596,7 +617,8 @@
    "similarity_pct": null,
    "upstream_source_path": null,
    "notes": "no upstream counterpart in v0.2.6",
-   "flagged_for_review": false
+   "flagged_for_review": false,
+   "licence_header": "AGPL-3.0-or-later (SPDX, Xalterra Ltd trading as Onexur)"
   },
   {
    "path": "src/manager_mcp/dev_supervisor.py",
@@ -604,7 +626,8 @@
    "similarity_pct": null,
    "upstream_source_path": null,
    "notes": "no upstream counterpart in v0.2.6",
-   "flagged_for_review": false
+   "flagged_for_review": false,
+   "licence_header": "AGPL-3.0-or-later (SPDX, Xalterra Ltd trading as Onexur)"
   },
   {
    "path": "src/manager_mcp/diagnostics.py",
@@ -612,7 +635,8 @@
    "similarity_pct": null,
    "upstream_source_path": null,
    "notes": "no upstream counterpart in v0.2.6",
-   "flagged_for_review": false
+   "flagged_for_review": false,
+   "licence_header": "AGPL-3.0-or-later (SPDX, Xalterra Ltd trading as Onexur)"
   },
   {
    "path": "src/manager_mcp/extra_read_collections.py",
@@ -620,7 +644,8 @@
    "similarity_pct": null,
    "upstream_source_path": null,
    "notes": "no upstream counterpart in v0.2.6",
-   "flagged_for_review": false
+   "flagged_for_review": false,
+   "licence_header": "AGPL-3.0-or-later (SPDX, Xalterra Ltd trading as Onexur)"
   },
   {
    "path": "src/manager_mcp/fixed_assets.py",
@@ -628,7 +653,8 @@
    "similarity_pct": null,
    "upstream_source_path": null,
    "notes": "no upstream counterpart in v0.2.6",
-   "flagged_for_review": false
+   "flagged_for_review": false,
+   "licence_header": "AGPL-3.0-or-later (SPDX, Xalterra Ltd trading as Onexur)"
   },
   {
    "path": "src/manager_mcp/paging.py",
@@ -636,7 +662,8 @@
    "similarity_pct": null,
    "upstream_source_path": null,
    "notes": "no upstream counterpart in v0.2.6",
-   "flagged_for_review": false
+   "flagged_for_review": false,
+   "licence_header": "AGPL-3.0-or-later (SPDX, Xalterra Ltd trading as Onexur)"
   },
   {
    "path": "src/manager_mcp/preconditions.py",
@@ -648,7 +675,8 @@
    "changed_from_upstream_pct": 0.0,
    "new_in_current_pct": 0.0,
    "upstream_lines": 45,
-   "current_lines": 45
+   "current_lines": 45,
+   "licence_header": "none"
   },
   {
    "path": "src/manager_mcp/reconciliation.py",
@@ -656,7 +684,8 @@
    "similarity_pct": null,
    "upstream_source_path": null,
    "notes": "no upstream counterpart in v0.2.6",
-   "flagged_for_review": false
+   "flagged_for_review": false,
+   "licence_header": "AGPL-3.0-or-later (SPDX, Xalterra Ltd trading as Onexur)"
   },
   {
    "path": "src/manager_mcp/reporting.py",
@@ -664,7 +693,8 @@
    "similarity_pct": null,
    "upstream_source_path": null,
    "notes": "no upstream counterpart in v0.2.6",
-   "flagged_for_review": false
+   "flagged_for_review": false,
+   "licence_header": "AGPL-3.0-or-later (SPDX, Xalterra Ltd trading as Onexur)"
   },
   {
    "path": "src/manager_mcp/resources.py",
@@ -677,7 +707,8 @@
    "new_in_current_pct": 8.0,
    "upstream_lines": 196,
    "current_lines": 212,
-   "review_flag": "minor modification - likely remains upstream-derived"
+   "review_flag": "minor modification - likely remains upstream-derived",
+   "licence_header": "none"
   },
   {
    "path": "src/manager_mcp/scopes.py",
@@ -689,7 +720,8 @@
    "changed_from_upstream_pct": 0.0,
    "new_in_current_pct": 0.7,
    "upstream_lines": 267,
-   "current_lines": 269
+   "current_lines": 269,
+   "licence_header": "none"
   },
   {
    "path": "src/manager_mcp/server.py",
@@ -702,7 +734,8 @@
    "new_in_current_pct": 17.6,
    "upstream_lines": 697,
    "current_lines": 792,
-   "review_flag": "substantial rewrite - candidate for onexurOSS/original"
+   "review_flag": "substantial rewrite - candidate for onexurOSS/original",
+   "licence_header": "none"
   },
   {
    "path": "src/manager_mcp/server_info.py",
@@ -710,7 +743,8 @@
    "similarity_pct": null,
    "upstream_source_path": null,
    "notes": "no upstream counterpart in v0.2.6",
-   "flagged_for_review": false
+   "flagged_for_review": false,
+   "licence_header": "AGPL-3.0-or-later (SPDX, Xalterra Ltd trading as Onexur)"
   },
   {
    "path": "src/manager_mcp/task_tools.py",
@@ -722,7 +756,8 @@
    "changed_from_upstream_pct": 0.0,
    "new_in_current_pct": 0.0,
    "upstream_lines": 473,
-   "current_lines": 473
+   "current_lines": 473,
+   "licence_header": "none"
   },
   {
    "path": "src/manager_mcp/writable.py",
@@ -734,7 +769,8 @@
    "changed_from_upstream_pct": 0.0,
    "new_in_current_pct": 0.0,
    "upstream_lines": 440,
-   "current_lines": 440
+   "current_lines": 440,
+   "licence_header": "none"
   },
   {
    "path": "src/manager_mcp/write_validate.py",
@@ -746,7 +782,8 @@
    "changed_from_upstream_pct": 0.0,
    "new_in_current_pct": 0.0,
    "upstream_lines": 100,
-   "current_lines": 100
+   "current_lines": 100,
+   "licence_header": "none"
   },
   {
    "path": "tests/fixtures/fake_mcp_child.py",
@@ -754,7 +791,8 @@
    "similarity_pct": null,
    "upstream_source_path": null,
    "notes": "no upstream counterpart in v0.2.6",
-   "flagged_for_review": false
+   "flagged_for_review": false,
+   "licence_header": "AGPL-3.0-or-later (SPDX, Xalterra Ltd trading as Onexur)"
   },
   {
    "path": "tests/integration/__init__.py",
@@ -766,7 +804,8 @@
    "changed_from_upstream_pct": 0.0,
    "new_in_current_pct": 0.0,
    "upstream_lines": 0,
-   "current_lines": 0
+   "current_lines": 0,
+   "licence_header": "none"
   },
   {
    "path": "tests/integration/conftest.py",
@@ -778,7 +817,8 @@
    "changed_from_upstream_pct": 0.0,
    "new_in_current_pct": 0.0,
    "upstream_lines": 228,
-   "current_lines": 228
+   "current_lines": 228,
+   "licence_header": "none"
   },
   {
    "path": "tests/integration/test_banking_ledger.py",
@@ -790,7 +830,8 @@
    "changed_from_upstream_pct": 0.0,
    "new_in_current_pct": 0.0,
    "upstream_lines": 104,
-   "current_lines": 104
+   "current_lines": 104,
+   "licence_header": "none"
   },
   {
    "path": "tests/integration/test_deposits.py",
@@ -802,7 +843,8 @@
    "changed_from_upstream_pct": 0.0,
    "new_in_current_pct": 0.0,
    "upstream_lines": 183,
-   "current_lines": 183
+   "current_lines": 183,
+   "licence_header": "none"
   },
   {
    "path": "tests/integration/test_parties.py",
@@ -814,7 +856,8 @@
    "changed_from_upstream_pct": 0.0,
    "new_in_current_pct": 0.0,
    "upstream_lines": 63,
-   "current_lines": 63
+   "current_lines": 63,
+   "licence_header": "none"
   },
   {
    "path": "tests/integration/test_payments.py",
@@ -826,7 +869,8 @@
    "changed_from_upstream_pct": 0.0,
    "new_in_current_pct": 0.0,
    "upstream_lines": 108,
-   "current_lines": 108
+   "current_lines": 108,
+   "licence_header": "none"
   },
   {
    "path": "tests/integration/test_reads.py",
@@ -838,7 +882,8 @@
    "changed_from_upstream_pct": 0.0,
    "new_in_current_pct": 0.0,
    "upstream_lines": 79,
-   "current_lines": 79
+   "current_lines": 79,
+   "licence_header": "none"
   },
   {
    "path": "tests/integration/test_sales.py",
@@ -850,7 +895,8 @@
    "changed_from_upstream_pct": 0.0,
    "new_in_current_pct": 0.0,
    "upstream_lines": 138,
-   "current_lines": 138
+   "current_lines": 138,
+   "licence_header": "none"
   },
   {
    "path": "tests/test_audit_log.py",
@@ -858,7 +904,8 @@
    "similarity_pct": null,
    "upstream_source_path": null,
    "notes": "no upstream counterpart in v0.2.6",
-   "flagged_for_review": false
+   "flagged_for_review": false,
+   "licence_header": "AGPL-3.0-or-later (SPDX, Xalterra Ltd trading as Onexur)"
   },
   {
    "path": "tests/test_client.py",
@@ -870,7 +917,8 @@
    "changed_from_upstream_pct": 0.0,
    "new_in_current_pct": 0.0,
    "upstream_lines": 147,
-   "current_lines": 147
+   "current_lines": 147,
+   "licence_header": "none"
   },
   {
    "path": "tests/test_corrections.py",
@@ -878,7 +926,8 @@
    "similarity_pct": null,
    "upstream_source_path": null,
    "notes": "no upstream counterpart in v0.2.6",
-   "flagged_for_review": false
+   "flagged_for_review": false,
+   "licence_header": "AGPL-3.0-or-later (SPDX, Xalterra Ltd trading as Onexur)"
   },
   {
    "path": "tests/test_denylist_comprehensive.py",
@@ -890,7 +939,8 @@
    "changed_from_upstream_pct": 0.0,
    "new_in_current_pct": 0.0,
    "upstream_lines": 55,
-   "current_lines": 55
+   "current_lines": 55,
+   "licence_header": "none"
   },
   {
    "path": "tests/test_dev_supervisor.py",
@@ -898,7 +948,8 @@
    "similarity_pct": null,
    "upstream_source_path": null,
    "notes": "no upstream counterpart in v0.2.6",
-   "flagged_for_review": false
+   "flagged_for_review": false,
+   "licence_header": "AGPL-3.0-or-later (SPDX, Xalterra Ltd trading as Onexur)"
   },
   {
    "path": "tests/test_diagnostics.py",
@@ -906,7 +957,8 @@
    "similarity_pct": null,
    "upstream_source_path": null,
    "notes": "no upstream counterpart in v0.2.6",
-   "flagged_for_review": false
+   "flagged_for_review": false,
+   "licence_header": "AGPL-3.0-or-later (SPDX, Xalterra Ltd trading as Onexur)"
   },
   {
    "path": "tests/test_extra_read_collections.py",
@@ -914,7 +966,8 @@
    "similarity_pct": null,
    "upstream_source_path": null,
    "notes": "no upstream counterpart in v0.2.6",
-   "flagged_for_review": false
+   "flagged_for_review": false,
+   "licence_header": "AGPL-3.0-or-later (SPDX, Xalterra Ltd trading as Onexur)"
   },
   {
    "path": "tests/test_fixed_assets.py",
@@ -922,7 +975,8 @@
    "similarity_pct": null,
    "upstream_source_path": null,
    "notes": "no upstream counterpart in v0.2.6",
-   "flagged_for_review": false
+   "flagged_for_review": false,
+   "licence_header": "AGPL-3.0-or-later (SPDX, Xalterra Ltd trading as Onexur)"
   },
   {
    "path": "tests/test_migration_collections.py",
@@ -930,7 +984,8 @@
    "similarity_pct": null,
    "upstream_source_path": null,
    "notes": "no upstream counterpart in v0.2.6",
-   "flagged_for_review": false
+   "flagged_for_review": false,
+   "licence_header": "AGPL-3.0-or-later (SPDX, Xalterra Ltd trading as Onexur)"
   },
   {
    "path": "tests/test_new_tool_registration.py",
@@ -938,7 +993,8 @@
    "similarity_pct": null,
    "upstream_source_path": null,
    "notes": "no upstream counterpart in v0.2.6",
-   "flagged_for_review": false
+   "flagged_for_review": false,
+   "licence_header": "AGPL-3.0-or-later (SPDX, Xalterra Ltd trading as Onexur)"
   },
   {
    "path": "tests/test_paging.py",
@@ -946,7 +1002,8 @@
    "similarity_pct": null,
    "upstream_source_path": null,
    "notes": "no upstream counterpart in v0.2.6",
-   "flagged_for_review": false
+   "flagged_for_review": false,
+   "licence_header": "AGPL-3.0-or-later (SPDX, Xalterra Ltd trading as Onexur)"
   },
   {
    "path": "tests/test_precondition.py",
@@ -958,7 +1015,8 @@
    "changed_from_upstream_pct": 0.0,
    "new_in_current_pct": 0.0,
    "upstream_lines": 118,
-   "current_lines": 118
+   "current_lines": 118,
+   "licence_header": "none"
   },
   {
    "path": "tests/test_readonly_guard.py",
@@ -970,7 +1028,8 @@
    "changed_from_upstream_pct": 0.0,
    "new_in_current_pct": 0.0,
    "upstream_lines": 40,
-   "current_lines": 40
+   "current_lines": 40,
+   "licence_header": "none"
   },
   {
    "path": "tests/test_reconciliation.py",
@@ -978,7 +1037,8 @@
    "similarity_pct": null,
    "upstream_source_path": null,
    "notes": "no upstream counterpart in v0.2.6",
-   "flagged_for_review": false
+   "flagged_for_review": false,
+   "licence_header": "AGPL-3.0-or-later (SPDX, Xalterra Ltd trading as Onexur)"
   },
   {
    "path": "tests/test_report_semantics.py",
@@ -986,7 +1046,8 @@
    "similarity_pct": null,
    "upstream_source_path": null,
    "notes": "no upstream counterpart in v0.2.6; five onexurOSS tests moved verbatim out of tests/test_server_tools.py",
-   "flagged_for_review": false
+   "flagged_for_review": false,
+   "licence_header": "AGPL-3.0-or-later (SPDX, Xalterra Ltd trading as Onexur)"
   },
   {
    "path": "tests/test_reporting.py",
@@ -994,7 +1055,8 @@
    "similarity_pct": null,
    "upstream_source_path": null,
    "notes": "no upstream counterpart in v0.2.6",
-   "flagged_for_review": false
+   "flagged_for_review": false,
+   "licence_header": "AGPL-3.0-or-later (SPDX, Xalterra Ltd trading as Onexur)"
   },
   {
    "path": "tests/test_resources.py",
@@ -1007,7 +1069,8 @@
    "new_in_current_pct": 6.5,
    "upstream_lines": 101,
    "current_lines": 107,
-   "review_flag": "minor modification - likely remains upstream-derived"
+   "review_flag": "minor modification - likely remains upstream-derived",
+   "licence_header": "none"
   },
   {
    "path": "tests/test_scopes.py",
@@ -1019,7 +1082,8 @@
    "changed_from_upstream_pct": 0.0,
    "new_in_current_pct": 0.0,
    "upstream_lines": 80,
-   "current_lines": 80
+   "current_lines": 80,
+   "licence_header": "none"
   },
   {
    "path": "tests/test_sdist_contents.py",
@@ -1032,7 +1096,8 @@
    "new_in_current_pct": 2.3,
    "upstream_lines": 43,
    "current_lines": 43,
-   "review_flag": "minor modification - likely remains upstream-derived"
+   "review_flag": "minor modification - likely remains upstream-derived",
+   "licence_header": "none"
   },
   {
    "path": "tests/test_server_icons.py",
@@ -1046,6 +1111,7 @@
    "upstream_lines": 24,
    "current_lines": 12,
    "review_flag": "minor modification - likely remains upstream-derived (manual override of the automatic flag)",
+   "licence_header": "none",
    "manual_review": {
     "classification": "minor modification - likely remains upstream-derived (manual override of the automatic flag)",
     "basis": "12-line upstream test whose icon assertions were inverted. The module skeleton and two assertion lines (mcp.name and website_url) are verbatim upstream. The automatic substantial flag is a small-file percentage artefact."
@@ -1057,7 +1123,8 @@
    "similarity_pct": null,
    "upstream_source_path": null,
    "notes": "no upstream counterpart in v0.2.6",
-   "flagged_for_review": false
+   "flagged_for_review": false,
+   "licence_header": "AGPL-3.0-or-later (SPDX, Xalterra Ltd trading as Onexur)"
   },
   {
    "path": "tests/test_server_tools.py",
@@ -1070,7 +1137,8 @@
    "new_in_current_pct": 1.1,
    "upstream_lines": 184,
    "current_lines": 175,
-   "review_flag": "minor modification - likely remains upstream-derived"
+   "review_flag": "minor modification - likely remains upstream-derived",
+   "licence_header": "none"
   },
   {
    "path": "tests/test_task_tools.py",
@@ -1082,7 +1150,8 @@
    "changed_from_upstream_pct": 0.0,
    "new_in_current_pct": 0.0,
    "upstream_lines": 119,
-   "current_lines": 119
+   "current_lines": 119,
+   "licence_header": "none"
   },
   {
    "path": "tests/test_writable_notes.py",
@@ -1094,7 +1163,8 @@
    "changed_from_upstream_pct": 0.0,
    "new_in_current_pct": 0.0,
    "upstream_lines": 20,
-   "current_lines": 20
+   "current_lines": 20,
+   "licence_header": "none"
   },
   {
    "path": "tests/test_write_hardening.py",
@@ -1106,7 +1176,8 @@
    "changed_from_upstream_pct": 0.0,
    "new_in_current_pct": 0.0,
    "upstream_lines": 151,
-   "current_lines": 151
+   "current_lines": 151,
+   "licence_header": "none"
   },
   {
    "path": "tests/test_write_quotes.py",
@@ -1118,7 +1189,8 @@
    "changed_from_upstream_pct": 0.0,
    "new_in_current_pct": 0.0,
    "upstream_lines": 157,
-   "current_lines": 157
+   "current_lines": 157,
+   "licence_header": "none"
   },
   {
    "path": "tests/test_write_scopes.py",
@@ -1130,7 +1202,8 @@
    "changed_from_upstream_pct": 0.0,
    "new_in_current_pct": 0.0,
    "upstream_lines": 100,
-   "current_lines": 100
+   "current_lines": 100,
+   "licence_header": "none"
   },
   {
    "path": "uv.lock",
@@ -2287,7 +2360,33 @@
    "WT:THIRD-PARTY-NOTICES:9793:MIT License",
    "WT:THIRD-PARTY-NOTICES:9795:Copyright (c) 2025 Astral Software Inc.",
    "WT:THIRD-PARTY-NOTICES:9797:Permission is hereby granted, free of charge, to any person obtaining a copy",
-   "WT:docs/upstream-history.md:6:Copyright (c) 2026 manager-mcp contributors (see [LICENSE-MIT](../LICENSE-MIT))."
+   "WT:docs/upstream-history.md:6:Copyright (c) 2026 manager-mcp contributors (see [LICENSE-MIT](../LICENSE-MIT)).",
+   "WT:scripts/build_capability_matrix.py:2:# Copyright (c) 2026 Xalterra Ltd, trading as Onexur",
+   "WT:scripts/verify_reporting_controls.py:2:# Copyright (c) 2026 Xalterra Ltd, trading as Onexur",
+   "WT:src/manager_mcp/audit_log.py:2:# Copyright (c) 2026 Xalterra Ltd, trading as Onexur",
+   "WT:src/manager_mcp/corrections.py:2:# Copyright (c) 2026 Xalterra Ltd, trading as Onexur",
+   "WT:src/manager_mcp/dev_supervisor.py:2:# Copyright (c) 2026 Xalterra Ltd, trading as Onexur",
+   "WT:src/manager_mcp/diagnostics.py:2:# Copyright (c) 2026 Xalterra Ltd, trading as Onexur",
+   "WT:src/manager_mcp/extra_read_collections.py:2:# Copyright (c) 2026 Xalterra Ltd, trading as Onexur",
+   "WT:src/manager_mcp/fixed_assets.py:2:# Copyright (c) 2026 Xalterra Ltd, trading as Onexur",
+   "WT:src/manager_mcp/paging.py:2:# Copyright (c) 2026 Xalterra Ltd, trading as Onexur",
+   "WT:src/manager_mcp/reconciliation.py:2:# Copyright (c) 2026 Xalterra Ltd, trading as Onexur",
+   "WT:src/manager_mcp/reporting.py:2:# Copyright (c) 2026 Xalterra Ltd, trading as Onexur",
+   "WT:src/manager_mcp/server_info.py:2:# Copyright (c) 2026 Xalterra Ltd, trading as Onexur",
+   "WT:tests/fixtures/fake_mcp_child.py:2:# Copyright (c) 2026 Xalterra Ltd, trading as Onexur",
+   "WT:tests/test_audit_log.py:2:# Copyright (c) 2026 Xalterra Ltd, trading as Onexur",
+   "WT:tests/test_corrections.py:2:# Copyright (c) 2026 Xalterra Ltd, trading as Onexur",
+   "WT:tests/test_dev_supervisor.py:2:# Copyright (c) 2026 Xalterra Ltd, trading as Onexur",
+   "WT:tests/test_diagnostics.py:2:# Copyright (c) 2026 Xalterra Ltd, trading as Onexur",
+   "WT:tests/test_extra_read_collections.py:2:# Copyright (c) 2026 Xalterra Ltd, trading as Onexur",
+   "WT:tests/test_fixed_assets.py:2:# Copyright (c) 2026 Xalterra Ltd, trading as Onexur",
+   "WT:tests/test_migration_collections.py:2:# Copyright (c) 2026 Xalterra Ltd, trading as Onexur",
+   "WT:tests/test_new_tool_registration.py:2:# Copyright (c) 2026 Xalterra Ltd, trading as Onexur",
+   "WT:tests/test_paging.py:2:# Copyright (c) 2026 Xalterra Ltd, trading as Onexur",
+   "WT:tests/test_reconciliation.py:2:# Copyright (c) 2026 Xalterra Ltd, trading as Onexur",
+   "WT:tests/test_report_semantics.py:2:# Copyright (c) 2026 Xalterra Ltd, trading as Onexur",
+   "WT:tests/test_reporting.py:2:# Copyright (c) 2026 Xalterra Ltd, trading as Onexur",
+   "WT:tests/test_server_info.py:2:# Copyright (c) 2026 Xalterra Ltd, trading as Onexur"
   ],
   "licence_file_comparison": {
    "head_LICENSE_MIT_lines": [
