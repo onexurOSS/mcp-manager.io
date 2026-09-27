@@ -21,7 +21,7 @@ First release under the onexurOSS identity (v1.0.0), based on the upstream [mana
   ```
 
   In a client config, replace the args `["--from", "mcp-manager.io", "manager-mcp"]` with `["--from", "git+https://github.com/onexurOSS/mcp-manager.io", "manager-mcp"]`.
-- The releases 0.1.x to 0.2.6 in [CHANGELOG.md](CHANGELOG.md) belong to the upstream project. They and their artifacts exist upstream, not in this repository.
+- The releases 0.1.x to 0.2.6 in [docs/upstream-history.md](docs/upstream-history.md) belong to the upstream project. They and their artifacts exist upstream, not in this repository.
 
 ### What is new since upstream 0.2.6
 
