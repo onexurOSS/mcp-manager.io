@@ -7,7 +7,7 @@
   },
   "homepage": "https://github.com/onexurOSS/mcp-manager.io",
   "repository": "https://github.com/onexurOSS/mcp-manager.io",
-  "license": "MIT",
+  "license": "AGPL-3.0-or-later",
   "keywords": [
     "mcp",
     "manager.io",
