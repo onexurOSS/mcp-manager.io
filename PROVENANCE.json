@@ -1,7 +1,7 @@
 {
  "generated_by": "Gate 1A provenance audit",
- "repo_head": "75e2ae5defc76da0dba34f5c78b093a99e6fc0fb",
- "repo_basis": "committed tree at HEAD 75e2ae5defc7; commit author identity rewritten to Onexur <github@xalterra.com>; working tree clean apart from PROVENANCE.json and PROVENANCE_SUMMARY.md",
+ "repo_head": "15e10d6353dcab938af5c213cd642f7355f3ffd0",
+ "repo_basis": "committed tree at HEAD 15e10d6353dc; commit author identity rewritten to Onexur <github@xalterra.com>; working tree clean apart from PROVENANCE.json and PROVENANCE_SUMMARY.md",
  "upstream_reference": {
   "source": "github.com/flumpiey/manager-mcp tag v0.2.6",
   "commit": "c50c4d71f2aff962a8c9dbb1cce2ef14f602a51b",
