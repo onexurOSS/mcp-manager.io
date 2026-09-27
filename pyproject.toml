@@ -8,6 +8,7 @@ version = "1.0.0"
 description = "MCP server for Manager.io bookkeeping: read-first with opt-in scoped task and write tools"
 readme = "README.md"
 license = "AGPL-3.0-or-later"
+license-files = ["LICENSE-MIT", "LICENSE-AGPL", "NOTICE", "THIRD-PARTY-NOTICES"]
 authors = [{ name = "Dru Connold" }, { name = "onexurOSS" }]
 requires-python = ">=3.10"
 keywords = [
@@ -61,6 +62,7 @@ include = [
   "LICENSE-MIT",
   "LICENSE-AGPL",
   "NOTICE",
+  "THIRD-PARTY-NOTICES",
   "pyproject.toml",
 ]
 exclude = [
