@@ -1,7 +1,7 @@
 {
  "generated_by": "Gate 1A provenance audit",
- "repo_head": "9d3454e826876fde1c150a13fc56548f49ff8a10",
- "repo_basis": "committed tree at HEAD 9d3454e82687; commit author identity rewritten to Onexur <github@xalterra.com>; working tree clean apart from PROVENANCE.json and PROVENANCE_SUMMARY.md",
+ "repo_head": "a81c6b1aa35978399a6f507bab8519bcea6fe8c8",
+ "repo_basis": "committed tree at HEAD a81c6b1aa359; commit author identity rewritten to Onexur <github@xalterra.com>; working tree clean apart from PROVENANCE.json and PROVENANCE_SUMMARY.md",
  "upstream_reference": {
   "source": "github.com/flumpiey/manager-mcp tag v0.2.6",
   "commit": "c50c4d71f2aff962a8c9dbb1cce2ef14f602a51b",
@@ -54,6 +54,14 @@
    "new_in_current_pct": 0.0,
    "upstream_lines": 27,
    "current_lines": 27
+  },
+  {
+   "path": ".github/workflows/cla.yml",
+   "category": "Onexur/original",
+   "similarity_pct": null,
+   "upstream_source_path": null,
+   "notes": "no upstream counterpart in v0.2.6",
+   "flagged_for_review": false
   },
   {
    "path": ".github/workflows/publish.yml",
