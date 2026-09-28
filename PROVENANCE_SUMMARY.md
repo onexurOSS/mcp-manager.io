@@ -1,6 +1,6 @@
 # Provenance summary (Gate 1A, analysis only)
 
-Nothing was decided legally here. This is evidence for solicitor review. Committed tree at HEAD 969041a69911; working tree clean apart from PROVENANCE.json and PROVENANCE_SUMMARY.md.
+Nothing was decided legally here. This is evidence for solicitor review. Committed tree at HEAD 9be4ec73ffc8; working tree clean apart from PROVENANCE.json and PROVENANCE_SUMMARY.md.
 
 ## History rewrite
 
@@ -15,15 +15,15 @@ This regeneration follows a history rewrite, which is why every commit hash diff
 
 | Measure | Before the split (first manifest) | Now (committed) |
 |---|---|---|
-| Similarity to upstream v0.2.6 | 71.5% | **86.6%** |
-| Share of the file that is new | 43.4% | **19.0%** |
-| Upstream lines changed | 2.9% | 7.0% |
-| Lines in the file | 1197 | 800 |
-| Approximate lines added | 519 | 152 |
+| Similarity to upstream v0.2.6 | 71.5% | **84.6%** |
+| Share of the file that is new | 43.4% | **22.0%** |
+| Upstream lines changed | 2.9% | 7.6% |
+| Lines in the file | 1197 | 826 |
+| Approximate lines added | 519 | 182 |
 
-The new-content share fell from 43.4% to 19.0% (24.4 percentage points, a 56% relative reduction). The Onexur tool wrappers that were in `server.py` now live in `diagnostics.py`, `reconciliation.py`, `corrections.py`, `fixed_assets.py` and `server_info.py` (all `Onexur/original`). Tool names, schemas, order and behaviour are unchanged (snapshot-verified). The embedded-icon code was also removed.
+The new-content share fell from 43.4% to 22.0% (21.4 percentage points, a 49% relative reduction). The Onexur tool wrappers that were in `server.py` now live in `diagnostics.py`, `reconciliation.py`, `corrections.py`, `fixed_assets.py` and `server_info.py` (all `Onexur/original`). Tool names, schemas, order and behaviour are unchanged (snapshot-verified). The embedded-icon code was also removed.
 
-What remains new in `server.py`, and why it still trips the 60-added-line heuristic: the thin `register_*` wiring calls, the date-rejection and `semantics` block in `_fetch_report` (a modified upstream function), reworded descriptions on the upstream report tools, and the dev-supervisor branch in `main()`. Whether these residual additions are separable from the upstream-derived remainder is a question for review.
+What remains new in `server.py`, and why it still trips the 60-added-line heuristic: the thin `register_*` wiring calls, the date-rejection and `semantics` block in `_fetch_report` (a modified upstream function), reworded descriptions on the upstream report tools, the dev-supervisor branch in `main()`, and (v1.1.0) the HTTP-transport dispatch branch in `main()` that reads `manager_mcp.transport.resolve_transport_config()` and selects `mcp.run(transport=...)` accordingly. Whether these residual additions are separable from the upstream-derived remainder is a question for review.
 
 ## Counts per category
 
@@ -31,12 +31,12 @@ What remains new in `server.py`, and why it still trips the 60-added-line heuris
 |---|---|---|
 | upstream/unmodified | 50 | 53 |
 | upstream/modified | 19 | 16 |
-| Onexur/original | 42 | 27 |
+| Onexur/original | 45 | 27 |
 | third-party | 1 | 7 |
 | generated/artifact | 3 | 3 |
-| **Total** | **115** | **106** |
+| **Total** | **118** | **106** |
 
-The total is +9 net against the first manifest: 7 third-party logo and API description files, the generated capability matrix and `spec/README.md` were removed, and `.cursor-plugin/plugin.json`, `tests/test_report_semantics.py`, `docs/upstream-history.md` and `NOTICE` were added. `upstream/modified` splits into 3 substantial-rewrite candidates and 16 minor modifications (after the manual classifications below).
+The total is +12 net against the first manifest: 7 third-party logo and API description files, the generated capability matrix and `spec/README.md` were removed, and `.cursor-plugin/plugin.json`, `tests/test_report_semantics.py`, `docs/upstream-history.md`, `NOTICE`, and (v1.1.0) `src/manager_mcp/transport.py`, `tests/test_transport.py` and `tests/test_http_transport.py` were added. `upstream/modified` splits into 3 substantial-rewrite candidates and 16 minor modifications (after the manual classifications below).
 
 ## Test split: `test_server_tools.py`
 
@@ -54,7 +54,7 @@ Five Onexur tests (three profit and loss pagination tests, two `aged_receivables
 |---|---|---|---|---|
 | `CHANGELOG.md` | 21.8% | 77.3% | 79.0% | documentation rewritten/extended |
 | `README.md` | 19.7% | 87.3% | 56.4% | documentation rewritten/extended |
-| `src/manager_mcp/server.py` | 86.6% | 7.0% | 19.0% | edits to existing logic/strings; removes server_icons |
+| `src/manager_mcp/server.py` | 84.6% | 7.6% | 22.0% | edits to existing logic/strings; removes server_icons; adds v1.1.0 HTTP transport dispatch |
 
 ### Manual classification of five files
 

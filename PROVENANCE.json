@@ -1,7 +1,7 @@
 {
  "generated_by": "Gate 1A provenance audit",
- "repo_head": "969041a69911c6f8279fbc32787c289300c6815a",
- "repo_basis": "committed tree at HEAD 969041a69911; working tree clean apart from PROVENANCE.json and PROVENANCE_SUMMARY.md",
+ "repo_head": "9be4ec73ffc8561f53873b96fd2d3c2468d4f96d",
+ "repo_basis": "committed tree at HEAD 9be4ec73ffc8; working tree clean apart from PROVENANCE.json and PROVENANCE_SUMMARY.md",
  "upstream_reference": {
   "source": "github.com/flumpiey/manager-mcp tag v0.2.6",
   "commit": "c50c4d71f2aff962a8c9dbb1cce2ef14f602a51b",
@@ -779,14 +779,14 @@
   {
    "path": "src/manager_mcp/server.py",
    "category": "upstream/modified",
-   "similarity_pct": 86.6,
+   "similarity_pct": 84.6,
    "upstream_source_path": "src/manager_mcp/server.py",
-   "notes": "7.0% of upstream lines changed, 19.0% of current file is new; edits to existing logic/strings; removes server_icons",
+   "notes": "7.6% of upstream lines changed, 22.0% of current file is new; edits to existing logic/strings; removes server_icons; adds v1.1.0 HTTP transport dispatch in main()",
    "flagged_for_review": true,
-   "changed_from_upstream_pct": 7.0,
-   "new_in_current_pct": 19.0,
+   "changed_from_upstream_pct": 7.6,
+   "new_in_current_pct": 22.0,
    "upstream_lines": 697,
-   "current_lines": 800,
+   "current_lines": 826,
    "review_flag": "substantial rewrite - candidate for Onexur/original",
    "licence_header": "none"
   },
@@ -818,6 +818,15 @@
    "similarity_pct": null,
    "upstream_source_path": null,
    "notes": "no upstream counterpart in v0.2.6",
+   "flagged_for_review": false,
+   "licence_header": "AGPL-3.0-or-later (SPDX, Xalterra Ltd trading as Onexur)"
+  },
+  {
+   "path": "src/manager_mcp/transport.py",
+   "category": "Onexur/original",
+   "similarity_pct": null,
+   "upstream_source_path": null,
+   "notes": "no upstream counterpart in v0.2.6 (v1.1.0 HTTP transport addition)",
    "flagged_for_review": false,
    "licence_header": "AGPL-3.0-or-later (SPDX, Xalterra Ltd trading as Onexur)"
   },
@@ -1050,6 +1059,15 @@
    "licence_header": "AGPL-3.0-or-later (SPDX, Xalterra Ltd trading as Onexur)"
   },
   {
+   "path": "tests/test_http_transport.py",
+   "category": "Onexur/original",
+   "similarity_pct": null,
+   "upstream_source_path": null,
+   "notes": "no upstream counterpart in v0.2.6 (v1.1.0 HTTP transport addition)",
+   "flagged_for_review": false,
+   "licence_header": "AGPL-3.0-or-later (SPDX, Xalterra Ltd trading as Onexur)"
+  },
+  {
    "path": "tests/test_mcp_permissions.py",
    "category": "Onexur/original",
    "similarity_pct": null,
@@ -1241,6 +1259,15 @@
    "upstream_lines": 119,
    "current_lines": 119,
    "licence_header": "none"
+  },
+  {
+   "path": "tests/test_transport.py",
+   "category": "Onexur/original",
+   "similarity_pct": null,
+   "upstream_source_path": null,
+   "notes": "no upstream counterpart in v0.2.6 (v1.1.0 HTTP transport addition)",
+   "flagged_for_review": false,
+   "licence_header": "AGPL-3.0-or-later (SPDX, Xalterra Ltd trading as Onexur)"
   },
   {
    "path": "tests/test_transport_warning.py",
