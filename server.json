@@ -7,14 +7,14 @@
     "url": "https://github.com/onexurOSS/mcp-manager.io",
     "source": "github"
   },
-  "version": "1.0.1",
+  "version": "1.1.0",
   "websiteUrl": "https://github.com/onexurOSS/mcp-manager.io",
   "packages": [
     {
       "registryType": "pypi",
       "registryBaseUrl": "https://pypi.org",
       "identifier": "mcp-manager.io",
-      "version": "1.0.1",
+      "version": "1.1.0",
       "runtimeHint": "uvx",
       "transport": {
         "type": "stdio"
@@ -41,6 +41,31 @@
           "name": "MANAGER_MCP_DELETE_SCOPES",
           "description": "Comma-separated delete scopes (never implied by write scopes)",
           "isRequired": false,
+          "default": ""
+        },
+        {
+          "name": "MANAGER_MCP_TRANSPORT",
+          "description": "stdio (default) or http. This package entry always launches over stdio via uvx; set http only when running the server yourself as a standalone process, not via this registry launch.",
+          "isRequired": false,
+          "default": "stdio"
+        },
+        {
+          "name": "MANAGER_MCP_HTTP_HOST",
+          "description": "Bind host for HTTP transport. Defaults to loopback (127.0.0.1) when unset.",
+          "isRequired": false,
+          "default": ""
+        },
+        {
+          "name": "MANAGER_MCP_HTTP_PORT",
+          "description": "Bind port for HTTP transport. Defaults to 8000 when unset.",
+          "isRequired": false,
+          "default": ""
+        },
+        {
+          "name": "MANAGER_MCP_HTTP_AUTH_TOKEN",
+          "description": "Bearer token required of every HTTP request when set. HTTP transport has no authentication at all when this is unset -- see README's Transports section.",
+          "isRequired": false,
+          "isSecret": true,
           "default": ""
         }
       ]

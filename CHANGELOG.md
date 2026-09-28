@@ -2,6 +2,29 @@
 
 All notable changes to this project are documented in this file.
 
+## [1.1.0] - 2026-09-28
+
+### Added
+
+- Optional HTTP transport (`MANAGER_MCP_TRANSPORT=http`), additive and opt-in. stdio
+  remains the default; an existing self-hosted single-process deployment that sets none
+  of the new env vars sees no behavioural change. HTTP mode exposes the exact same tool
+  set, the exact same scope/policy enforcement (`WritePolicy.authorize`, the denylist,
+  the tiered scope model), and the exact same single-Manager-instance-per-process model
+  as stdio -- only the transport changes. `MANAGER_MCP_HTTP_HOST` / `MANAGER_MCP_HTTP_PORT`
+  configure the bind address (defaults: loopback, port 8000).
+- `MANAGER_MCP_HTTP_AUTH_TOKEN`: an optional shared-secret bearer token checked on every
+  HTTP request before it reaches tool dispatch. HTTP transport has no authentication at
+  all when this is unset, which is only safe behind network isolation (loopback binding,
+  a private network, a gateway/reverse proxy) -- the server prints a warning to stderr at
+  startup in that case rather than staying silent about it. See README's Transports
+  section for the full security discussion.
+
+### Changed
+
+- `server.json`: registry package launch (via `uvx`) is unchanged, still stdio; the new
+  env vars are documented for operators who run the server themselves in HTTP mode.
+
 ## [1.0.1] - 2026-09-27
 
 - Add the MCP Registry ownership validation line to README.md, required for the

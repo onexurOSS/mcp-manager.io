@@ -80,6 +80,21 @@ The older `MANAGER_MCP_ALLOW_WRITES`, `ALLOW_WRITES` and `MANAGER_MCP_WRITES` va
 
 Never commit your API key. Keep it in the environment of the MCP client or in a private env file.
 
+### Transports
+
+stdio is the default and the only transport a registry-launched (`uvx`) process uses. HTTP is additive and opt-in for self-hosted deployments that need this server reachable over a network rather than only through local stdio pipes:
+
+| Variable | Purpose |
+|---|---|
+| `MANAGER_MCP_TRANSPORT` | `stdio` (default) or `http`. |
+| `MANAGER_MCP_HTTP_HOST` | Bind host for HTTP mode. Defaults to loopback (`127.0.0.1`) when unset. |
+| `MANAGER_MCP_HTTP_PORT` | Bind port for HTTP mode. Defaults to `8000` when unset. |
+| `MANAGER_MCP_HTTP_AUTH_TOKEN` | Optional bearer token. When set, every HTTP request must carry a matching `Authorization: Bearer <token>` header or is rejected with 401 before it reaches any tool. |
+
+HTTP mode exposes the exact same tools, the exact same scope/policy enforcement, and the exact same single-Manager-instance-per-process model as stdio -- only the transport changes. It does not add multi-tenancy or multiple Manager instances per process; that belongs in a separate gateway service in front of this one.
+
+**Security note:** `MANAGER_MCP_HTTP_AUTH_TOKEN` is a single shared secret for the whole process, checked at the transport layer -- it is not per-caller identity, OAuth, or a replacement for a real auth boundary. When it is unset, HTTP mode has **no transport-level authentication at all**: any client that can reach the configured host:port can call every tool this process exposes, subject only to the scope/denylist policy above (which governs what can be done, not who may connect). That is only safe when network placement -- loopback binding, a private Docker network, a VPN, or a gateway/reverse proxy that performs the real authentication -- is genuinely the sole access control. The server prints a warning to stderr at startup when running in HTTP mode with no token configured, rather than staying silent about it. Given this server can expose real bookkeeping data (and, depending on configured scopes, write/delete access to it), operators are strongly encouraged to set the token, place the server behind a gateway, or both.
+
 ### Permission scopes
 
 Valid scopes are `quotes`, `orders`, `parties`, `items`, `sales`, `purchases`, `banking`, `payroll` and `ledger`, plus `raw`, an escape hatch that enables the full create and update (or delete) set for every domain. A recommended starting point for day-to-day bookkeeping is `banking,sales,parties`.

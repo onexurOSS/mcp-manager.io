@@ -787,13 +787,39 @@ _reporting.register_reporting_tools(_read_tools, get_client)
 
 def main() -> None:
     from manager_mcp.dev_supervisor import is_dev_supervisor_enabled, run_supervisor
+    from manager_mcp.transport import (
+        BearerTokenMiddleware,
+        resolve_transport_config,
+        warn_if_no_http_auth,
+    )
 
-    if is_dev_supervisor_enabled():
+    transport_config = resolve_transport_config()
+
+    # The dev supervisor pipes a child process's own stdin/stdout -- a stdio-mode
+    # reload mechanism. It doesn't apply to HTTP mode (there's nothing to pipe), so
+    # HTTP mode always runs directly here regardless of the supervisor env var.
+    if transport_config.transport == "stdio" and is_dev_supervisor_enabled():
         run_supervisor()
         return
+
     register_task_tools()
     register_write_tools()
-    mcp.run()
+
+    if transport_config.transport == "stdio":
+        mcp.run()
+    else:
+        warn_if_no_http_auth(transport_config)
+        middleware = None
+        if transport_config.auth_token is not None:
+            from starlette.middleware import Middleware
+
+            middleware = [Middleware(BearerTokenMiddleware, token=transport_config.auth_token)]
+        mcp.run(
+            transport=transport_config.transport,
+            host=transport_config.host,
+            port=transport_config.port,
+            middleware=middleware,
+        )
 
 
 if __name__ == "__main__":
